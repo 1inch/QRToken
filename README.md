@@ -1,5 +1,9 @@
 # QR Token
 
+## Test it
+
+https://qrtoken.io
+
 ## Sources
 
 Icons:
