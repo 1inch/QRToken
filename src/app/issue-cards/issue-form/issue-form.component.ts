@@ -93,7 +93,7 @@ export class IssueFormComponent implements OnInit {
             if (token.address === this.selectedTokenAddress) {
                 this.selectedToken = token;
 
-                console.log('Selected token:', this.selectedToken);
+                // console.log('Selected token:', this.selectedToken);
 
                 this.getAllowance(token);
             }
@@ -102,7 +102,7 @@ export class IssueFormComponent implements OnInit {
 
     approveToken(token: Token) {
 
-        console.log('Approve');
+        // console.log('Approve');
 
         token.inApproval = true;
 
@@ -124,7 +124,7 @@ export class IssueFormComponent implements OnInit {
                     this.zone.run(() => {
                         this.selectedToken.allowance = _token.allowance;
                         this.selectedToken.inApproval = false;
-                        console.log('Token allowance', this.selectedToken.allowance);
+                        // console.log('Token allowance', this.selectedToken.allowance);
                     });
                 }
             });
@@ -134,7 +134,7 @@ export class IssueFormComponent implements OnInit {
 
         this.loading = true;
 
-        console.log('Cards amount', this.cardsAmount);
+        // console.log('Cards amount', this.cardsAmount);
 
         const privateKeys = [];
 
@@ -181,11 +181,11 @@ export class IssueFormComponent implements OnInit {
 
         const data = document.getElementById('contentToConvert' + index);
 
-        console.log('Data:', data);
+        // console.log('Data:', data);
 
         html2canvas(data).then(canvas => {
 
-            console.log('Canvas:', canvas);
+            // console.log('Canvas:', canvas);
 
             // Few necessary setting options
             const imgWidth = 145;
@@ -212,7 +212,7 @@ export class IssueFormComponent implements OnInit {
 
         const QRCodes = await Promise.all(vCards.map(value => QRCode.toDataURL(value)));
 
-        console.log('QRCodes', QRCodes);
+        // console.log('QRCodes', QRCodes);
 
         return QRCodes;
     }
@@ -239,15 +239,15 @@ export class IssueFormComponent implements OnInit {
 
             const content = bufferToBase64(c).replace(/\//g, '-').replace(/\+/g, '_');
 
-            console.log('Base64', content);
+            // console.log('Base64', content);
 
             result.push(
                 'https://qrtoken.io/#/r/' + content
             );
         }
 
-        console.log('privateKeys', privateKeys);
-        console.log('Urls', result);
+        // console.log('privateKeys', privateKeys);
+        // console.log('Urls', result);
 
         return result;
     }
