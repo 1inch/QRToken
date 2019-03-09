@@ -27,11 +27,11 @@ contract QRToken {
     event Redeemed(uint160 root, uint256 index, address receiver);
 
     function create(
-      IERC20 token,
-      uint256 sumTokenAmount,
-      uint256 codesCount,
-      uint160 root,
-      uint256 deadline
+        IERC20 token,
+        uint256 sumTokenAmount,
+        uint256 codesCount,
+        uint160 root,
+        uint256 deadline
     ) public {
         require(codesCount <= MAX_CODES_COUNT);
         require(deadline > now);

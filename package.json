@@ -9,6 +9,8 @@
     "test": "scripts/test.sh",
     "e2e": "ng e2e",
     "postinstall": "node patch.js",
+    "lint:js": "eslint .",
+    "lint:js:fix": "eslint . --fix",
     "lint:sol": "solium -d .",
     "lint:sol:fix": "solium -d . --fix",
     "lint": "npm run lint:js && npm run lint:sol",
