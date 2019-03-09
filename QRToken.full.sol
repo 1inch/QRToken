@@ -89,7 +89,7 @@ library ECDSA {
 
 // File: contracts/IndexedMerkleProof.sol
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.5;
 
 
 library IndexedMerkleProof {
@@ -119,7 +119,7 @@ library IndexedMerkleProof {
 
 // File: contracts/QRToken.sol
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.5;
 
 
 
