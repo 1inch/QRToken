@@ -1,11 +1,13 @@
 pragma solidity ^0.5.5;
 
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/cryptography/ECDSA.sol";
 import "./IndexedMerkleProof.sol";
 
 
 contract QRToken {
+    using SafeMath for uint;
     using ECDSA for bytes;
     using IndexedMerkleProof for bytes;
 
@@ -33,10 +35,11 @@ contract QRToken {
         uint160 root,
         uint256 deadline
     ) public {
-        require(codesCount <= MAX_CODES_COUNT);
+        require(0 < sumTokenAmount);
+        require(0 < codesCount && codesCount <= MAX_CODES_COUNT);
         require(deadline > now);
 
-        token.transferFrom(msg.sender, address(this), sumTokenAmount);
+        require(token.transferFrom(msg.sender, address(this), sumTokenAmount));
         Distribution storage distribution = distributions[root];
         distribution.token = token;
         distribution.sumAmount = sumTokenAmount;
@@ -59,7 +62,7 @@ contract QRToken {
         require(distribution.bitMask[index / 32] & (1 << (index % 32)) == 0);
 
         distribution.bitMask[index / 32] = distribution.bitMask[index / 32] | (1 << (index % 32));
-        distribution.token.transfer(receiver, distribution.sumAmount / distribution.codesCount);
+        require(distribution.token.transfer(receiver, distribution.sumAmount.div(distribution.codesCount)));
         emit Redeemed(root, index, receiver);
     }
 
@@ -73,7 +76,7 @@ contract QRToken {
                 count += distribution.sumAmount / distribution.codesCount;
             }
         }
-        distribution.token.transfer(distribution.sponsor, distribution.sumAmount - count);
+        require(distribution.token.transfer(distribution.sponsor, distribution.sumAmount.sub(count)));
         delete distributions[root];
     }
 }
