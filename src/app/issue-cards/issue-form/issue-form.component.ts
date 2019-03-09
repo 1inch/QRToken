@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {faArrowLeft, faUnlock} from '@fortawesome/free-solid-svg-icons';
+import {WalletService} from './wallet.service';
 
 @Component({
   selector: 'app-issue-form',
@@ -13,9 +14,13 @@ export class IssueFormComponent implements OnInit {
   tokenAmount = '';
   unlockIcon = faUnlock;
 
-  constructor() { }
+  constructor(
+    private walletService: WalletService
+  ) { }
 
   ngOnInit() {
+
+    this.walletService.getListOfTokens();
   }
 
 }

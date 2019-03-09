@@ -9,6 +9,7 @@ declare let window: any;
 
 @Injectable()
 export class Web3Service {
+
   public ready = false;
   public accountsObservable = new Subject<string[]>();
   public web3: any;
