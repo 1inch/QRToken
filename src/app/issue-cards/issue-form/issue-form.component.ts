@@ -6,10 +6,14 @@ import {Web3Service} from '../../util/web3.service';
 import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 import {MerkleTree} from '../../util/merkle-tree';
+import {QRTOKEN_SMART_CONTRACT_ADDRESS} from '../../util/qrtoken-smart-contract';
 
 declare let require: any;
 declare let Buffer: any;
 const QRCode = require('qrcode');
+
+const qrtokenContractArtifacts = require('../../util/QRTokenABI.json');
+const tokenContractArtifacts = require('../../util/TokenABI.json');
 
 @Component({
     selector: 'app-issue-form',
@@ -20,8 +24,8 @@ export class IssueFormComponent implements OnInit {
 
     selectedTokenAddress = '0xB8c77482e45F1F44dE1745F52C74426C631bDD52';
     selectedToken: Token;
-    cardsAmount = 8;
-    tokenAmount = '';
+    cardsAmount = 4;
+    tokenAmount = 0.01;
     unlockIcon = faUnlock;
     thumbsUpIcon = faThumbsUp;
     loading = false;
@@ -152,7 +156,7 @@ export class IssueFormComponent implements OnInit {
 
         // console.log(merkleTree);
 
-        // this.storeMerkleTree(merkleTree);
+        await this.storeMerkleTree(merkleTree);
         const cards = this.generateCards(privateKeys.map(pk => pk.privateKey), merkleTree);
         this.QRCodes = (await this.generateQRCodes(cards)).map(qr => {
             return {
@@ -163,6 +167,45 @@ export class IssueFormComponent implements OnInit {
         // setTimeout(this.generatePDF, 300);
 
         this.loading = false;
+    }
+
+    async storeMerkleTree(merkleTree: MerkleTree) {
+
+        const scope = this;
+
+        return new Promise(
+            async function (resolve, reject) {
+
+                scope.web3Service.getAccounts().subscribe(async (addresses) => {
+
+                    const contract = new scope.web3Service.web3.eth.Contract(qrtokenContractArtifacts, QRTOKEN_SMART_CONTRACT_ADDRESS);
+
+                    console.log('Root', merkleTree.getHexRoot());
+                    console.log('Layers', merkleTree.layers);
+
+                    const tokenContract = new scope.web3Service.web3.eth.Contract(tokenContractArtifacts, scope.selectedToken.address);
+
+                    console.log('Token Contract', tokenContract);
+
+                    const decimals = await tokenContract.methods.decimals().call();
+
+                    console.log('BigNumer', scope.web3Service.web3.utils.toBN(scope.tokenAmount * 10 ** decimals));
+
+                    const result = await contract.methods
+                        .create(
+                            scope.selectedToken.address,
+                            '0x' + scope.web3Service.web3.utils.toBN(scope.tokenAmount * 10 ** decimals),
+                            scope.cardsAmount,
+                            merkleTree.getHexRoot(),
+                            Math.trunc( Date.now() / 1000 + 60 * 60 * 24 * 7)
+                        )
+                        .send({
+                            from: addresses[0]
+                        });
+
+                    resolve(result);
+                });
+            });
     }
 
     print(index: number) {
@@ -226,7 +269,7 @@ export class IssueFormComponent implements OnInit {
             const privateKeyBuffer = new Buffer(this.web3Service.web3.utils.hexToBytes(privateKeys[index]));
             const merkleTreeBuffer = Buffer.concat(merkleTree.getProof(index));
 
-            var c = new Uint8Array(privateKeyBuffer.length + merkleTreeBuffer.length);
+            const c = new Uint8Array(privateKeyBuffer.length + merkleTreeBuffer.length);
             c.set(privateKeyBuffer);
             c.set(merkleTreeBuffer, privateKeyBuffer.length);
 

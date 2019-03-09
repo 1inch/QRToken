@@ -23,7 +23,7 @@
                               style="top: -16px;"><i></i></span>
                         <button (click)="approveToken(selectedToken)" [disabled]="selectedToken.allowance > 0"
                                 [hidden]="selectedToken.inApproval"
-                                class="btn btn-success" title="Approve transfer coins." type="submit">
+                                class="btn btn-success" title="Approve transfer coins." type="button">
                             <fa-icon [hidden]="selectedToken.inApproval || selectedToken.allowance > 0"
                                      [icon]="unlockIcon"></fa-icon>
                             <fa-icon [hidden]="selectedToken.allowance == 0" [icon]="thumbsUpIcon"></fa-icon>
