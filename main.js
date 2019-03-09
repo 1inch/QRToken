@@ -41,7 +41,13 @@ module.exports = g;
 var map = {
 	"./issue-cards/issue-cards.module": [
 		"./src/app/issue-cards/issue-cards.module.ts",
+		"default~issue-cards-issue-cards-module~redeem-redeem-module",
 		"issue-cards-issue-cards-module"
+	],
+	"./redeem/redeem.module": [
+		"./src/app/redeem/redeem.module.ts",
+		"default~issue-cards-issue-cards-module~redeem-redeem-module",
+		"redeem-redeem-module"
 	]
 };
 function webpackAsyncContext(req) {
@@ -53,7 +59,7 @@ function webpackAsyncContext(req) {
 			throw e;
 		});
 	}
-	return __webpack_require__.e(ids[1]).then(function() {
+	return Promise.all(ids.slice(1).map(__webpack_require__.e)).then(function() {
 		var id = ids[0];
 		return __webpack_require__(id);
 	});
@@ -161,6 +167,10 @@ var routes = [
             {
                 path: '',
                 loadChildren: './issue-cards/issue-cards.module#IssueCardsModule'
+            },
+            {
+                path: 'r/:data',
+                loadChildren: './redeem/redeem.module#RedeemModule'
             }
         ]
     },

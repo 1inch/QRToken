@@ -63,7 +63,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({"issue-cards-issue-cards-module":"issue-cards-issue-cards-module"}[chunkId]||chunkId) + ".js"
+/******/ 		return __webpack_require__.p + "" + ({"default~issue-cards-issue-cards-module~redeem-redeem-module":"default~issue-cards-issue-cards-module~redeem-redeem-module","issue-cards-issue-cards-module":"issue-cards-issue-cards-module","redeem-redeem-module":"redeem-redeem-module"}[chunkId]||chunkId) + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
