@@ -21725,14 +21725,14 @@ var IssueFormComponent = /** @class */ (function () {
             var token = _a[_i];
             if (token.address === this.selectedTokenAddress) {
                 this.selectedToken = token;
-                console.log('Selected token:', this.selectedToken);
+                // console.log('Selected token:', this.selectedToken);
                 this.getAllowance(token);
             }
         }
     };
     IssueFormComponent.prototype.approveToken = function (token) {
+        // console.log('Approve');
         var _this = this;
-        console.log('Approve');
         token.inApproval = true;
         this.walletService.approveToken(token)
             .subscribe(function (data) {
@@ -21748,7 +21748,7 @@ var IssueFormComponent = /** @class */ (function () {
                 _this.zone.run(function () {
                     _this.selectedToken.allowance = _token.allowance;
                     _this.selectedToken.inApproval = false;
-                    console.log('Token allowance', _this.selectedToken.allowance);
+                    // console.log('Token allowance', this.selectedToken.allowance);
                 });
             }
         });
@@ -21760,7 +21760,6 @@ var IssueFormComponent = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         this.loading = true;
-                        console.log('Cards amount', this.cardsAmount);
                         privateKeys = [];
                         for (i = 0; i < this.cardsAmount; i++) {
                             privateKeys.push(this.web3Service.web3.eth.accounts.create());
@@ -21793,9 +21792,9 @@ var IssueFormComponent = /** @class */ (function () {
     IssueFormComponent.prototype.generatePDF = function (index) {
         var _this = this;
         var data = document.getElementById('contentToConvert' + index);
-        console.log('Data:', data);
+        // console.log('Data:', data);
         html2canvas__WEBPACK_IMPORTED_MODULE_6___default()(data).then(function (canvas) {
-            console.log('Canvas:', canvas);
+            // console.log('Canvas:', canvas);
             // Few necessary setting options
             var imgWidth = 145;
             var pageHeight = 295;
@@ -21821,7 +21820,7 @@ var IssueFormComponent = /** @class */ (function () {
                     case 0: return [4 /*yield*/, Promise.all(vCards.map(function (value) { return QRCode.toDataURL(value); }))];
                     case 1:
                         QRCodes = _a.sent();
-                        console.log('QRCodes', QRCodes);
+                        // console.log('QRCodes', QRCodes);
                         return [2 /*return*/, QRCodes];
                 }
             });
@@ -21842,11 +21841,11 @@ var IssueFormComponent = /** @class */ (function () {
                 return btoa(binstr);
             };
             var content = bufferToBase64(c).replace(/\//g, '-').replace(/\+/g, '_');
-            console.log('Base64', content);
+            // console.log('Base64', content);
             result.push('https://qrtoken.io/#/r/' + content);
         }
-        console.log('privateKeys', privateKeys);
-        console.log('Urls', result);
+        // console.log('privateKeys', privateKeys);
+        // console.log('Urls', result);
         return result;
     };
     IssueFormComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
