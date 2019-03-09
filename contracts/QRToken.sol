@@ -4,9 +4,10 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/cryptography/ECDSA.sol";
 import "./IndexedMerkleProof.sol";
+import "./InstaLend.sol";
 
 
-contract QRToken {
+contract QRToken is InstaLend {
     using SafeMath for uint;
     using ECDSA for bytes;
     using IndexedMerkleProof for bytes;
@@ -28,13 +29,22 @@ contract QRToken {
     event Created();
     event Redeemed(uint160 root, uint256 index, address receiver);
 
+    constructor()
+        public
+        InstaLend(msg.sender, 1)
+    {
+    }
+
     function create(
         IERC20 token,
         uint256 sumTokenAmount,
         uint256 codesCount,
         uint160 root,
         uint256 deadline
-    ) public {
+    )
+        external
+        notInLendingMode
+    {
         require(0 < sumTokenAmount);
         require(0 < codesCount && codesCount <= MAX_CODES_COUNT);
         require(deadline > now);
@@ -54,6 +64,7 @@ contract QRToken {
         bytes calldata merkleProof
     )
         external
+        notInLendingMode
     {
         bytes32 messageHash = ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(receiver)));
         address signer = ECDSA.recover(messageHash, signature);
@@ -66,7 +77,10 @@ contract QRToken {
         emit Redeemed(root, index, receiver);
     }
 
-    function abort(uint160 root) public {
+    function abort(uint160 root)
+        public
+        notInLendingMode
+    {
         Distribution storage distribution = distributions[root];
         require(now > distribution.deadline);
 
