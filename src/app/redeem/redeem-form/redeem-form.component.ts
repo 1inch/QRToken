@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Web3Service} from '../../util/web3.service';
-import {MerkleTree} from '../../../../../VIC/src/app/util/merkle-tree';
 import {QRTOKEN_SMART_CONTRACT_ADDRESS} from '../../util/qrtoken-smart-contract';
+import {MerkleTree} from '../../util/merkle-tree';
 
 declare let Buffer: any;
 
