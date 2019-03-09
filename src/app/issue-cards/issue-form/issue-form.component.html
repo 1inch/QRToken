@@ -1,0 +1,47 @@
+<div class="container" id="issue-form">
+  <div class="row align-items-center">
+    <div class="col-sm-8 ml-auto mr-auto">
+      <h3 class="pb-3 pt-3">Issue QR Token Cards</h3>
+
+      <hr>
+
+      <form>
+        <div class="form-row pt-0">
+          <div class="col-10 pb-1 pr-0">
+            <select [(ngModel)]="selectedToken" class="form-control" id="selectedToken" name="selectedToken">
+              <option selected value="">-- Select Token --</option>
+              <option value="DAI">DAI</option>
+              <option value="USDC">USDC</option>
+              <option value="TUSD">TUSD</option>
+              <option value="USDS">USDS</option>
+              <option value="WBTC">WBTC</option>
+              <option value="ETH">ETH</option>
+            </select>
+          </div>
+          <div class="col-2 pb-1">
+            <button type="submit" class="btn btn-success" title="Approve transfer coins.">
+              <fa-icon [icon]="unlockIcon"></fa-icon>
+            </button>
+          </div>
+
+          <div class="col-10 pb-1 pr-0 pt-1">
+            <input [(ngModel)]="tokenAmount" type="number" class="form-control mb-2" name="tokenAmount" id="tokenAmount" placeholder="Token amount">
+
+            <select [(ngModel)]="cardsAmount" class="form-control" id="cardsAmount" name="cardsAmount">
+              <option selected value="">-- Select Cards Amount --</option>
+              <option value="12">12</option>
+              <option value="24">24</option>
+              <option value="32">32</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-0" style="text-align: center">
+          <button type="submit" class="btn btn-primary btn-lg" title="Approve transfer coins.">
+            CREATE
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

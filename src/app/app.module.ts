@@ -9,12 +9,17 @@ import {BaseComponent} from './base/base.component';
 import {NoContentComponent} from './no-content/no-content.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {Web3Service} from './util/web3.service';
-import {FormsModule} from '@angular/forms';
 
 export const routes: Routes = [
   {
     path: '',
-    component: BaseComponent
+    component: BaseComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: './issue-cards/issue-cards.module#IssueCardsModule'
+      }
+    ]
   },
   {
     path: '**',
@@ -32,7 +37,6 @@ export const routes: Routes = [
     CommonModule,
     BrowserModule,
     HttpClientModule,
-    FormsModule,
     FontAwesomeModule,
     RouterModule.forRoot(
       routes,

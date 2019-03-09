@@ -1,0 +1,25 @@
+@media (min-width: 767.98px) {
+
+  #issue-form {
+    padding-top: 2rem;
+  }
+
+  #issue-form .row div {
+    border-radius: 0.4rem;
+  }
+}
+
+#issue-form h3 {
+  text-align: center;
+  font-weight: 300;
+  border-radius: 0.5rem;
+
+  background: #ECE9E6;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #FFFFFF, #ECE9E6);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#issue-form .row div {
+  background: white;
+  padding: 2rem;
+}
