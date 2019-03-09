@@ -5,12 +5,14 @@ import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/cryptography/ECDSA.sol";
 import "./IndexedMerkleProof.sol";
 import "./InstaLend.sol";
+import "./CheckedERC20.sol";
 
 
 contract QRToken is InstaLend {
     using SafeMath for uint;
     using ECDSA for bytes;
     using IndexedMerkleProof for bytes;
+    using CheckedERC20 for IERC20;
 
     uint256 constant public MAX_CODES_COUNT = 1024;
     uint256 constant public MAX_WORDS_COUNT = (MAX_CODES_COUNT + 31) / 32;
@@ -49,7 +51,7 @@ contract QRToken is InstaLend {
         require(0 < codesCount && codesCount <= MAX_CODES_COUNT);
         require(deadline > now);
 
-        require(token.transferFrom(msg.sender, address(this), sumTokenAmount));
+        token.checkedTransferFrom(msg.sender, address(this), sumTokenAmount);
         Distribution storage distribution = distributions[root];
         distribution.token = token;
         distribution.sumAmount = sumTokenAmount;
@@ -77,7 +79,7 @@ contract QRToken is InstaLend {
         require(distribution.bitMask[index / 32] & (1 << (index % 32)) == 0);
 
         distribution.bitMask[index / 32] = distribution.bitMask[index / 32] | (1 << (index % 32));
-        require(distribution.token.transfer(msg.sender, distribution.sumAmount.div(distribution.codesCount)));
+        distribution.token.checkedTransfer(msg.sender, distribution.sumAmount.div(distribution.codesCount));
         emit Redeemed(root, index, msg.sender);
     }
 
@@ -99,8 +101,8 @@ contract QRToken is InstaLend {
     //     distribution.bitMask[index / 32] = distribution.bitMask[index / 32] | (1 << (index % 32));
     //     uint256 reward = distribution.sumAmount.div(distribution.codesCount);
     //     uint256 fee = reward.mul(feePrecent).div(100);
-    //     require(distribution.token.transfer(receiver, reward));
-    //     require(distribution.token.transfer(msg.sender, fee));
+    //     distribution.token.checkedTransfer(receiver, reward);
+    //     distribution.token.checkedTransfer(msg.sender, fee);
     //     emit Redeemed(root, index, receiver);
     // }
 
@@ -117,7 +119,7 @@ contract QRToken is InstaLend {
                 count += distribution.sumAmount / distribution.codesCount;
             }
         }
-        require(distribution.token.transfer(distribution.sponsor, distribution.sumAmount.sub(count)));
+        distribution.token.checkedTransfer(distribution.sponsor, distribution.sumAmount.sub(count));
         delete distributions[root];
     }
 }
