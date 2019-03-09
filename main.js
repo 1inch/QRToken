@@ -36,21 +36,33 @@ module.exports = g;
   !*** ./src/$$_lazy_route_resource lazy namespace object ***!
   \**********************************************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-function webpackEmptyAsyncContext(req) {
-	// Here Promise.resolve().then() is used instead of new Promise() to prevent
-	// uncaught exception popping up in devtools
-	return Promise.resolve().then(function() {
-		var e = new Error("Cannot find module '" + req + "'");
-		e.code = 'MODULE_NOT_FOUND';
-		throw e;
+var map = {
+	"./issue-cards/issue-cards.module": [
+		"./src/app/issue-cards/issue-cards.module.ts",
+		"issue-cards-issue-cards-module"
+	]
+};
+function webpackAsyncContext(req) {
+	var ids = map[req];
+	if(!ids) {
+		return Promise.resolve().then(function() {
+			var e = new Error("Cannot find module '" + req + "'");
+			e.code = 'MODULE_NOT_FOUND';
+			throw e;
+		});
+	}
+	return __webpack_require__.e(ids[1]).then(function() {
+		var id = ids[0];
+		return __webpack_require__(id);
 	});
 }
-webpackEmptyAsyncContext.keys = function() { return []; };
-webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
-module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
+webpackAsyncContext.keys = function webpackAsyncContextKeys() {
+	return Object.keys(map);
+};
+webpackAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
+module.exports = webpackAsyncContext;
 
 /***/ }),
 
@@ -130,8 +142,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _no_content_no_content_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./no-content/no-content.component */ "./src/app/no-content/no-content.component.ts");
 /* harmony import */ var _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @fortawesome/angular-fontawesome */ "./node_modules/@fortawesome/angular-fontawesome/fesm5/angular-fontawesome.js");
 /* harmony import */ var _util_web3_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./util/web3.service */ "./src/app/util/web3.service.ts");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-
 
 
 
@@ -146,7 +156,13 @@ __webpack_require__.r(__webpack_exports__);
 var routes = [
     {
         path: '',
-        component: _base_base_component__WEBPACK_IMPORTED_MODULE_7__["BaseComponent"]
+        component: _base_base_component__WEBPACK_IMPORTED_MODULE_7__["BaseComponent"],
+        children: [
+            {
+                path: '',
+                loadChildren: './issue-cards/issue-cards.module#IssueCardsModule'
+            }
+        ]
     },
     {
         path: '**',
@@ -167,7 +183,6 @@ var AppModule = /** @class */ (function () {
                 _angular_common__WEBPACK_IMPORTED_MODULE_5__["CommonModule"],
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
                 _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"],
-                _angular_forms__WEBPACK_IMPORTED_MODULE_11__["FormsModule"],
                 _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_9__["FontAwesomeModule"],
                 _angular_router__WEBPACK_IMPORTED_MODULE_6__["RouterModule"].forRoot(routes, {
                     enableTracing: false,
