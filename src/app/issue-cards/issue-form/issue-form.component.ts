@@ -2,10 +2,10 @@ import {Component, NgZone, OnInit} from '@angular/core';
 import {faThumbsUp, faUnlock} from '@fortawesome/free-solid-svg-icons';
 import {WalletService} from '../../util/wallet.service';
 import {Token} from '../../util/token';
-import {MerkleTree} from '../../../../../VIC/src/app/util/merkle-tree';
 import {Web3Service} from '../../util/web3.service';
 import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
+import {MerkleTree} from '../../util/merkle-tree';
 
 declare let require: any;
 declare let Buffer: any;
@@ -20,7 +20,7 @@ export class IssueFormComponent implements OnInit {
 
     selectedTokenAddress = '0xB8c77482e45F1F44dE1745F52C74426C631bDD52';
     selectedToken: Token;
-    cardsAmount = 4;
+    cardsAmount = 8;
     tokenAmount = '';
     unlockIcon = faUnlock;
     thumbsUpIcon = faThumbsUp;
@@ -134,16 +134,22 @@ export class IssueFormComponent implements OnInit {
 
         this.loading = true;
 
-        const privateKeys = Array.from(Array(this.cardsAmount).keys())
-            .map(_ => this.web3Service.web3.eth.accounts.create());
+        console.log('Cards amount', this.cardsAmount);
+
+        const privateKeys = [];
+
+        for (let i = 0; i < this.cardsAmount; i++) {
+            privateKeys.push(this.web3Service.web3.eth.accounts.create());
+        }
+
+        // console.log('privateKeys1', privateKeys);
 
         const accounts = privateKeys.map(pk => pk.address);
 
         const merkleTree = new MerkleTree(accounts);
 
-        console.log('pk accounts', privateKeys.map(pk => pk.address));
+        // console.log('pk accounts', privateKeys.map(pk => pk.address));
 
-        // console.log(privateKeys);
         // console.log(merkleTree);
 
         // this.storeMerkleTree(merkleTree);
@@ -157,54 +163,6 @@ export class IssueFormComponent implements OnInit {
         // setTimeout(this.generatePDF, 300);
 
         this.loading = false;
-    }
-
-    private async generateQRCodes(vCards: any) {
-
-        const QRCodes = await Promise.all(vCards.map( value =>  QRCode.toDataURL(value)));
-
-        console.log('QRCodes', QRCodes);
-
-        return QRCodes;
-    }
-
-    private generateCards(privateKeys: Array<string>, merkleTree: MerkleTree) {
-
-        const result = [];
-
-        for (let index = 0; index < privateKeys.length; index++) {
-
-            const privateKeyBuffer = new Buffer(this.web3Service.web3.utils.hexToBytes(privateKeys[index]));
-            const merkleTreeBuffer = Buffer.concat(merkleTree.getProof(index));
-
-            console.log('Part1', privateKeyBuffer);
-            console.log('Part2', merkleTreeBuffer);
-
-            var c = new Uint8Array(privateKeyBuffer.length + merkleTreeBuffer.length);
-            c.set(privateKeyBuffer);
-            c.set(merkleTreeBuffer, privateKeyBuffer.length);
-
-
-            const bufferToBase64 = function(buf) {
-                var binstr = Array.prototype.map.call(buf, function (ch) {
-                    return String.fromCharCode(ch);
-                }).join('');
-                return btoa(binstr);
-            };
-
-            const content = bufferToBase64(c).replace('/', '-');
-
-            console.log('Multi', content);
-
-            result.push(
-                'https://qrtoken.io/#/redeem/' + content
-            );
-        }
-
-        console.log('privateKeys', privateKeys);
-        console.log('Urls', result);
-
-        return result;
     }
 
     print(index: number) {
@@ -248,5 +206,49 @@ export class IssueFormComponent implements OnInit {
 
             this.hidePrintButtons = false;
         });
+    }
+
+    private async generateQRCodes(vCards: any) {
+
+        const QRCodes = await Promise.all(vCards.map(value => QRCode.toDataURL(value)));
+
+        console.log('QRCodes', QRCodes);
+
+        return QRCodes;
+    }
+
+    private generateCards(privateKeys: Array<string>, merkleTree: MerkleTree) {
+
+        const result = [];
+
+        for (let index = 0; index < privateKeys.length; index++) {
+
+            const privateKeyBuffer = new Buffer(this.web3Service.web3.utils.hexToBytes(privateKeys[index]));
+            const merkleTreeBuffer = Buffer.concat(merkleTree.getProof(index));
+
+            var c = new Uint8Array(privateKeyBuffer.length + merkleTreeBuffer.length);
+            c.set(privateKeyBuffer);
+            c.set(merkleTreeBuffer, privateKeyBuffer.length);
+
+            const bufferToBase64 = function (buf) {
+                var binstr = Array.prototype.map.call(buf, function (ch) {
+                    return String.fromCharCode(ch);
+                }).join('');
+                return btoa(binstr);
+            };
+
+            const content = bufferToBase64(c).replace(/\//g, '-').replace(/\+/g, '_');
+
+            console.log('Base64', content);
+
+            result.push(
+                'https://qrtoken.io/#/r/' + content
+            );
+        }
+
+        console.log('privateKeys', privateKeys);
+        console.log('Urls', result);
+
+        return result;
     }
 }
