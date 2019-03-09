@@ -1,0 +1,15 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+  <button (click)="goBack()" [hidden]="!navigationService.showBackButton"
+          class="btn btn-link my-2 my-sm-0 text-success mr-auto" type="submit">
+    <fa-icon [icon]="backIcon" style="font-size: 30px;"></fa-icon>
+  </button>
+
+  <div class="ml-auto mr-auto" style="display: flex!important;flex-basis: auto;">
+    <a routerLink="/" class="navbar-brand">
+      <img alt="QRToken" height="50" src="assets/logo.svg"> QR<strong>Token</strong>
+    </a>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>
