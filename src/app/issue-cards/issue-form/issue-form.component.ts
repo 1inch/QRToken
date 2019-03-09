@@ -66,6 +66,14 @@ export class IssueFormComponent implements OnInit {
             allowance: 0,
             inApproval: false
         },
+        {
+            address: '0x4470BB87d77b963A013DB939BE332f927f2b992e',
+            icon: 'assets/icons/AdEx.png',
+            name: 'AdEx - AdEx Token',
+            balance: Number(0),
+            allowance: 0,
+            inApproval: false
+        },
     ];
 
     constructor(
