@@ -32,7 +32,7 @@ export class MerkleTree {
 
     console.log('Proof1', proof);
 
-    proof = proof.map(el => new Buffer(el.substr(2), 'hex'));
+    proof = proof.map(el => new Buffer(el, 'hex'));
 
     console.log('Proof2', proof);
 
@@ -40,9 +40,9 @@ export class MerkleTree {
 
       if (account < proof[i]) {
         account = keccak160(Buffer.concat([account, proof[i]]));
+        index += 1 << i;
       } else {
         account = keccak160(Buffer.concat([proof[i], account]));
-        index += 1 << i;
       }
     }
 

@@ -71,7 +71,7 @@ export class IssueFormComponent implements OnInit {
         {
             address: '0x4470BB87d77b963A013DB939BE332f927f2b992e',
             icon: 'assets/icons/AdEx.png',
-            name: 'AdEx - AdEx Token',
+            name: 'ADX - AdEx Token',
             balance: Number(0),
             allowance: 0,
             inApproval: false
@@ -138,7 +138,7 @@ export class IssueFormComponent implements OnInit {
                     this.zone.run(() => {
                         this.selectedToken.allowance = _token.allowance;
                         this.selectedToken.inApproval = false;
-                        // console.log('Token allowance', this.selectedToken.allowance);
+                        console.log('Token allowance', this.selectedToken.allowance);
                     });
                 }
             });
@@ -148,7 +148,7 @@ export class IssueFormComponent implements OnInit {
 
         this.loading = true;
 
-        // console.log('Cards amount', this.cardsAmount);
+        console.log('Cards amount', this.cardsAmount);
 
         const privateKeys = [];
 
@@ -156,15 +156,15 @@ export class IssueFormComponent implements OnInit {
             privateKeys.push(this.web3Service.web3.eth.accounts.create());
         }
 
-        // console.log('privateKeys1', privateKeys);
+        console.log('privateKeys1', privateKeys);
 
         const accounts = privateKeys.map(pk => pk.address);
 
         const merkleTree = new MerkleTree(accounts);
 
-        // console.log('pk accounts', privateKeys.map(pk => pk.address));
+        console.log('pk accounts', privateKeys.map(pk => pk.address));
 
-        // console.log(merkleTree);
+        console.log(merkleTree);
 
         await this.storeMerkleTree(merkleTree);
         const cards = this.generateCards(privateKeys.map(pk => pk.privateKey), merkleTree);
@@ -277,6 +277,8 @@ export class IssueFormComponent implements OnInit {
             const privateKeyBuffer = new Buffer(this.web3Service.web3.utils.hexToBytes(privateKeys[index]));
             const merkleTreeBuffer = Buffer.concat(merkleTree.getProof(index));
 
+            console.log('Proof', Buffer.concat(merkleTree.getProof(index)).toString('hex'));
+
             const c = new Uint8Array(privateKeyBuffer.length + merkleTreeBuffer.length);
             c.set(privateKeyBuffer);
             c.set(merkleTreeBuffer, privateKeyBuffer.length);
@@ -291,15 +293,15 @@ export class IssueFormComponent implements OnInit {
 
             const content = bufferToBase64(c).replace(/\//g, '-').replace(/\+/g, '_');
 
-            // console.log('Base64', content);
+            console.log('Base64', content);
 
             result.push(
                 'https://qrtoken.io/#/r/' + content
             );
         }
 
-        // console.log('privateKeys', privateKeys);
-        // console.log('Urls', result);
+        console.log('privateKeys', privateKeys);
+        console.log('Urls', result);
 
         return result;
     }

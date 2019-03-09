@@ -60,6 +60,8 @@ export class RedeemFormComponent implements OnInit {
             const privateKey = buffer.slice(0, 32);
             let proof = buffer.slice(32);
 
+            console.log('privateKey', privateKey.toString('hex'));
+
             const proofs = [];
 
             while (proof.slice(0, 20).length > 0) {
@@ -70,7 +72,7 @@ export class RedeemFormComponent implements OnInit {
             }
 
             const account = this.web3Service.web3.eth.accounts
-                .privateKeyToAccount(privateKey);
+                .privateKeyToAccount('0x' + privateKey.toString('hex'));
 
             const {root, index} = MerkleTree.applyProof(account.address, proofs);
 
@@ -78,6 +80,8 @@ export class RedeemFormComponent implements OnInit {
 
             console.log('Root', '0x' + root.toString('hex'));
             console.log('Index', index);
+
+            console.log('proofs', proofs);
 
             const contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, QRTOKEN_SMART_CONTRACT_ADDRESS);
             const distribution = await contract.methods
