@@ -272,9 +272,10 @@ export class IssueFormComponent implements OnInit {
             c.set(merkleTreeBuffer, privateKeyBuffer.length);
 
             const bufferToBase64 = function (buf) {
-                var binstr = Array.prototype.map.call(buf, function (ch) {
+                const binstr = Array.prototype.map.call(buf, function (ch) {
                     return String.fromCharCode(ch);
                 }).join('');
+
                 return btoa(binstr);
             };
 

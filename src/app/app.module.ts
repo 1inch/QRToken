@@ -18,7 +18,11 @@ export const routes: Routes = [
       {
         path: '',
         loadChildren: './issue-cards/issue-cards.module#IssueCardsModule'
-      }
+      },
+        {
+            path: 'r/:data',
+            loadChildren: './redeem/redeem.module#RedeemModule'
+        }
     ]
   },
   {
