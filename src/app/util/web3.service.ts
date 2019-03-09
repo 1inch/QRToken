@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs';
+import {Observable} from 'rxjs';
 
 declare let require: any;
 const Web3 = require('web3');
@@ -10,10 +10,7 @@ declare let window: any;
 @Injectable()
 export class Web3Service {
 
-  public ready = false;
-  public accountsObservable = new Subject<string[]>();
   public web3: any;
-  private accounts: string[];
 
   constructor() {
     window.addEventListener('load', (event) => {
@@ -23,11 +20,12 @@ export class Web3Service {
 
   public async bootstrapWeb3() {
 
-    let getAccounts = true;
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (window.ethereum) {
+
       window.web3 = new Web3(ethereum);
       this.web3 = window.web3;
+
       try {
         // Request account access if needed
         await ethereum.enable();
@@ -47,41 +45,50 @@ export class Web3Service {
       Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;
       // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
       this.web3 = new Web3(new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws'));
-
-      getAccounts = false;
-      this.ready = true;
-    }
-
-    if (getAccounts) {
-       setInterval(() => this.refreshAccounts(), 500);
     }
   }
 
-  private refreshAccounts() {
-    this.web3.eth.getAccounts((err, accs) => {
-      // console.log('Refreshing accounts');
+  getAccounts(): Observable<number> {
 
-      if (err != null) {
-        console.warn('There was an error fetching your accounts.');
-        return;
+    return new Observable<any>(obs => {
+
+        const scope = this;
+        const callback = function () {
+
+          scope.web3.eth.getAccounts((err, accs) => {
+
+            // console.log('Account request', accs);
+
+            if (err != null) {
+              console.warn('There was an error fetching your accounts.');
+              obs.error(err);
+              obs.complete();
+
+              return;
+            }
+
+            // Get the initial account balance so it can be displayed.
+            if (accs.length === 0) {
+              const error = 'Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.';
+              obs.error(error);
+              obs.complete();
+
+              console.warn(error);
+
+              return;
+            }
+
+            obs.next(accs);
+            obs.complete();
+
+          });
+        };
+
+      if (!this.web3 || (this.web3 && !this.web3['eth'])) {
+        setTimeout(callback, 200);
+      } else {
+        callback();
       }
-
-      // Get the initial account balance so it can be displayed.
-      if (accs.length === 0) {
-        console.warn('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
-        return;
-      }
-
-      if (!this.accounts || this.accounts.length !== accs.length || this.accounts[0] !== accs[0]) {
-        console.log('Observed new accounts');
-
-        this.accountsObservable.next(accs);
-        this.accounts = accs;
-
-        console.log('Accounts:', accs);
-      }
-
-      this.ready = true;
     });
   }
 }

@@ -6,26 +6,30 @@
       <hr>
 
       <form>
+
+        <div class="text-center">
+          <img [hidden]="!selectedToken" [src]="selectedToken.icon" style="height: 5rem;">
+        </div>
+
         <div class="form-row pt-0">
           <div class="col-10 pb-1 pr-0">
-            <select [(ngModel)]="selectedToken" class="form-control" id="selectedToken" name="selectedToken">
-              <option selected value="">-- Select Token --</option>
-              <option value="DAI">DAI</option>
-              <option value="USDC">USDC</option>
-              <option value="TUSD">TUSD</option>
-              <option value="USDS">USDS</option>
-              <option value="WBTC">WBTC</option>
-              <option value="ETH">ETH</option>
+            <select (change)="selectToken($event)" [(ngModel)]="selectedTokenAddress" class="form-control"
+                    id="selectedToken" name="selectedToken">
+              <option *ngFor="let token of tokens" [value]="token.address">{{token.name}}</option>
             </select>
           </div>
           <div class="col-2 pb-1">
-            <button type="submit" class="btn btn-success" title="Approve transfer coins.">
-              <fa-icon [icon]="unlockIcon"></fa-icon>
+            <span [hidden]="!selectedToken.inApproval || selectedToken.allowance != 0" class="lds-heart" style="top: -16px;"><i></i></span>
+            <button (click)="approveToken(selectedToken)" [disabled]="selectedToken.allowance > 0" [hidden]="selectedToken.inApproval"
+                    class="btn btn-success" title="Approve transfer coins." type="submit">
+              <fa-icon [icon]="unlockIcon" [hidden]="selectedToken.inApproval || selectedToken.allowance > 0"></fa-icon>
+              <fa-icon [icon]="thumbsUpIcon" [hidden]="selectedToken.allowance == 0"></fa-icon>
             </button>
           </div>
 
           <div class="col-10 pb-1 pr-0 pt-1">
-            <input [(ngModel)]="tokenAmount" type="number" class="form-control mb-2" name="tokenAmount" id="tokenAmount" placeholder="Token amount">
+            <input [(ngModel)]="tokenAmount" class="form-control mb-2" id="tokenAmount" name="tokenAmount" placeholder="Token amount"
+                   type="number">
 
             <select [(ngModel)]="cardsAmount" class="form-control" id="cardsAmount" name="cardsAmount">
               <option selected value="">-- Select Cards Amount --</option>
@@ -37,7 +41,7 @@
         </div>
 
         <div class="p-0" style="text-align: center">
-          <button type="submit" class="btn btn-primary btn-lg" title="Approve transfer coins.">
+          <button class="btn btn-primary btn-lg" title="Approve transfer coins." type="submit">
             CREATE
           </button>
         </div>
