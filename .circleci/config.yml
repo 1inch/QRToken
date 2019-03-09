@@ -23,6 +23,15 @@ jobs:
           paths:
             - node_modules
           key: v2-dependencies-{{ checksum "package.json" }}
+#      - run:
+#          name: Run lint
+#          command: yarn run lint
+#      - run:
+#          name: Run tests
+#          command: yarn run test
+#      - run:
+#          name: Run coverage
+#          command: yarn run coverage && cat coverage/lcov.info | coveralls
       - deploy:
           name: Deploy
           command: |
