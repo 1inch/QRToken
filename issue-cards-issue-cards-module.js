@@ -6445,17 +6445,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fortawesome/free-solid-svg-icons */ "./node_modules/@fortawesome/free-solid-svg-icons/index.es.js");
+/* harmony import */ var _wallet_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./wallet.service */ "./src/app/issue-cards/issue-form/wallet.service.ts");
+
 
 
 
 var IssueFormComponent = /** @class */ (function () {
-    function IssueFormComponent() {
+    function IssueFormComponent(walletService) {
+        this.walletService = walletService;
         this.selectedToken = '';
         this.cardsAmount = '';
         this.tokenAmount = '';
         this.unlockIcon = _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_2__["faUnlock"];
     }
     IssueFormComponent.prototype.ngOnInit = function () {
+        this.walletService.getListOfTokens();
     };
     IssueFormComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -6463,9 +6467,64 @@ var IssueFormComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./issue-form.component.html */ "./src/app/issue-cards/issue-form/issue-form.component.html"),
             styles: [__webpack_require__(/*! ./issue-form.component.css */ "./src/app/issue-cards/issue-form/issue-form.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_wallet_service__WEBPACK_IMPORTED_MODULE_3__["WalletService"]])
     ], IssueFormComponent);
     return IssueFormComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/issue-cards/issue-form/wallet.service.ts":
+/*!**********************************************************!*\
+  !*** ./src/app/issue-cards/issue-form/wallet.service.ts ***!
+  \**********************************************************/
+/*! exports provided: WalletService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WalletService", function() { return WalletService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _util_web3_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../util/web3.service */ "./src/app/util/web3.service.ts");
+
+
+
+var WalletService = /** @class */ (function () {
+    function WalletService(web3Service) {
+        this.web3Service = web3Service;
+    }
+    WalletService.prototype.ngOnInit = function () {
+    };
+    WalletService.prototype.getListOfTokens = function () {
+        var _this = this;
+        this.web3Service.accountsObservable.subscribe(function (addresses) {
+            console.log('Account', addresses[0]);
+            _this.web3Service.web3.eth.getPastLogs({
+                fromBlock: 6500000,
+                topics: [
+                    _this.web3Service.web3.utils.keccak256('Transfer(address,address,uint256)'),
+                    null,
+                    _this.web3Service.web3.utils.padLeft(addresses[0], 64)
+                ]
+            })
+                .then(function (data) {
+                console.log('Data', data);
+            })
+                .catch(function (err) {
+                console.error('Error', err);
+            });
+        });
+    };
+    WalletService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            providedIn: 'root'
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_util_web3_service__WEBPACK_IMPORTED_MODULE_2__["Web3Service"]])
+    ], WalletService);
+    return WalletService;
 }());
 
 
