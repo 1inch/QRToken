@@ -58,24 +58,51 @@ contract QRToken is InstaLend {
         distribution.sponsor = msg.sender;
     }
 
+    function redeemed(uint160 root, uint index) public view returns(bool) {
+        Distribution storage distribution = distributions[root];
+        return distribution.bitMask[index / 32] & (1 << (index % 32)) != 0;
+    }
+
     function redeem(
-        address receiver,
         bytes calldata signature,
         bytes calldata merkleProof
     )
         external
         notInLendingMode
     {
-        bytes32 messageHash = ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(receiver)));
+        bytes32 messageHash = ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(msg.sender)));
         address signer = ECDSA.recover(messageHash, signature);
         (uint160 root, uint256 index) = merkleProof.compute(uint160(signer));
         Distribution storage distribution = distributions[root];
         require(distribution.bitMask[index / 32] & (1 << (index % 32)) == 0);
 
         distribution.bitMask[index / 32] = distribution.bitMask[index / 32] | (1 << (index % 32));
-        require(distribution.token.transfer(receiver, distribution.sumAmount.div(distribution.codesCount)));
-        emit Redeemed(root, index, receiver);
+        require(distribution.token.transfer(msg.sender, distribution.sumAmount.div(distribution.codesCount)));
+        emit Redeemed(root, index, msg.sender);
     }
+
+    // function redeemWithFee(
+    //     address receiver,
+    //     uint256 feePrecent,
+    //     bytes calldata signature,
+    //     bytes calldata merkleProof
+    // )
+    //     external
+    //     notInLendingMode
+    // {
+    //     bytes32 messageHash = ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(receiver, feePrecent)));
+    //     address signer = ECDSA.recover(messageHash, signature);
+    //     (uint160 root, uint256 index) = merkleProof.compute(uint160(signer));
+    //     Distribution storage distribution = distributions[root];
+    //     require(distribution.bitMask[index / 32] & (1 << (index % 32)) == 0);
+
+    //     distribution.bitMask[index / 32] = distribution.bitMask[index / 32] | (1 << (index % 32));
+    //     uint256 reward = distribution.sumAmount.div(distribution.codesCount);
+    //     uint256 fee = reward.mul(feePrecent).div(100);
+    //     require(distribution.token.transfer(receiver, reward));
+    //     require(distribution.token.transfer(msg.sender, fee));
+    //     emit Redeemed(root, index, receiver);
+    // }
 
     function abort(uint160 root)
         public
