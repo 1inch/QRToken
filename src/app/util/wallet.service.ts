@@ -83,14 +83,14 @@ export class WalletService implements OnInit {
 
   getAllowance(token: Token): Observable<Token> {
 
-    console.log('getAllowance');
+    // console.log('getAllowance');
 
     return new Observable<any>(obs => {
 
       this.web3Service.getAccounts()
         .subscribe(addresses => {
 
-          console.log('addresses', addresses);
+          // console.log('addresses', addresses);
 
           try {
             const contract = new this.web3Service.web3.eth.Contract(tokenbArtifacts, token.address);
@@ -100,7 +100,7 @@ export class WalletService implements OnInit {
               .call()
               .then(data => {
 
-                console.log('getAllowance', data);
+                // console.log('getAllowance', data);
                 token.allowance = data;
 
                 obs.next(token);

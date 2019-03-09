@@ -189,12 +189,10 @@ export class IssueFormComponent implements OnInit {
 
                     const decimals = await tokenContract.methods.decimals().call();
 
-                    console.log('BigNumer', scope.web3Service.web3.utils.toBN(scope.tokenAmount * 10 ** decimals));
-
                     const result = await contract.methods
                         .create(
                             scope.selectedToken.address,
-                            '0x' + scope.web3Service.web3.utils.toBN(scope.tokenAmount * 10 ** decimals),
+                            scope.web3Service.web3.utils.toHex(scope.tokenAmount * 10 ** decimals),
                             scope.cardsAmount,
                             merkleTree.getHexRoot(),
                             Math.trunc( Date.now() / 1000 + 60 * 60 * 24 * 7)
