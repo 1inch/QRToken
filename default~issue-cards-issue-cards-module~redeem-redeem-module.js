@@ -10183,15 +10183,15 @@ var MerkleTree = /** @class */ (function () {
         account = keccak160(account);
         console.log('keccak160(Account0)', account);
         console.log('Proof1', proof);
-        proof = proof.map(function (el) { return new Buffer(el.substr(2), 'hex'); });
+        proof = proof.map(function (el) { return new Buffer(el, 'hex'); });
         console.log('Proof2', proof);
         for (var i = 0; i < proof.length; i++) {
             if (account < proof[i]) {
                 account = keccak160(Buffer.concat([account, proof[i]]));
+                index += 1 << i;
             }
             else {
                 account = keccak160(Buffer.concat([proof[i], account]));
-                index += 1 << i;
             }
         }
         return {

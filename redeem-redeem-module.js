@@ -87,6 +87,7 @@ var RedeemFormComponent = /** @class */ (function () {
                                 buffer = new Buffer(data, 'base64');
                                 privateKey = buffer.slice(0, 32);
                                 proof = buffer.slice(32);
+                                console.log('privateKey', privateKey.toString('hex'));
                                 proofs = [];
                                 while (proof.slice(0, 20).length > 0) {
                                     slice = proof.slice(0, 20);
@@ -94,11 +95,12 @@ var RedeemFormComponent = /** @class */ (function () {
                                     proofs.push(slice.toString('hex'));
                                 }
                                 account = this.web3Service.web3.eth.accounts
-                                    .privateKeyToAccount(privateKey);
+                                    .privateKeyToAccount('0x' + privateKey.toString('hex'));
                                 _a = _util_merkle_tree__WEBPACK_IMPORTED_MODULE_5__["MerkleTree"].applyProof(account.address, proofs), root = _a.root, index = _a.index;
                                 console.log('Account', account);
                                 console.log('Root', '0x' + root.toString('hex'));
                                 console.log('Index', index);
+                                console.log('proofs', proofs);
                                 contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_4__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
                                 return [4 /*yield*/, contract.methods
                                         .distributions('0x' + root.toString('hex'))
