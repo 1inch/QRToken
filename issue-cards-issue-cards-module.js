@@ -21629,7 +21629,7 @@ module.exports = "@media (min-width: 767.98px) {\n\n  #issue-form {\n    padding
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\" id=\"issue-form\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-sm-8 ml-auto mr-auto\">\n            <h3 class=\"pb-3 pt-3\">Issue QR Token Cards</h3>\n\n            <hr>\n\n            <form (ngSubmit)=\"f.form.valid && create()\" name=\"form\" #f=\"ngForm\" novalidate>\n\n                <div class=\"text-center mb-3\">\n                    <img [hidden]=\"!selectedToken\" [src]=\"selectedToken.icon\" style=\"height: 5rem;\">\n                </div>\n\n                <div class=\"form-row pt-0\">\n                    <div class=\"col-10 pb-1 pr-0\">\n                        <select (change)=\"selectToken($event)\" [(ngModel)]=\"selectedTokenAddress\" class=\"form-control\"\n                                id=\"selectedToken\" name=\"selectedToken\">\n                            <option *ngFor=\"let token of tokens\" [value]=\"token.address\">{{token.name}}</option>\n                        </select>\n                    </div>\n                    <div class=\"col-2 pb-1\">\n                        <span [hidden]=\"!selectedToken.inApproval || selectedToken.allowance != 0\" class=\"lds-heart\"\n                              style=\"top: -16px;\"><i></i></span>\n                        <button (click)=\"approveToken(selectedToken)\" [disabled]=\"selectedToken.allowance > 0\"\n                                [hidden]=\"selectedToken.inApproval\"\n                                class=\"btn btn-success\" title=\"Approve transfer coins.\" type=\"submit\">\n                            <fa-icon [hidden]=\"selectedToken.inApproval || selectedToken.allowance > 0\"\n                                     [icon]=\"unlockIcon\"></fa-icon>\n                            <fa-icon [hidden]=\"selectedToken.allowance == 0\" [icon]=\"thumbsUpIcon\"></fa-icon>\n                        </button>\n                    </div>\n\n                    <div class=\"col-10 pb-1 pr-0 pt-1\">\n                        <input [(ngModel)]=\"tokenAmount\" class=\"form-control mb-2\" required id=\"tokenAmount\" name=\"tokenAmount\"\n                               placeholder=\"Token amount\"\n                               type=\"number\">\n\n                        <select [(ngModel)]=\"cardsAmount\" class=\"form-control\" id=\"cardsAmount\" name=\"cardsAmount\"\n                                required>\n                            <option selected value=\"\">-- Select Cards Amount --</option>\n                            <option value=\"4\">4</option>\n                            <option value=\"8\">8</option>\n                            <option value=\"16\">16</option>\n                            <option value=\"32\">32</option>\n                        </select>\n                    </div>\n                </div>\n\n                <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                    <button class=\"btn btn-primary btn-lg\" title=\"Approve transfer coins.\"\n                            type=\"submit\">\n                        CREATE\n                    </button>\n                </div>\n            </form>\n        </div>\n    </div>\n</div>\n\n<div class=\"container mt-5\" id=\"card-panel\" [hidden]=\"!QRCodes.length\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-sm-8 ml-auto mr-auto\">\n\n            <div class=\"container-fluid\">\n                <div class=\"row align-items-center\">\n                    <div class=\"col-sm-12\" *ngFor=\"let QRCode of QRCodes; index as i\" [id]=\"'contentToConvert' + i\">\n                        <div class=\"pb-10\">\n                            <button class=\"btn btn-info btn-sm float-right\" (click)=\"print(i)\" [hidden]=\"hidePrintButtons\">Print</button>\n                            <img [src]=\"selectedToken.icon\" width=\"128\" class=\"float-right mr-4\" style=\"margin-top: 10rem;\">\n                            <img [src]=\"QRCode.qr\" width=\"430\" class=\"mr-auto\">\n                        </div>\n                    </div>\n                    <div class=\"clearfix\"></div>\n                </div>\n            </div>\n\n        </div>\n    </div>\n</div>\n"
+module.exports = "<div class=\"container\" id=\"issue-form\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-sm-8 ml-auto mr-auto\">\n            <h3 class=\"pb-3 pt-3\">Issue QR Token Cards</h3>\n\n            <hr>\n\n            <form (ngSubmit)=\"f.form.valid && create()\" name=\"form\" #f=\"ngForm\" novalidate>\n\n                <div class=\"text-center mb-3\">\n                    <img [hidden]=\"!selectedToken\" [src]=\"selectedToken.icon\" style=\"height: 5rem;\">\n                </div>\n\n                <div class=\"form-row pt-0\">\n                    <div class=\"col-10 pb-1 pr-0\">\n                        <select (change)=\"selectToken($event)\" [(ngModel)]=\"selectedTokenAddress\" class=\"form-control\"\n                                id=\"selectedToken\" name=\"selectedToken\">\n                            <option *ngFor=\"let token of tokens\" [value]=\"token.address\">{{token.name}}</option>\n                        </select>\n                    </div>\n                    <div class=\"col-2 pb-1\">\n                        <span [hidden]=\"!selectedToken.inApproval || selectedToken.allowance != 0\" class=\"lds-heart\"\n                              style=\"top: -16px;\"><i></i></span>\n                        <button (click)=\"approveToken(selectedToken)\" [disabled]=\"selectedToken.allowance > 0\"\n                                [hidden]=\"selectedToken.inApproval\"\n                                class=\"btn btn-success\" title=\"Approve transfer coins.\" type=\"button\">\n                            <fa-icon [hidden]=\"selectedToken.inApproval || selectedToken.allowance > 0\"\n                                     [icon]=\"unlockIcon\"></fa-icon>\n                            <fa-icon [hidden]=\"selectedToken.allowance == 0\" [icon]=\"thumbsUpIcon\"></fa-icon>\n                        </button>\n                    </div>\n\n                    <div class=\"col-10 pb-1 pr-0 pt-1\">\n                        <input [(ngModel)]=\"tokenAmount\" class=\"form-control mb-2\" required id=\"tokenAmount\" name=\"tokenAmount\"\n                               placeholder=\"Token amount\"\n                               type=\"number\">\n\n                        <select [(ngModel)]=\"cardsAmount\" class=\"form-control\" id=\"cardsAmount\" name=\"cardsAmount\"\n                                required>\n                            <option selected value=\"\">-- Select Cards Amount --</option>\n                            <option value=\"4\">4</option>\n                            <option value=\"8\">8</option>\n                            <option value=\"16\">16</option>\n                            <option value=\"32\">32</option>\n                        </select>\n                    </div>\n                </div>\n\n                <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                    <button class=\"btn btn-primary btn-lg\" title=\"Approve transfer coins.\"\n                            type=\"submit\">\n                        CREATE\n                    </button>\n                </div>\n            </form>\n        </div>\n    </div>\n</div>\n\n<div class=\"container mt-5\" id=\"card-panel\" [hidden]=\"!QRCodes.length\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-sm-8 ml-auto mr-auto\">\n\n            <div class=\"container-fluid\">\n                <div class=\"row align-items-center\">\n                    <div class=\"col-sm-12\" *ngFor=\"let QRCode of QRCodes; index as i\" [id]=\"'contentToConvert' + i\">\n                        <div class=\"pb-10\">\n                            <button class=\"btn btn-info btn-sm float-right\" (click)=\"print(i)\" [hidden]=\"hidePrintButtons\">Print</button>\n                            <img [src]=\"selectedToken.icon\" width=\"128\" class=\"float-right mr-4\" style=\"margin-top: 10rem;\">\n                            <img [src]=\"QRCode.qr\" width=\"430\" class=\"mr-auto\">\n                        </div>\n                    </div>\n                    <div class=\"clearfix\"></div>\n                </div>\n            </div>\n\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -21653,6 +21653,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var html2canvas__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! html2canvas */ "./node_modules/html2canvas/dist/npm/index.js");
 /* harmony import */ var html2canvas__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(html2canvas__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _util_merkle_tree__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../util/merkle-tree */ "./src/app/util/merkle-tree.ts");
+/* harmony import */ var _util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../util/qrtoken-smart-contract */ "./src/app/util/qrtoken-smart-contract.ts");
+
 
 
 
@@ -21662,14 +21664,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var QRCode = __webpack_require__(/*! qrcode */ "./node_modules/qrcode/lib/browser.js");
+var qrtokenContractArtifacts = __webpack_require__(/*! ../../util/QRTokenABI.json */ "./src/app/util/QRTokenABI.json");
+var tokenContractArtifacts = __webpack_require__(/*! ../../util/TokenABI.json */ "./src/app/util/TokenABI.json");
 var IssueFormComponent = /** @class */ (function () {
     function IssueFormComponent(walletService, zone, web3Service) {
         this.walletService = walletService;
         this.zone = zone;
         this.web3Service = web3Service;
         this.selectedTokenAddress = '0xB8c77482e45F1F44dE1745F52C74426C631bDD52';
-        this.cardsAmount = 8;
-        this.tokenAmount = '';
+        this.cardsAmount = 4;
+        this.tokenAmount = 0.01;
         this.unlockIcon = _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_2__["faUnlock"];
         this.thumbsUpIcon = _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_2__["faThumbsUp"];
         this.loading = false;
@@ -21766,10 +21770,17 @@ var IssueFormComponent = /** @class */ (function () {
                         }
                         accounts = privateKeys.map(function (pk) { return pk.address; });
                         merkleTree = new _util_merkle_tree__WEBPACK_IMPORTED_MODULE_7__["MerkleTree"](accounts);
+                        // console.log('pk accounts', privateKeys.map(pk => pk.address));
+                        // console.log(merkleTree);
+                        return [4 /*yield*/, this.storeMerkleTree(merkleTree)];
+                    case 1:
+                        // console.log('pk accounts', privateKeys.map(pk => pk.address));
+                        // console.log(merkleTree);
+                        _b.sent();
                         cards = this.generateCards(privateKeys.map(function (pk) { return pk.privateKey; }), merkleTree);
                         _a = this;
                         return [4 /*yield*/, this.generateQRCodes(cards)];
-                    case 1:
+                    case 2:
                         _a.QRCodes = (_b.sent()).map(function (qr) {
                             return {
                                 qr: qr, index: null
@@ -21779,6 +21790,48 @@ var IssueFormComponent = /** @class */ (function () {
                         this.loading = false;
                         return [2 /*return*/];
                 }
+            });
+        });
+    };
+    IssueFormComponent.prototype.storeMerkleTree = function (merkleTree) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var scope;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                scope = this;
+                return [2 /*return*/, new Promise(function (resolve, reject) {
+                        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+                            var _this = this;
+                            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                scope.web3Service.getAccounts().subscribe(function (addresses) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                    var contract, tokenContract, decimals, result;
+                                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                contract = new scope.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_8__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
+                                                console.log('Root', merkleTree.getHexRoot());
+                                                console.log('Layers', merkleTree.layers);
+                                                tokenContract = new scope.web3Service.web3.eth.Contract(tokenContractArtifacts, scope.selectedToken.address);
+                                                console.log('Token Contract', tokenContract);
+                                                return [4 /*yield*/, tokenContract.methods.decimals().call()];
+                                            case 1:
+                                                decimals = _a.sent();
+                                                console.log('BigNumer', scope.web3Service.web3.utils.toBN(scope.tokenAmount * Math.pow(10, decimals)));
+                                                return [4 /*yield*/, contract.methods
+                                                        .create(scope.selectedToken.address, '0x' + scope.web3Service.web3.utils.toBN(scope.tokenAmount * Math.pow(10, decimals)), scope.cardsAmount, merkleTree.getHexRoot(), Math.trunc(Date.now() / 1000 + 60 * 60 * 24 * 7))
+                                                        .send({
+                                                        from: addresses[0]
+                                                    })];
+                                            case 2:
+                                                result = _a.sent();
+                                                resolve(result);
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); });
+                                return [2 /*return*/];
+                            });
+                        });
+                    })];
             });
         });
     };
@@ -21866,14 +21919,25 @@ var IssueFormComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/util/QRTokenABI.json":
+/*!**************************************!*\
+  !*** ./src/app/util/QRTokenABI.json ***!
+  \**************************************/
+/*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, default */
+/***/ (function(module) {
+
+module.exports = [{"constant":true,"inputs":[],"name":"MAX_WORDS_COUNT","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"MAX_CODES_COUNT","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint160"}],"name":"distributions","outputs":[{"name":"token","type":"address"},{"name":"sumAmount","type":"uint256"},{"name":"codesCount","type":"uint256"},{"name":"deadline","type":"uint256"},{"name":"sponsor","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"token","type":"address"},{"name":"sumTokenAmount","type":"uint256"},{"name":"codesCount","type":"uint256"},{"name":"root","type":"uint160"},{"name":"deadline","type":"uint256"}],"name":"create","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"root","type":"uint160"}],"name":"abort","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"receiver","type":"address"},{"name":"signature","type":"bytes"},{"name":"merkleProof","type":"bytes"}],"name":"redeem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[],"name":"Created","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"root","type":"uint160"},{"indexed":false,"name":"index","type":"uint256"},{"indexed":false,"name":"receiver","type":"address"}],"name":"Redeemed","type":"event"}];
+
+/***/ }),
+
 /***/ "./src/app/util/TokenABI.json":
 /*!************************************!*\
   !*** ./src/app/util/TokenABI.json ***!
   \************************************/
-/*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, default */
+/*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, default */
 /***/ (function(module) {
 
-module.exports = [{"constant":true,"inputs":[],"name":"naturalUnit","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getComponents","outputs":[{"name":"","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getUnits","outputs":[{"name":"","type":"uint256[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_tokenAddress","type":"address"}],"name":"tokenIsComponent","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_issuer","type":"address"},{"name":"_quantity","type":"uint256"}],"name":"mint","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_quantity","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}];
+module.exports = [{"constant":true,"inputs":[],"name":"naturalUnit","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getComponents","outputs":[{"name":"","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getUnits","outputs":[{"name":"","type":"uint256[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_tokenAddress","type":"address"}],"name":"tokenIsComponent","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_issuer","type":"address"},{"name":"_quantity","type":"uint256"}],"name":"mint","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_quantity","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}];
 
 /***/ }),
 
