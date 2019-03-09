@@ -15,6 +15,8 @@ const QRCode = require('qrcode');
 const qrtokenContractArtifacts = require('../../util/QRTokenABI.json');
 const tokenContractArtifacts = require('../../util/TokenABI.json');
 
+declare let window: any;
+
 @Component({
     selector: 'app-issue-form',
     templateUrl: './issue-form.component.html',
@@ -300,5 +302,9 @@ export class IssueFormComponent implements OnInit {
         // console.log('Urls', result);
 
         return result;
+    }
+
+    hasMetamask() {
+        return window.ethereum || window.web3;
     }
 }

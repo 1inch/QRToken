@@ -1,88 +1,102 @@
-<div class="container-fluid" [hidden]="!loading">
-    <div class="row align-items-center">
-        <div class="col-12">
-            <div class="lds-ripple m-auto d-block"><div></div><div></div></div>
+<div [hidden]="hasMetamask()">
+    <div class="container-fluid" id="select-screen">
+        <div class="row align-items-center">
+            <div class="col-12 text-center pt-4">
+                <img src="assets/metamask.png" class="d-inline-block mb-4">
+                <h2>Please install Metamask:<br><br><a href="https://metamask.io" class="btn btn-warning btn-lg" target="_blank">https://metamask.io</a></h2>
+            </div>
         </div>
     </div>
 </div>
 
-<div [hidden]="loading">
-    <div class="container" id="issue-form">
+
+<div [hidden]="!hasMetamask()">
+    <div class="container-fluid" [hidden]="!loading">
         <div class="row align-items-center">
-            <div class="col-sm-8 ml-auto mr-auto">
-                <h3 class="pb-3 pt-3">Issue QR Token Cards</h3>
-
-                <hr>
-
-                <form (ngSubmit)="f.form.valid && create()" name="form" #f="ngForm" novalidate>
-
-                    <div class="text-center mb-3">
-                        <img [hidden]="!selectedToken" [src]="selectedToken.icon" style="height: 5rem;">
-                    </div>
-
-                    <div class="form-row pt-0">
-                        <div class="col-10 pb-1 pr-0">
-                            <select (change)="selectToken($event)" [(ngModel)]="selectedTokenAddress" class="form-control"
-                                    id="selectedToken" name="selectedToken">
-                                <option *ngFor="let token of tokens" [value]="token.address">{{token.name}}</option>
-                            </select>
-                        </div>
-                        <div class="col-2 pb-1">
-                        <span [hidden]="!selectedToken.inApproval || selectedToken.allowance != 0" class="lds-heart"
-                              style="top: -16px;"><i></i></span>
-                            <button (click)="approveToken(selectedToken)" [disabled]="selectedToken.allowance > 0"
-                                    [hidden]="selectedToken.inApproval"
-                                    class="btn btn-success" title="Approve transfer coins." type="button">
-                                <fa-icon [hidden]="selectedToken.inApproval || selectedToken.allowance > 0"
-                                         [icon]="unlockIcon"></fa-icon>
-                                <fa-icon [hidden]="selectedToken.allowance == 0" [icon]="thumbsUpIcon"></fa-icon>
-                            </button>
-                        </div>
-
-                        <div class="col-10 pb-1 pr-0 pt-1">
-                            <input [(ngModel)]="tokenAmount" class="form-control mb-2" required id="tokenAmount" name="tokenAmount"
-                                   placeholder="Token amount"
-                                   type="number">
-
-                            <select [(ngModel)]="cardsAmount" class="form-control" id="cardsAmount" name="cardsAmount"
-                                    required>
-                                <option selected value="">-- Select Cards Amount --</option>
-                                <option value="4">4</option>
-                                <option value="8">8</option>
-                                <option value="16">16</option>
-                                <option value="32">32</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="p-0 mt-3" style="text-align: center">
-                        <button class="btn btn-primary btn-lg" title="Approve transfer coins."
-                                type="submit">
-                            CREATE
-                        </button>
-                    </div>
-                </form>
+            <div class="col-12">
+                <div class="lds-ripple m-auto d-block"><div></div><div></div></div>
             </div>
         </div>
     </div>
 
-    <div class="container mt-5" id="card-panel" [hidden]="!QRCodes.length">
-        <div class="row align-items-center">
-            <div class="col-sm-8 ml-auto mr-auto">
+    <div [hidden]="loading">
+        <div class="container" id="issue-form">
+            <div class="row align-items-center">
+                <div class="col-sm-8 ml-auto mr-auto">
+                    <h3 class="pb-3 pt-3">Issue QR Token Cards</h3>
 
-                <div class="container-fluid">
-                    <div class="row align-items-center">
-                        <div class="col-sm-12" *ngFor="let QRCode of QRCodes; index as i" [id]="'contentToConvert' + i">
-                            <div class="pb-10">
-                                <button class="btn btn-info btn-sm float-right" (click)="print(i)" [hidden]="hidePrintButtons">Print</button>
-                                <img [src]="selectedToken.icon" width="128" class="float-right mr-4" style="margin-top: 10rem;">
-                                <img [src]="QRCode.qr" width="430" class="mr-auto">
+                    <hr>
+
+                    <form (ngSubmit)="f.form.valid && create()" name="form" #f="ngForm" novalidate>
+
+                        <div class="text-center mb-3">
+                            <img [hidden]="!selectedToken" [src]="selectedToken.icon" style="height: 5rem;">
+                        </div>
+
+                        <div class="form-row pt-0">
+                            <div class="col-10 pb-1 pr-0">
+                                <select (change)="selectToken($event)" [(ngModel)]="selectedTokenAddress" class="form-control"
+                                        id="selectedToken" name="selectedToken">
+                                    <option *ngFor="let token of tokens" [value]="token.address">{{token.name}}</option>
+                                </select>
+                            </div>
+                            <div class="col-2 pb-1">
+                            <span [hidden]="!selectedToken.inApproval || selectedToken.allowance != 0" class="lds-heart"
+                                  style="top: -16px;"><i></i></span>
+                                <button (click)="approveToken(selectedToken)" [disabled]="selectedToken.allowance > 0"
+                                        [hidden]="selectedToken.inApproval"
+                                        class="btn btn-success" title="Approve transfer coins." type="button">
+                                    <fa-icon [hidden]="selectedToken.inApproval || selectedToken.allowance > 0"
+                                             [icon]="unlockIcon"></fa-icon>
+                                    <fa-icon [hidden]="selectedToken.allowance == 0" [icon]="thumbsUpIcon"></fa-icon>
+                                </button>
+                            </div>
+
+                            <div class="col-10 pb-1 pr-0 pt-1">
+                                <input [(ngModel)]="tokenAmount" class="form-control mb-2" required id="tokenAmount" name="tokenAmount"
+                                       placeholder="Token amount"
+                                       type="number">
+
+                                <select [(ngModel)]="cardsAmount" class="form-control" id="cardsAmount" name="cardsAmount"
+                                        required>
+                                    <option selected value="">-- Select Cards Amount --</option>
+                                    <option value="4">4</option>
+                                    <option value="8">8</option>
+                                    <option value="16">16</option>
+                                    <option value="32">32</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
 
+                        <div class="p-0 mt-3" style="text-align: center">
+                            <button class="btn btn-primary btn-lg" title="Approve transfer coins."
+                                    type="submit">
+                                CREATE
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-5" id="card-panel" [hidden]="!QRCodes.length">
+            <div class="row align-items-center">
+                <div class="col-sm-8 ml-auto mr-auto">
+
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col-sm-12" *ngFor="let QRCode of QRCodes; index as i" [id]="'contentToConvert' + i">
+                                <div class="pb-10">
+                                    <button class="btn btn-info btn-sm float-right" (click)="print(i)" [hidden]="hidePrintButtons">Print</button>
+                                    <img [src]="selectedToken.icon" width="128" class="float-right mr-4" style="margin-top: 10rem;">
+                                    <img [src]="QRCode.qr" width="430" class="mr-auto">
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
