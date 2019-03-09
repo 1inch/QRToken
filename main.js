@@ -389,20 +389,16 @@ var Web3 = __webpack_require__(/*! web3 */ "./node_modules/web3/src/index.js");
 var Web3Service = /** @class */ (function () {
     function Web3Service() {
         var _this = this;
-        this.ready = false;
-        this.accountsObservable = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
         window.addEventListener('load', function (event) {
             _this.bootstrapWeb3();
         });
     }
     Web3Service.prototype.bootstrapWeb3 = function () {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var getAccounts, error_1;
-            var _this = this;
+            var error_1;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        getAccounts = true;
                         if (!window.ethereum) return [3 /*break*/, 5];
                         window.web3 = new Web3(ethereum);
                         this.web3 = window.web3;
@@ -432,39 +428,44 @@ var Web3Service = /** @class */ (function () {
                             Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;
                             // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
                             this.web3 = new Web3(new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws'));
-                            getAccounts = false;
-                            this.ready = true;
                         }
                         _a.label = 6;
-                    case 6:
-                        if (getAccounts) {
-                            setInterval(function () { return _this.refreshAccounts(); }, 500);
-                        }
-                        return [2 /*return*/];
+                    case 6: return [2 /*return*/];
                 }
             });
         });
     };
-    Web3Service.prototype.refreshAccounts = function () {
+    Web3Service.prototype.getAccounts = function () {
         var _this = this;
-        this.web3.eth.getAccounts(function (err, accs) {
-            // console.log('Refreshing accounts');
-            if (err != null) {
-                console.warn('There was an error fetching your accounts.');
-                return;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (obs) {
+            var scope = _this;
+            var callback = function () {
+                scope.web3.eth.getAccounts(function (err, accs) {
+                    // console.log('Account request', accs);
+                    if (err != null) {
+                        console.warn('There was an error fetching your accounts.');
+                        obs.error(err);
+                        obs.complete();
+                        return;
+                    }
+                    // Get the initial account balance so it can be displayed.
+                    if (accs.length === 0) {
+                        var error = 'Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.';
+                        obs.error(error);
+                        obs.complete();
+                        console.warn(error);
+                        return;
+                    }
+                    obs.next(accs);
+                    obs.complete();
+                });
+            };
+            if (!_this.web3 || (_this.web3 && !_this.web3['eth'])) {
+                setTimeout(callback, 200);
             }
-            // Get the initial account balance so it can be displayed.
-            if (accs.length === 0) {
-                console.warn('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
-                return;
+            else {
+                callback();
             }
-            if (!_this.accounts || _this.accounts.length !== accs.length || _this.accounts[0] !== accs[0]) {
-                console.log('Observed new accounts');
-                _this.accountsObservable.next(accs);
-                _this.accounts = accs;
-                console.log('Accounts:', accs);
-            }
-            _this.ready = true;
         });
     };
     Web3Service = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([

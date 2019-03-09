@@ -6417,7 +6417,7 @@ var IssueCardsModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "@media (min-width: 767.98px) {\n\n  #issue-form {\n    padding-top: 2rem;\n  }\n\n  #issue-form .row div {\n    border-radius: 0.4rem;\n  }\n}\n\n#issue-form h3 {\n  text-align: center;\n  font-weight: 300;\n  border-radius: 0.5rem;\n\n  background: #ECE9E6;  /* fallback for old browsers */  /* Chrome 10-25, Safari 5.1-6 */\n  background: linear-gradient(to bottom, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */\n}\n\n#issue-form .row div {\n  background: white;\n  padding: 2rem;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvaXNzdWUtY2FyZHMvaXNzdWUtZm9ybS9pc3N1ZS1mb3JtLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7O0VBRUU7SUFDRSxpQkFBaUI7RUFDbkI7O0VBRUE7SUFDRSxxQkFBcUI7RUFDdkI7QUFDRjs7QUFFQTtFQUNFLGtCQUFrQjtFQUNsQixnQkFBZ0I7RUFDaEIscUJBQXFCOztFQUVyQixtQkFBbUIsR0FBRyw4QkFBOEIsR0FDZSwrQkFBK0I7RUFDbEcsd0RBQXdELEVBQUUscUVBQXFFO0FBQ2pJOztBQUVBO0VBQ0UsaUJBQWlCO0VBQ2pCLGFBQWE7QUFDZiIsImZpbGUiOiJzcmMvYXBwL2lzc3VlLWNhcmRzL2lzc3VlLWZvcm0vaXNzdWUtZm9ybS5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiQG1lZGlhIChtaW4td2lkdGg6IDc2Ny45OHB4KSB7XG5cbiAgI2lzc3VlLWZvcm0ge1xuICAgIHBhZGRpbmctdG9wOiAycmVtO1xuICB9XG5cbiAgI2lzc3VlLWZvcm0gLnJvdyBkaXYge1xuICAgIGJvcmRlci1yYWRpdXM6IDAuNHJlbTtcbiAgfVxufVxuXG4jaXNzdWUtZm9ybSBoMyB7XG4gIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgZm9udC13ZWlnaHQ6IDMwMDtcbiAgYm9yZGVyLXJhZGl1czogMC41cmVtO1xuXG4gIGJhY2tncm91bmQ6ICNFQ0U5RTY7ICAvKiBmYWxsYmFjayBmb3Igb2xkIGJyb3dzZXJzICovXG4gIGJhY2tncm91bmQ6IC13ZWJraXQtbGluZWFyLWdyYWRpZW50KHRvIGJvdHRvbSwgI0ZGRkZGRiwgI0VDRTlFNik7ICAvKiBDaHJvbWUgMTAtMjUsIFNhZmFyaSA1LjEtNiAqL1xuICBiYWNrZ3JvdW5kOiBsaW5lYXItZ3JhZGllbnQodG8gYm90dG9tLCAjRkZGRkZGLCAjRUNFOUU2KTsgLyogVzNDLCBJRSAxMCsvIEVkZ2UsIEZpcmVmb3ggMTYrLCBDaHJvbWUgMjYrLCBPcGVyYSAxMissIFNhZmFyaSA3KyAqL1xufVxuXG4jaXNzdWUtZm9ybSAucm93IGRpdiB7XG4gIGJhY2tncm91bmQ6IHdoaXRlO1xuICBwYWRkaW5nOiAycmVtO1xufVxuIl19 */"
+module.exports = "@media (min-width: 767.98px) {\n\n  #issue-form {\n    padding-top: 2rem;\n  }\n\n  #issue-form .row div {\n    border-radius: 0.4rem;\n  }\n}\n\n#issue-form h3 {\n  text-align: center;\n  font-weight: 300;\n  border-radius: 0.5rem;\n\n  background: #ECE9E6;  /* fallback for old browsers */  /* Chrome 10-25, Safari 5.1-6 */\n  background: linear-gradient(to bottom, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */\n}\n\n#issue-form .row div {\n  background: white;\n  padding: 2rem;\n}\n\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvaXNzdWUtY2FyZHMvaXNzdWUtZm9ybS9pc3N1ZS1mb3JtLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7O0VBRUU7SUFDRSxpQkFBaUI7RUFDbkI7O0VBRUE7SUFDRSxxQkFBcUI7RUFDdkI7QUFDRjs7QUFFQTtFQUNFLGtCQUFrQjtFQUNsQixnQkFBZ0I7RUFDaEIscUJBQXFCOztFQUVyQixtQkFBbUIsR0FBRyw4QkFBOEIsR0FDZSwrQkFBK0I7RUFDbEcsd0RBQXdELEVBQUUscUVBQXFFO0FBQ2pJOztBQUVBO0VBQ0UsaUJBQWlCO0VBQ2pCLGFBQWE7QUFDZiIsImZpbGUiOiJzcmMvYXBwL2lzc3VlLWNhcmRzL2lzc3VlLWZvcm0vaXNzdWUtZm9ybS5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiQG1lZGlhIChtaW4td2lkdGg6IDc2Ny45OHB4KSB7XG5cbiAgI2lzc3VlLWZvcm0ge1xuICAgIHBhZGRpbmctdG9wOiAycmVtO1xuICB9XG5cbiAgI2lzc3VlLWZvcm0gLnJvdyBkaXYge1xuICAgIGJvcmRlci1yYWRpdXM6IDAuNHJlbTtcbiAgfVxufVxuXG4jaXNzdWUtZm9ybSBoMyB7XG4gIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgZm9udC13ZWlnaHQ6IDMwMDtcbiAgYm9yZGVyLXJhZGl1czogMC41cmVtO1xuXG4gIGJhY2tncm91bmQ6ICNFQ0U5RTY7ICAvKiBmYWxsYmFjayBmb3Igb2xkIGJyb3dzZXJzICovXG4gIGJhY2tncm91bmQ6IC13ZWJraXQtbGluZWFyLWdyYWRpZW50KHRvIGJvdHRvbSwgI0ZGRkZGRiwgI0VDRTlFNik7ICAvKiBDaHJvbWUgMTAtMjUsIFNhZmFyaSA1LjEtNiAqL1xuICBiYWNrZ3JvdW5kOiBsaW5lYXItZ3JhZGllbnQodG8gYm90dG9tLCAjRkZGRkZGLCAjRUNFOUU2KTsgLyogVzNDLCBJRSAxMCsvIEVkZ2UsIEZpcmVmb3ggMTYrLCBDaHJvbWUgMjYrLCBPcGVyYSAxMissIFNhZmFyaSA3KyAqL1xufVxuXG4jaXNzdWUtZm9ybSAucm93IGRpdiB7XG4gIGJhY2tncm91bmQ6IHdoaXRlO1xuICBwYWRkaW5nOiAycmVtO1xufVxuXG4iXX0= */"
 
 /***/ }),
 
@@ -6428,7 +6428,7 @@ module.exports = "@media (min-width: 767.98px) {\n\n  #issue-form {\n    padding
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\" id=\"issue-form\">\n  <div class=\"row align-items-center\">\n    <div class=\"col-sm-8 ml-auto mr-auto\">\n      <h3 class=\"pb-3 pt-3\">Issue QR Token Cards</h3>\n\n      <hr>\n\n      <form>\n        <div class=\"form-row pt-0\">\n          <div class=\"col-10 pb-1 pr-0\">\n            <select [(ngModel)]=\"selectedToken\" class=\"form-control\" id=\"selectedToken\" name=\"selectedToken\">\n              <option selected value=\"\">-- Select Token --</option>\n              <option value=\"DAI\">DAI</option>\n              <option value=\"USDC\">USDC</option>\n              <option value=\"TUSD\">TUSD</option>\n              <option value=\"USDS\">USDS</option>\n              <option value=\"WBTC\">WBTC</option>\n              <option value=\"ETH\">ETH</option>\n            </select>\n          </div>\n          <div class=\"col-2 pb-1\">\n            <button type=\"submit\" class=\"btn btn-success\" title=\"Approve transfer coins.\">\n              <fa-icon [icon]=\"unlockIcon\"></fa-icon>\n            </button>\n          </div>\n\n          <div class=\"col-10 pb-1 pr-0 pt-1\">\n            <input [(ngModel)]=\"tokenAmount\" type=\"number\" class=\"form-control mb-2\" name=\"tokenAmount\" id=\"tokenAmount\" placeholder=\"Token amount\">\n\n            <select [(ngModel)]=\"cardsAmount\" class=\"form-control\" id=\"cardsAmount\" name=\"cardsAmount\">\n              <option selected value=\"\">-- Select Cards Amount --</option>\n              <option value=\"12\">12</option>\n              <option value=\"24\">24</option>\n              <option value=\"32\">32</option>\n            </select>\n          </div>\n        </div>\n\n        <div class=\"p-0\" style=\"text-align: center\">\n          <button type=\"submit\" class=\"btn btn-primary btn-lg\" title=\"Approve transfer coins.\">\n            CREATE\n          </button>\n        </div>\n      </form>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container\" id=\"issue-form\">\n  <div class=\"row align-items-center\">\n    <div class=\"col-sm-8 ml-auto mr-auto\">\n      <h3 class=\"pb-3 pt-3\">Issue QR Token Cards</h3>\n\n      <hr>\n\n      <form>\n\n        <div class=\"text-center\">\n          <img [hidden]=\"!selectedToken\" [src]=\"selectedToken.icon\" style=\"height: 5rem;\">\n        </div>\n\n        <div class=\"form-row pt-0\">\n          <div class=\"col-10 pb-1 pr-0\">\n            <select (change)=\"selectToken($event)\" [(ngModel)]=\"selectedTokenAddress\" class=\"form-control\"\n                    id=\"selectedToken\" name=\"selectedToken\">\n              <option *ngFor=\"let token of tokens\" [value]=\"token.address\">{{token.name}}</option>\n            </select>\n          </div>\n          <div class=\"col-2 pb-1\">\n            <span [hidden]=\"!selectedToken.inApproval || selectedToken.allowance != 0\" class=\"lds-heart\" style=\"top: -16px;\"><i></i></span>\n            <button (click)=\"approveToken(selectedToken)\" [disabled]=\"selectedToken.allowance > 0\" [hidden]=\"selectedToken.inApproval\"\n                    class=\"btn btn-success\" title=\"Approve transfer coins.\" type=\"submit\">\n              <fa-icon [icon]=\"unlockIcon\" [hidden]=\"selectedToken.inApproval || selectedToken.allowance > 0\"></fa-icon>\n              <fa-icon [icon]=\"thumbsUpIcon\" [hidden]=\"selectedToken.allowance == 0\"></fa-icon>\n            </button>\n          </div>\n\n          <div class=\"col-10 pb-1 pr-0 pt-1\">\n            <input [(ngModel)]=\"tokenAmount\" class=\"form-control mb-2\" id=\"tokenAmount\" name=\"tokenAmount\" placeholder=\"Token amount\"\n                   type=\"number\">\n\n            <select [(ngModel)]=\"cardsAmount\" class=\"form-control\" id=\"cardsAmount\" name=\"cardsAmount\">\n              <option selected value=\"\">-- Select Cards Amount --</option>\n              <option value=\"4\">4</option>\n              <option value=\"8\">8</option>\n              <option value=\"16\">16</option>\n              <option value=\"32\">32</option>\n            </select>\n          </div>\n        </div>\n\n        <div class=\"p-0\" style=\"text-align: center\">\n          <button class=\"btn btn-primary btn-lg\" title=\"Approve transfer coins.\" type=\"submit\">\n            CREATE\n          </button>\n        </div>\n      </form>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -6445,21 +6445,97 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fortawesome/free-solid-svg-icons */ "./node_modules/@fortawesome/free-solid-svg-icons/index.es.js");
-/* harmony import */ var _wallet_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./wallet.service */ "./src/app/issue-cards/issue-form/wallet.service.ts");
+/* harmony import */ var _util_wallet_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../util/wallet.service */ "./src/app/util/wallet.service.ts");
 
 
 
 
 var IssueFormComponent = /** @class */ (function () {
-    function IssueFormComponent(walletService) {
+    function IssueFormComponent(walletService, zone) {
         this.walletService = walletService;
-        this.selectedToken = '';
+        this.zone = zone;
+        this.selectedTokenAddress = '0xB8c77482e45F1F44dE1745F52C74426C631bDD52';
         this.cardsAmount = '';
         this.tokenAmount = '';
         this.unlockIcon = _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_2__["faUnlock"];
+        this.thumbsUpIcon = _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_2__["faThumbsUp"];
+        this.tokens = [
+            {
+                address: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
+                icon: 'assets/icons/bnb.png',
+                name: 'BNB - Binance Coin',
+                balance: Number(0),
+                allowance: 0,
+                inApproval: false
+            },
+            {
+                address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359',
+                icon: 'assets/icons/dai_stablecoin.png',
+                name: 'DAI - DAI Stable Coin',
+                balance: Number(0),
+                allowance: 0,
+                inApproval: false
+            },
+            {
+                address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+                icon: 'assets/icons/usdc.png',
+                name: 'USDC - USD Coin',
+                balance: Number(0),
+                allowance: 0,
+                inApproval: false
+            },
+            {
+                address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
+                icon: 'assets/icons/wbtc.png',
+                name: 'WBTC - Wrapped Bitcoin',
+                balance: Number(0),
+                allowance: 0,
+                inApproval: false
+            },
+        ];
     }
     IssueFormComponent.prototype.ngOnInit = function () {
-        this.walletService.getListOfTokens();
+        // this.walletService.getListOfTokens();
+        this.setTokenBySelectedAddress();
+        if (this.selectedToken.address != null) {
+            this.getAllowance(this.selectedToken);
+        }
+    };
+    IssueFormComponent.prototype.selectToken = function ($event) {
+        this.setTokenBySelectedAddress();
+    };
+    IssueFormComponent.prototype.setTokenBySelectedAddress = function () {
+        for (var _i = 0, _a = this.tokens; _i < _a.length; _i++) {
+            var token = _a[_i];
+            if (token.address === this.selectedTokenAddress) {
+                this.selectedToken = token;
+                console.log('Selected token:', this.selectedToken);
+                this.getAllowance(token);
+            }
+        }
+    };
+    IssueFormComponent.prototype.approveToken = function (token) {
+        var _this = this;
+        console.log('Approve');
+        token.inApproval = true;
+        this.walletService.approveToken(token)
+            .subscribe(function (data) {
+            _this.getAllowance(token);
+        });
+    };
+    IssueFormComponent.prototype.getAllowance = function (token) {
+        var _this = this;
+        token.inApproval = true;
+        this.walletService.getAllowance(token)
+            .subscribe(function (_token) {
+            if (_this.selectedToken.address === _token.address) {
+                _this.zone.run(function () {
+                    _this.selectedToken.allowance = _token.allowance;
+                    _this.selectedToken.inApproval = false;
+                    console.log('Token allowance', _this.selectedToken.allowance);
+                });
+            }
+        });
     };
     IssueFormComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -6467,7 +6543,8 @@ var IssueFormComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./issue-form.component.html */ "./src/app/issue-cards/issue-form/issue-form.component.html"),
             styles: [__webpack_require__(/*! ./issue-form.component.css */ "./src/app/issue-cards/issue-form/issue-form.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_wallet_service__WEBPACK_IMPORTED_MODULE_3__["WalletService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_util_wallet_service__WEBPACK_IMPORTED_MODULE_3__["WalletService"],
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]])
     ], IssueFormComponent);
     return IssueFormComponent;
 }());
@@ -6476,10 +6553,36 @@ var IssueFormComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/issue-cards/issue-form/wallet.service.ts":
-/*!**********************************************************!*\
-  !*** ./src/app/issue-cards/issue-form/wallet.service.ts ***!
-  \**********************************************************/
+/***/ "./src/app/util/TokenABI.json":
+/*!************************************!*\
+  !*** ./src/app/util/TokenABI.json ***!
+  \************************************/
+/*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, default */
+/***/ (function(module) {
+
+module.exports = [{"constant":true,"inputs":[],"name":"naturalUnit","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getComponents","outputs":[{"name":"","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getUnits","outputs":[{"name":"","type":"uint256[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_tokenAddress","type":"address"}],"name":"tokenIsComponent","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_issuer","type":"address"},{"name":"_quantity","type":"uint256"}],"name":"mint","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_quantity","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}];
+
+/***/ }),
+
+/***/ "./src/app/util/qrtoken-smart-contract.ts":
+/*!************************************************!*\
+  !*** ./src/app/util/qrtoken-smart-contract.ts ***!
+  \************************************************/
+/*! exports provided: QRTOKEN_SMART_CONTRACT_ADDRESS */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QRTOKEN_SMART_CONTRACT_ADDRESS", function() { return QRTOKEN_SMART_CONTRACT_ADDRESS; });
+var QRTOKEN_SMART_CONTRACT_ADDRESS = '0x7664A0e18Dd950a600Af45368c2458e211f7AcEd';
+
+
+/***/ }),
+
+/***/ "./src/app/util/wallet.service.ts":
+/*!****************************************!*\
+  !*** ./src/app/util/wallet.service.ts ***!
+  \****************************************/
 /*! exports provided: WalletService */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -6488,33 +6591,103 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WalletService", function() { return WalletService; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _util_web3_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../util/web3.service */ "./src/app/util/web3.service.ts");
+/* harmony import */ var _web3_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./web3.service */ "./src/app/util/web3.service.ts");
+/* harmony import */ var _qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./qrtoken-smart-contract */ "./src/app/util/qrtoken-smart-contract.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
 
 
 
+
+
+var tokenbArtifacts = __webpack_require__(/*! ./TokenABI.json */ "./src/app/util/TokenABI.json");
 var WalletService = /** @class */ (function () {
     function WalletService(web3Service) {
         this.web3Service = web3Service;
     }
     WalletService.prototype.ngOnInit = function () {
     };
-    WalletService.prototype.getListOfTokens = function () {
+    // getListOfTokens(): any {
+    //
+    //   this.web3Service.accountsObservable.subscribe(addresses => {
+    //
+    //     console.log('Account', addresses[0]);
+    //
+    //     this.web3Service.web3.eth.getPastLogs({
+    //       fromBlock: 6500000,
+    //       topics: [
+    //         this.web3Service.web3.utils.keccak256('Transfer(address,address,uint256)'),
+    //         null,
+    //         this.web3Service.web3.utils.padLeft(addresses[0], 64)
+    //       ]
+    //     })
+    //       .then(data => {
+    //
+    //         console.log('Data', data);
+    //       })
+    //       .catch(err => {
+    //         console.error('Error', err);
+    //       });
+    //   });
+    // }
+    WalletService.prototype.approveToken = function (token) {
         var _this = this;
-        this.web3Service.accountsObservable.subscribe(function (addresses) {
-            console.log('Account', addresses[0]);
-            _this.web3Service.web3.eth.getPastLogs({
-                fromBlock: 6500000,
-                topics: [
-                    _this.web3Service.web3.utils.keccak256('Transfer(address,address,uint256)'),
-                    null,
-                    _this.web3Service.web3.utils.padLeft(addresses[0], 64)
-                ]
-            })
-                .then(function (data) {
-                console.log('Data', data);
-            })
-                .catch(function (err) {
-                console.error('Error', err);
+        console.log('approveToken', token);
+        return new rxjs__WEBPACK_IMPORTED_MODULE_4__["Observable"](function (obs) {
+            _this.web3Service.getAccounts()
+                .subscribe(function (addresses) {
+                var contract = new _this.web3Service.web3.eth.Contract(tokenbArtifacts, token.address);
+                try {
+                    contract.methods
+                        .approve(_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__["QRTOKEN_SMART_CONTRACT_ADDRESS"], _this.web3Service.web3.utils.toHex(_this.web3Service.web3.utils.toBN(2).pow(_this.web3Service.web3.utils.toBN(255))))
+                        .send({
+                        from: addresses[0]
+                    })
+                        .then(function (data) {
+                        obs.next(data);
+                        obs.complete();
+                    })
+                        .catch(function (e) {
+                        obs.error(e);
+                        obs.complete();
+                    });
+                }
+                catch (e) {
+                    console.log(e);
+                    // this.setStatus('Error! See log.');
+                }
+            });
+        });
+    };
+    WalletService.prototype.getAllowance = function (token) {
+        var _this = this;
+        console.log('getAllowance');
+        return new rxjs__WEBPACK_IMPORTED_MODULE_4__["Observable"](function (obs) {
+            _this.web3Service.getAccounts()
+                .subscribe(function (addresses) {
+                console.log('addresses', addresses);
+                try {
+                    var contract = new _this.web3Service.web3.eth.Contract(tokenbArtifacts, token.address);
+                    contract.methods
+                        .allowance(addresses[0], _qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__["QRTOKEN_SMART_CONTRACT_ADDRESS"])
+                        .call()
+                        .then(function (data) {
+                        console.log('getAllowance', data);
+                        token.allowance = data;
+                        obs.next(token);
+                        obs.complete();
+                    })
+                        .catch(function (e) {
+                        console.error('Error', e);
+                        obs.error(e);
+                        obs.complete();
+                        alert('An error has occurred. Try it again.');
+                    });
+                    //    console.log('Allowance: ', this.tokens[i], this.tokens[i].allowance);
+                }
+                catch (e) {
+                    console.log(e);
+                    // this.setStatus('Error getting balance; see log.');
+                }
             });
         });
     };
@@ -6522,7 +6695,7 @@ var WalletService = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
             providedIn: 'root'
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_util_web3_service__WEBPACK_IMPORTED_MODULE_2__["Web3Service"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_web3_service__WEBPACK_IMPORTED_MODULE_2__["Web3Service"]])
     ], WalletService);
     return WalletService;
 }());
