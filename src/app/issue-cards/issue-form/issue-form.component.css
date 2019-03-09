@@ -19,7 +19,8 @@
   background: linear-gradient(to bottom, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
-#issue-form .row div {
+#issue-form .row > div,
+#card-panel .row > div {
   background: white;
   padding: 2rem;
 }
