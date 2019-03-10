@@ -10337,6 +10337,22 @@ var TOKENS = [
         inApproval: false
     },
     {
+        address: '0xdd974D5C2e2928deA5F71b9825b8b646686BD200',
+        icon: 'assets/icons/KyberNetwork.jpg',
+        name: 'KNC - KyberNetwork Coin',
+        balance: Number(0),
+        allowance: 0,
+        inApproval: false
+    },
+    {
+        address: '0xE41d2489571d322189246DaFA5ebDe1F4699F498',
+        icon: 'assets/icons/0x.png',
+        name: 'ZRX - 0x Token',
+        balance: Number(0),
+        allowance: 0,
+        inApproval: false
+    },
+    {
         address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359',
         icon: 'assets/icons/dai_stablecoin.png',
         name: 'DAI - DAI Stable Coin',

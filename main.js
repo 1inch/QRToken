@@ -440,9 +440,7 @@ var Web3Service = /** @class */ (function () {
                             this.web3 = new Web3(new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws'));
                         }
                         _a.label = 6;
-                    case 6:
-                        console.log('yo');
-                        return [2 /*return*/];
+                    case 6: return [2 /*return*/];
                 }
             });
         });
