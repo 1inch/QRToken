@@ -132,7 +132,7 @@ export class WalletService implements OnInit {
         return tokenContract.methods.decimals().call();
     }
 
-    async transferTokensByZeroTransactionGasFee(fromAddress, signature, merkleProof) {
+    async transferTokens(fromAddress, signature, merkleProof) {
 
         const contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, QRTOKEN_SMART_CONTRACT_ADDRESS);
 
@@ -144,5 +144,36 @@ export class WalletService implements OnInit {
             .send({
                 from: fromAddress
             });
+    }
+
+    async transferTokensByZeroTransactionGasFee(account, fromAddress, receiver, feePrecent, merkleProof) {
+
+        const signatureObject = account.sign(
+            this.web3Service.web3.utils.keccak256(
+                this.web3Service.web3.utils.padLeft(receiver, 40)
+                    .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2))
+                , {encoding: 'hex'}
+            )
+        );
+
+        const signature = signatureObject.signature;
+
+        const contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, QRTOKEN_SMART_CONTRACT_ADDRESS);
+
+        const tx = contract.methods
+            .redeemWithFee(
+                '0x818E6FECD516Ecc3849DAf6845e3EC868087B755',
+                receiver,
+                feePrecent,
+                signature,
+                '0x' + merkleProof.toString('hex')
+            );
+
+        return await tx.send({
+            from: fromAddress,
+            // gas: await tx.estimateGas(),
+             gas: 1000000,
+            gasPrice: 10e9
+        });
     }
 }

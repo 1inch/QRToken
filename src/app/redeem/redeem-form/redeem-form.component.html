@@ -1,4 +1,4 @@
-<div class="container-fluid" [hidden]="!loading">
+<div class="container-fluid" [hidden]="!loading || done">
     <div class="row align-items-center">
         <div class="col-12">
             <div class="lds-ripple m-auto d-block"><div></div><div></div></div>
@@ -6,7 +6,7 @@
     </div>
 </div>
 
-<div class="container-fluid" [hidden]="!isRedeemed">
+<div class="container-fluid" [hidden]="!isRedeemed || done">
     <div class="row align-items-center">
         <div class="col-12 text-center">
             <h3 class="mt-5">QRToken is already taken!</h3>
@@ -14,7 +14,15 @@
     </div>
 </div>
 
-<div [hidden]="loading || isRedeemed">
+<div class="container-fluid" [hidden]="!done">
+    <div class="row align-items-center">
+        <div class="col-12 text-center">
+            <h3 class="mt-5">Your tokens were transmitted.</h3>
+        </div>
+    </div>
+</div>
+
+<div [hidden]="loading || isRedeemed || done">
     <div class="container" id="redeem-form">
         <div class="row align-items-center">
             <div class="col-sm-8 ml-auto mr-auto">

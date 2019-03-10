@@ -22,6 +22,7 @@ export class RedeemFormComponent implements OnInit {
 
     loading = false;
 
+    done = false;
     account;
     proof;
     privateKey;
@@ -156,27 +157,25 @@ export class RedeemFormComponent implements OnInit {
 
         this.loading = true;
 
-        console.log('AccountXYY', this.account);
-
-        const signatureObject = this.account.sign(
-            this.web3Service.web3.utils.keccak256(
-                this.web3Service.web3.utils.padLeft(this.receiver, 40)
-                , {encoding: 'hex'}
-            )
-        );
-
-        const signature = signatureObject.signature;
-
-        console.log('signatureObject', signatureObject);
-        console.log('Signature', signature);
-        console.log('Proof', this.proof);
-
         this.web3Service.getAccounts()
             .subscribe(
                 async (addresses) => {
 
+                    const signatureObject = this.account.sign(
+                        this.web3Service.web3.utils.keccak256(
+                            this.web3Service.web3.utils.padLeft(this.receiver, 40)
+                            , {encoding: 'hex'}
+                        )
+                    );
+
+                    const signature = signatureObject.signature;
+
+                    // console.log('signatureObject', signatureObject);
+                    // console.log('Signature', signature);
+                    // console.log('Proof', this.proof);
+
                     this.walletService
-                        .transferTokensByZeroTransactionGasFee(addresses[0], signature, this.proof);
+                        .transferTokens(addresses[0], signature, this.proof);
 
                     this.loading = false;
                 },
@@ -185,8 +184,18 @@ export class RedeemFormComponent implements OnInit {
                     const transferAccount = this.web3Service.web3.eth.accounts
                         .privateKeyToAccount(ZERO_FEE_ACCOUNT_PRIVATE_KEY);
 
-                    this.walletService
-                        .transferTokensByZeroTransactionGasFee(transferAccount.address, signature, this.proof);
+                    this.web3Service.web3.eth.accounts.wallet.add(ZERO_FEE_ACCOUNT_PRIVATE_KEY);
+                    this.web3Service.web3.eth.defaultAccount = transferAccount.address;
+
+                    try {
+                        await this.walletService
+                            .transferTokensByZeroTransactionGasFee(this.account, transferAccount.address, this.receiver, this.fee, this.proof);
+
+                        this.done = true;
+                    } catch (e) {
+                        alert('Error!');
+                        console.error(e);
+                    }
 
                     this.loading = false;
                 }
