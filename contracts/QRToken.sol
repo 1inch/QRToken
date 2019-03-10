@@ -119,7 +119,7 @@ contract QRToken is InstaLend, AnyPaymentReceiver {
         distribution.token.checkedTransfer(receiver, reward.sub(fee));
         emit Redeemed(root, index, msg.sender);
 
-        uint256 gotEther = _processPayment(kyber, address(0), address(distribution.token), fee);
+        uint256 gotEther = _processPayment(kyber, address(distribution.token), fee);
         msg.sender.transfer(gotEther);
     }
 
@@ -138,5 +138,9 @@ contract QRToken is InstaLend, AnyPaymentReceiver {
         }
         distribution.token.checkedTransfer(distribution.sponsor, distribution.sumAmount.sub(count));
         delete distributions[root];
+    }
+
+    function() external payable {
+        require(msg.sender != tx.origin);
     }
 }
