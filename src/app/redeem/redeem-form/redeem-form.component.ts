@@ -193,7 +193,7 @@ export class RedeemFormComponent implements OnInit {
 
                         this.done = true;
                     } catch (e) {
-                        alert('Error!');
+                        alert(e.toString());
                         console.error(e);
                     }
 

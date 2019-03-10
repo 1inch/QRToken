@@ -148,6 +148,9 @@ export class WalletService implements OnInit {
 
     async transferTokensByZeroTransactionGasFee(account, fromAddress, receiver, feePrecent, merkleProof) {
 
+        console.log('receiver', receiver);
+        console.log('feePrecent', feePrecent);
+
         const signatureObject = account.sign(
             this.web3Service.web3.utils.keccak256(
                 this.web3Service.web3.utils.padLeft(receiver, 40)
@@ -155,6 +158,13 @@ export class WalletService implements OnInit {
                 , {encoding: 'hex'}
             )
         );
+
+        console.log('Message', this.web3Service.web3.utils.padLeft(receiver, 40)
+            .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)));
+
+
+        console.log('Message Keccak', this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
+            .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)), {encoding: 'hex'}));
 
         const signature = signatureObject.signature;
 
@@ -171,8 +181,8 @@ export class WalletService implements OnInit {
 
         return await tx.send({
             from: fromAddress,
-            // gas: await tx.estimateGas(),
-             gas: 1000000,
+            gas: await tx.estimateGas(),
+            // gas: 1000000,
             gasPrice: 10e9
         });
     }
