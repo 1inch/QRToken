@@ -5,11 +5,11 @@ library IndexedMerkleProof {
     function compute(bytes memory proof, uint160 leaf) internal pure returns (uint160 root, uint256 index) {
         uint160 computedHash = leaf;
 
-        for (uint256 i = 0; i < proof.length; i++) {
+        for (uint256 i = 0; i < proof.length; i += 20) {
             uint160 proofElement;
             // solium-disable-next-line security/no-inline-assembly
             assembly {
-                proofElement := div(mload(add(proof, 32)), 0x1000000000000000000000000)
+                proofElement := div(mload(add(proof, add(32, i))), 0x1000000000000000000000000)
             }
 
             if (computedHash < proofElement) {
