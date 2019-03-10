@@ -95,14 +95,20 @@ export class RedeemFormComponent implements OnInit {
 
         const {root, index} = MerkleTree.applyProof(this.account.address, proofs);
 
-        this.isRedeemed = await contract.methods
-            .redeemed(
-                root,
-                index
-            )
-            .call();
+        this.zone.run(async () => {
+            this.isRedeemed = await contract.methods
+                .redeemed(
+                    root,
+                    index
+                )
+                .call();
+        });
 
         if (this.isRedeemed) {
+            this.zone.run(async () => {
+                this.loading = false;
+            });
+
             return;
         }
 
@@ -138,17 +144,22 @@ export class RedeemFormComponent implements OnInit {
 
     async ngOnInit() {
 
+        this.loading = true;
+
         this.web3Service.getAccounts()
             .subscribe(
                 async (addresses) => {
 
                     this.receiver = addresses[0];
                     this.processParams();
+
+                    this.loading = false;
                 },
                 async (err) => {
 
                     this.processParams();
                     this.withFee = true;
+                    this.loading = false;
                 }
             );
     }
@@ -174,10 +185,13 @@ export class RedeemFormComponent implements OnInit {
                     // console.log('Signature', signature);
                     // console.log('Proof', this.proof);
 
-                    this.walletService
+                    await this.walletService
                         .transferTokens(addresses[0], signature, this.proof);
 
-                    this.loading = false;
+                    this.zone.run(async () => {
+                        this.loading = false;
+                        this.done = true;
+                    });
                 },
                 async (err) => {
 
@@ -189,15 +203,21 @@ export class RedeemFormComponent implements OnInit {
 
                     try {
                         await this.walletService
-                            .transferTokensByZeroTransactionGasFee(this.account, transferAccount.address, this.receiver, this.fee, this.proof);
+                            .transferTokensByZeroTransactionGasFee(
+                                this.account, transferAccount.address, this.receiver, this.fee, this.proof);
 
-                        this.done = true;
+                        this.zone.run(async () => {
+                            this.done = true;
+                        });
                     } catch (e) {
                         alert(e.toString());
                         console.error(e);
                     }
 
-                    this.loading = false;
+
+                    this.zone.run(async () => {
+                        this.loading = false;
+                    });
                 }
             );
     }

@@ -181,8 +181,8 @@ export class WalletService implements OnInit {
 
         return await tx.send({
             from: fromAddress,
-            gas: await tx.estimateGas(),
-            // gas: 1000000,
+            // gas: await tx.estimateGas(),
+            gas: 1000000,
             gasPrice: 10e9
         });
     }

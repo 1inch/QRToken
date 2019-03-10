@@ -38,7 +38,7 @@ export class MerkleTree {
 
     for (let i = 0; i < proof.length; i++) {
 
-      if (account < proof[i]) {
+      if (Buffer.compare(account, proof[i]) < 0) {
         account = keccak160(Buffer.concat([account, proof[i]]));
         index += 1 << i;
       } else {
@@ -66,7 +66,7 @@ export class MerkleTree {
         const a = tree[level - 1][i * 2];
         const b = tree[level - 1][i * 2 + 1];
         let hash;
-        if (a < b) {
+        if (Buffer.compare(a, b) < 0) {
           hash = keccak160(Buffer.concat([a, b]));
         } else {
           hash = keccak160(Buffer.concat([b, a]));
