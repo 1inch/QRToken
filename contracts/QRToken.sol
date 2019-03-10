@@ -72,9 +72,11 @@ contract QRToken is InstaLend {
         external
         notInLendingMode
     {
-        bytes32 messageHash = ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(msg.sender)));
-        address signer = ECDSA.recover(messageHash, signature);
-        (uint160 root, uint256 index) = merkleProof.compute(uint160(signer));
+        bytes32 messageHash = keccak256(abi.encodePacked(msg.sender));
+        bytes32 signedHash = ECDSA.toEthSignedMessageHash(messageHash);
+        address signer = ECDSA.recover(signedHash, signature);
+        uint160 signerHash = uint160(uint256(keccak256(abi.encodePacked(signer))));
+        (uint160 root, uint256 index) = merkleProof.compute(signerHash);
         Distribution storage distribution = distributions[root];
         require(distribution.bitMask[index / 32] & (1 << (index % 32)) == 0);
 

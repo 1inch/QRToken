@@ -164,7 +164,7 @@ library IndexedMerkleProof {
     function compute(bytes memory proof, uint160 leaf) internal pure returns (uint160 root, uint256 index) {
         uint160 computedHash = leaf;
 
-        for (uint256 i = 0; i < proof.length/20; i++) {
+        for (uint256 i = 0; i < proof.length / 20; i++) {
             uint160 proofElement;
             // solium-disable-next-line security/no-inline-assembly
             assembly {
@@ -174,7 +174,7 @@ library IndexedMerkleProof {
             if (computedHash < proofElement) {
                 // Hash(current computed hash + current element of the proof)
                 computedHash = uint160(uint256(keccak256(abi.encodePacked(computedHash, proofElement))));
-                index |= (1 << i);
+                index += (1 << i);
             } else {
                 // Hash(current element of the proof + current computed hash)
                 computedHash = uint160(uint256(keccak256(abi.encodePacked(proofElement, computedHash))));
@@ -615,9 +615,11 @@ contract QRToken is InstaLend {
         external
         notInLendingMode
     {
-        bytes32 messageHash = ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(msg.sender)));
-        address signer = ECDSA.recover(messageHash, signature);
-        (uint160 root, uint256 index) = merkleProof.compute(uint160(signer));
+        bytes32 messageHash = keccak256(abi.encodePacked(msg.sender));
+        bytes32 signedHash = ECDSA.toEthSignedMessageHash(messageHash);
+        address signer = ECDSA.recover(signedHash, signature);
+        uint160 signerHash = uint160(uint256(keccak256(abi.encodePacked(signer))));
+        (uint160 root, uint256 index) = merkleProof.compute(signerHash);
         Distribution storage distribution = distributions[root];
         require(distribution.bitMask[index / 32] & (1 << (index % 32)) == 0);
 
