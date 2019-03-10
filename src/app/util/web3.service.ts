@@ -46,6 +46,8 @@ export class Web3Service {
       // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
       this.web3 = new Web3(new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws'));
     }
+
+    console.log('yo');
   }
 
   getAccounts(): Observable<number> {
@@ -73,7 +75,7 @@ export class Web3Service {
               obs.error(error);
               obs.complete();
 
-              console.warn(error);
+              // console.warn(error);
 
               return;
             }

@@ -6,7 +6,15 @@
     </div>
 </div>
 
-<div [hidden]="loading">
+<div class="container-fluid" [hidden]="!isRedeemed">
+    <div class="row align-items-center">
+        <div class="col-12">
+            <h3>QRToken is already taken!</h3>
+        </div>
+    </div>
+</div>
+
+<div [hidden]="loading || isRedeemed">
     <div class="container" id="redeem-form">
         <div class="row align-items-center">
             <div class="col-sm-8 ml-auto mr-auto">
@@ -14,8 +22,15 @@
 
                 <hr>
 
-                <form (ngSubmit)="f.form.valid && create()" name="form" #f="ngForm" novalidate>
-                    <div class="form-row pt-0">
+                <form (ngSubmit)="f.form.valid && onSubmit()" name="form" #f="ngForm" novalidate>
+                    <div class="form-row pt-0 pb-2">
+                        <div class="col-12">
+                            <input [(ngModel)]="receiver" class="form-control" minlength="42" maxlength="42" required id="receiver" name="receiver"
+                                   placeholder="Token receiver"
+                                   type="text">
+                        </div>
+                    </div>
+                    <div class="form-row pt-0" [hidden]="!withFee">
                         <div class="col-12">
                             <select [(ngModel)]="fee" class="form-control"
                                     id="fee" name="fee">
@@ -25,7 +40,7 @@
                     </div>
 
                     <div class="p-0 mt-3" style="text-align: center">
-                        <button class="btn btn-success btn-lg" title="Approve transfer coins."
+                        <button class="btn btn-success btn-lg" [disabled]="!f.form.valid" title="Approve transfer coins."
                                 type="submit">
                             REDEEM YOUR TOKENS
                         </button>
