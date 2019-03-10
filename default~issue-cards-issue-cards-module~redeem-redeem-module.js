@@ -10147,10 +10147,10 @@ exports.callbackify = callbackify;
 /*!**************************************!*\
   !*** ./src/app/util/QRTokenABI.json ***!
   \**************************************/
-/*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, default */
+/*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, default */
 /***/ (function(module) {
 
-module.exports = [{"constant":false,"inputs":[{"name":"tokens","type":"address[]"},{"name":"amounts","type":"uint256[]"},{"name":"target","type":"address"},{"name":"data","type":"bytes"}],"name":"lend","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"MAX_WORDS_COUNT","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"MAX_CODES_COUNT","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"root","type":"uint160"},{"name":"index","type":"uint256"}],"name":"redeemed","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint160"}],"name":"distributions","outputs":[{"name":"token","type":"address"},{"name":"sumAmount","type":"uint256"},{"name":"codesCount","type":"uint256"},{"name":"deadline","type":"uint256"},{"name":"sponsor","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"token","type":"address"},{"name":"sumTokenAmount","type":"uint256"},{"name":"codesCount","type":"uint256"},{"name":"root","type":"uint160"},{"name":"deadline","type":"uint256"}],"name":"create","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"root","type":"uint160"}],"name":"abort","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"feesReceiver","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"feesPercent","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"signature","type":"bytes"},{"name":"merkleProof","type":"bytes"}],"name":"redeem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[],"name":"Created","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"root","type":"uint160"},{"indexed":false,"name":"index","type":"uint256"},{"indexed":false,"name":"receiver","type":"address"}],"name":"Redeemed","type":"event"}];
+module.exports = [{"constant":false,"inputs":[{"name":"tokens","type":"address[]"},{"name":"amounts","type":"uint256[]"},{"name":"target","type":"address"},{"name":"data","type":"bytes"}],"name":"lend","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"MAX_WORDS_COUNT","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"kyber","type":"address"},{"name":"receiver","type":"address"},{"name":"feePrecent","type":"uint256"},{"name":"signature","type":"bytes"},{"name":"merkleProof","type":"bytes"}],"name":"redeemWithFee","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"renounceOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"MAX_CODES_COUNT","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"root","type":"uint160"},{"name":"index","type":"uint256"}],"name":"redeemed","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint160"}],"name":"distributions","outputs":[{"name":"token","type":"address"},{"name":"sumAmount","type":"uint256"},{"name":"codesCount","type":"uint256"},{"name":"deadline","type":"uint256"},{"name":"sponsor","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"token","type":"address"},{"name":"sumTokenAmount","type":"uint256"},{"name":"codesCount","type":"uint256"},{"name":"root","type":"uint160"},{"name":"deadline","type":"uint256"}],"name":"create","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"isOwner","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"root","type":"uint160"}],"name":"abort","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"feesReceiver","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"ETHER_ADDRESS","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"feesPercent","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"signature","type":"bytes"},{"name":"merkleProof","type":"bytes"}],"name":"redeem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[],"name":"Created","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"root","type":"uint160"},{"indexed":false,"name":"index","type":"uint256"},{"indexed":false,"name":"receiver","type":"address"}],"name":"Redeemed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"previousOwner","type":"address"},{"indexed":true,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"}];
 
 /***/ }),
 
@@ -10312,7 +10312,7 @@ var MerkleTree = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QRTOKEN_SMART_CONTRACT_ADDRESS", function() { return QRTOKEN_SMART_CONTRACT_ADDRESS; });
-var QRTOKEN_SMART_CONTRACT_ADDRESS = '0x5858244812bd7733be6fa7fcc45424a1584e8bfd';
+var QRTOKEN_SMART_CONTRACT_ADDRESS = '0x5c5755f8e0E4bD0AA94bfCe52d2A731eCC884112';
 
 
 /***/ }),
@@ -10507,7 +10507,7 @@ var WalletService = /** @class */ (function () {
         var tokenContract = new this.web3Service.web3.eth.Contract(tokenContractArtifacts, tokenAddress);
         return tokenContract.methods.decimals().call();
     };
-    WalletService.prototype.transferTokensByZeroTransactionGasFee = function (fromAddress, signature, merkleProof) {
+    WalletService.prototype.transferTokens = function (fromAddress, signature, merkleProof) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
             var contract;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
@@ -10518,6 +10518,29 @@ var WalletService = /** @class */ (function () {
                                 .redeem(signature, '0x' + merkleProof.toString('hex'))
                                 .send({
                                 from: fromAddress
+                            })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    WalletService.prototype.transferTokensByZeroTransactionGasFee = function (account, fromAddress, receiver, feePrecent, merkleProof) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var signatureObject, signature, contract, tx;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        signatureObject = account.sign(this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
+                            .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)), { encoding: 'hex' }));
+                        signature = signatureObject.signature;
+                        contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
+                        tx = contract.methods
+                            .redeemWithFee('0x818E6FECD516Ecc3849DAf6845e3EC868087B755', receiver, feePrecent, signature, '0x' + merkleProof.toString('hex'));
+                        return [4 /*yield*/, tx.send({
+                                from: fromAddress,
+                                // gas: await tx.estimateGas(),
+                                gas: 1000000,
+                                gasPrice: 10e9
                             })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }

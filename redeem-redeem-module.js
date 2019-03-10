@@ -18,7 +18,7 @@ module.exports = "@media (min-width: 767.98px) {\n\n    #redeem-form {\n        
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\" [hidden]=\"!loading\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12\">\n            <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!isRedeemed\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">QRToken is already taken!</h3>\n        </div>\n    </div>\n</div>\n\n<div [hidden]=\"loading || isRedeemed\">\n    <div class=\"container\" id=\"redeem-form\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-sm-8 ml-auto mr-auto\">\n                <h3 class=\"pb-3 pt-3\">{{tokensAmount}} {{tokenName}}</h3>\n\n                <hr>\n\n                <form (ngSubmit)=\"f.form.valid && onSubmit()\" name=\"form\" #f=\"ngForm\" novalidate>\n                    <div class=\"form-row pt-0 pb-2\">\n                        <div class=\"col-12\">\n                            <input [(ngModel)]=\"receiver\" class=\"form-control\" minlength=\"42\" maxlength=\"42\" required id=\"receiver\" name=\"receiver\"\n                                   placeholder=\"Token receiver\"\n                                   type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"form-row pt-0\" [hidden]=\"!withFee\">\n                        <div class=\"col-12\">\n                            <select [(ngModel)]=\"fee\" class=\"form-control\"\n                                    id=\"fee\" name=\"fee\">\n                                <option *ngFor=\"let fee of fees\" [value]=\"fee.value\">{{fee.name}}</option>\n                            </select>\n                        </div>\n                    </div>\n\n                    <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                        <button class=\"btn btn-success btn-lg\" [disabled]=\"!f.form.valid\" title=\"Approve transfer coins.\"\n                                type=\"submit\">\n                            REDEEM YOUR TOKENS\n                        </button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<div class=\"container-fluid\" [hidden]=\"!loading || done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12\">\n            <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!isRedeemed || done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">QRToken is already taken!</h3>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">Your tokens were transmitted.</h3>\n        </div>\n    </div>\n</div>\n\n<div [hidden]=\"loading || isRedeemed || done\">\n    <div class=\"container\" id=\"redeem-form\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-sm-8 ml-auto mr-auto\">\n                <h3 class=\"pb-3 pt-3\">{{tokensAmount}} {{tokenName}}</h3>\n\n                <hr>\n\n                <form (ngSubmit)=\"f.form.valid && onSubmit()\" name=\"form\" #f=\"ngForm\" novalidate>\n                    <div class=\"form-row pt-0 pb-2\">\n                        <div class=\"col-12\">\n                            <input [(ngModel)]=\"receiver\" class=\"form-control\" minlength=\"42\" maxlength=\"42\" required id=\"receiver\" name=\"receiver\"\n                                   placeholder=\"Token receiver\"\n                                   type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"form-row pt-0\" [hidden]=\"!withFee\">\n                        <div class=\"col-12\">\n                            <select [(ngModel)]=\"fee\" class=\"form-control\"\n                                    id=\"fee\" name=\"fee\">\n                                <option *ngFor=\"let fee of fees\" [value]=\"fee.value\">{{fee.name}}</option>\n                            </select>\n                        </div>\n                    </div>\n\n                    <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                        <button class=\"btn btn-success btn-lg\" [disabled]=\"!f.form.valid\" title=\"Approve transfer coins.\"\n                                type=\"submit\">\n                            REDEEM YOUR TOKENS\n                        </button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -58,6 +58,7 @@ var RedeemFormComponent = /** @class */ (function () {
         this.walletService = walletService;
         this.zone = zone;
         this.loading = false;
+        this.done = false;
         this.fee = 10;
         this.withFee = false;
         this.tokens = _util_tokens__WEBPACK_IMPORTED_MODULE_6__["TOKENS"];
@@ -181,33 +182,50 @@ var RedeemFormComponent = /** @class */ (function () {
     };
     RedeemFormComponent.prototype.onSubmit = function () {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var signatureObject, signature;
             var _this = this;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                 this.loading = true;
-                console.log('AccountXYY', this.account);
-                signatureObject = this.account.sign(this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(this.receiver, 40), { encoding: 'hex' }));
-                signature = signatureObject.signature;
-                console.log('signatureObject', signatureObject);
-                console.log('Signature', signature);
-                console.log('Proof', this.proof);
                 this.web3Service.getAccounts()
                     .subscribe(function (addresses) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                    var signatureObject, signature;
                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                        signatureObject = this.account.sign(this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(this.receiver, 40), { encoding: 'hex' }));
+                        signature = signatureObject.signature;
+                        // console.log('signatureObject', signatureObject);
+                        // console.log('Signature', signature);
+                        // console.log('Proof', this.proof);
                         this.walletService
-                            .transferTokensByZeroTransactionGasFee(addresses[0], signature, this.proof);
+                            .transferTokens(addresses[0], signature, this.proof);
                         this.loading = false;
                         return [2 /*return*/];
                     });
                 }); }, function (err) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
-                    var transferAccount;
+                    var transferAccount, e_1;
                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
-                        transferAccount = this.web3Service.web3.eth.accounts
-                            .privateKeyToAccount(_util_zero_fee_account__WEBPACK_IMPORTED_MODULE_8__["ZERO_FEE_ACCOUNT_PRIVATE_KEY"]);
-                        this.walletService
-                            .transferTokensByZeroTransactionGasFee(transferAccount.address, signature, this.proof);
-                        this.loading = false;
-                        return [2 /*return*/];
+                        switch (_a.label) {
+                            case 0:
+                                transferAccount = this.web3Service.web3.eth.accounts
+                                    .privateKeyToAccount(_util_zero_fee_account__WEBPACK_IMPORTED_MODULE_8__["ZERO_FEE_ACCOUNT_PRIVATE_KEY"]);
+                                this.web3Service.web3.eth.accounts.wallet.add(_util_zero_fee_account__WEBPACK_IMPORTED_MODULE_8__["ZERO_FEE_ACCOUNT_PRIVATE_KEY"]);
+                                this.web3Service.web3.eth.defaultAccount = transferAccount.address;
+                                _a.label = 1;
+                            case 1:
+                                _a.trys.push([1, 3, , 4]);
+                                return [4 /*yield*/, this.walletService
+                                        .transferTokensByZeroTransactionGasFee(this.account, transferAccount.address, this.receiver, this.fee, this.proof)];
+                            case 2:
+                                _a.sent();
+                                this.done = true;
+                                return [3 /*break*/, 4];
+                            case 3:
+                                e_1 = _a.sent();
+                                alert('Error!');
+                                console.error(e_1);
+                                return [3 /*break*/, 4];
+                            case 4:
+                                this.loading = false;
+                                return [2 /*return*/];
+                        }
                     });
                 }); });
                 return [2 /*return*/];
