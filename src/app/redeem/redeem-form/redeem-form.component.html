@@ -6,7 +6,7 @@
     </div>
 </div>
 
-<div class="container-fluid" [hidden]="done && !isRedeemed">
+<div class="container-fluid" [hidden]="!isRedeemed || loading || done">
     <div class="row align-items-center">
         <div class="col-12 text-center">
             <h3 class="mt-5">QRToken is already taken!</h3>
@@ -14,7 +14,7 @@
     </div>
 </div>
 
-<div class="container-fluid" [hidden]="!done">
+<div class="container-fluid" [hidden]="!done || loading">
     <div class="row align-items-center">
         <div class="col-12 text-center">
             <h3 class="mt-5">Your tokens were transmitted.</h3>
