@@ -443,7 +443,7 @@ contract ERC20 is IERC20 {
 
 // File: contracts/CheckedERC20.sol
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.5;
 
 
 
@@ -540,6 +540,184 @@ library CheckedERC20 {
     }
 }
 
+// File: contracts/IKyberNetwork.sol
+
+pragma solidity ^0.5.2;
+
+
+contract IKyberNetwork {
+    function trade(
+        address src,
+        uint256 srcAmount,
+        address dest,
+        address destAddress,
+        uint256 maxDestAmount,
+        uint256 minConversionRate,
+        address walletId
+    )
+        public
+        payable
+        returns(uint);
+
+    function getExpectedRate(
+        address source,
+        address dest,
+        uint srcQty
+    )
+        public
+        view
+        returns (
+            uint expectedPrice,
+            uint slippagePrice
+        );
+}
+
+// File: openzeppelin-solidity/contracts/ownership/Ownable.sol
+
+pragma solidity ^0.5.0;
+
+/**
+ * @title Ownable
+ * @dev The Ownable contract has an owner address, and provides basic authorization control
+ * functions, this simplifies the implementation of "user permissions".
+ */
+contract Ownable {
+    address private _owner;
+
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+    /**
+     * @dev The Ownable constructor sets the original `owner` of the contract to the sender
+     * account.
+     */
+    constructor () internal {
+        _owner = msg.sender;
+        emit OwnershipTransferred(address(0), _owner);
+    }
+
+    /**
+     * @return the address of the owner.
+     */
+    function owner() public view returns (address) {
+        return _owner;
+    }
+
+    /**
+     * @dev Throws if called by any account other than the owner.
+     */
+    modifier onlyOwner() {
+        require(isOwner());
+        _;
+    }
+
+    /**
+     * @return true if `msg.sender` is the owner of the contract.
+     */
+    function isOwner() public view returns (bool) {
+        return msg.sender == _owner;
+    }
+
+    /**
+     * @dev Allows the current owner to relinquish control of the contract.
+     * @notice Renouncing to ownership will leave the contract without an owner.
+     * It will not be possible to call the functions with the `onlyOwner`
+     * modifier anymore.
+     */
+    function renounceOwnership() public onlyOwner {
+        emit OwnershipTransferred(_owner, address(0));
+        _owner = address(0);
+    }
+
+    /**
+     * @dev Allows the current owner to transfer control of the contract to a newOwner.
+     * @param newOwner The address to transfer ownership to.
+     */
+    function transferOwnership(address newOwner) public onlyOwner {
+        _transferOwnership(newOwner);
+    }
+
+    /**
+     * @dev Transfers control of the contract to a newOwner.
+     * @param newOwner The address to transfer ownership to.
+     */
+    function _transferOwnership(address newOwner) internal {
+        require(newOwner != address(0));
+        emit OwnershipTransferred(_owner, newOwner);
+        _owner = newOwner;
+    }
+}
+
+// File: contracts/AnyPaymentReceiver.sol
+
+pragma solidity ^0.5.5;
+
+
+
+
+
+
+
+contract AnyPaymentReceiver is Ownable {
+    using SafeMath for uint256;
+    using CheckedERC20 for IERC20;
+
+    address constant public ETHER_ADDRESS = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
+
+    function _processPayment(
+        IKyberNetwork kyber,
+        address desiredToken,
+        address paymentToken,
+        uint256 paymentAmount
+    )
+        internal
+        returns(uint256)
+    {
+        uint256 previousBalance = _balanceOf(desiredToken);
+
+        // Receive payment
+        if (paymentToken != address(0)) {
+            IERC20(paymentToken).checkedTransferFrom(msg.sender, address(this), paymentAmount);
+        } else {
+            require(msg.value >= paymentAmount);
+        }
+
+        // Convert payment if needed
+        if (paymentToken != desiredToken) {
+            if (paymentToken != address(0)) {
+                require(IERC20(paymentToken).asmApprove(address(kyber), paymentAmount));
+            }
+
+            kyber.trade.value(msg.value)(
+                (paymentToken == address(0)) ? ETHER_ADDRESS : paymentToken,
+                (paymentToken == address(0)) ? msg.value : paymentAmount,
+                (desiredToken == address(0)) ? ETHER_ADDRESS : desiredToken,
+                address(this),
+                1 << 255,
+                0,
+                address(0)
+            );
+        }
+
+        uint256 currentBalance = _balanceOf(desiredToken);
+        return currentBalance.sub(previousBalance);
+    }
+
+    function _balanceOf(address token) internal view returns(uint256) {
+        if (token == address(0)) {
+            return address(this).balance;
+        }
+        return IERC20(token).balanceOf(address(this));
+    }
+
+    function _returnRemainder(address payable renter, IERC20 token, uint256 remainder) internal {
+        if (token == IERC20(0)) {
+            renter.transfer(remainder);
+        } else {
+            token.transfer(renter, remainder);
+        }
+    }
+}
+
 // File: contracts/QRToken.sol
 
 pragma solidity ^0.5.5;
@@ -551,7 +729,9 @@ pragma solidity ^0.5.5;
 
 
 
-contract QRToken is InstaLend {
+
+
+contract QRToken is InstaLend, AnyPaymentReceiver {
     using SafeMath for uint;
     using ECDSA for bytes;
     using IndexedMerkleProof for bytes;
@@ -608,6 +788,22 @@ contract QRToken is InstaLend {
         return distribution.bitMask[index / 32] & (1 << (index % 32)) != 0;
     }
 
+    function calcRootAndIndex(
+        bytes memory signature,
+        bytes memory merkleProof,
+        bytes memory message
+    )
+        public
+        pure
+        returns(uint160 root, uint256 index)
+    {
+        bytes32 messageHash = keccak256(message);
+        bytes32 signedHash = ECDSA.toEthSignedMessageHash(messageHash);
+        address signer = ECDSA.recover(signedHash, signature);
+        uint160 signerHash = uint160(uint256(keccak256(abi.encodePacked(signer))));
+        return merkleProof.compute(signerHash);
+    }
+
     function redeem(
         bytes calldata signature,
         bytes calldata merkleProof
@@ -615,11 +811,7 @@ contract QRToken is InstaLend {
         external
         notInLendingMode
     {
-        bytes32 messageHash = keccak256(abi.encodePacked(msg.sender));
-        bytes32 signedHash = ECDSA.toEthSignedMessageHash(messageHash);
-        address signer = ECDSA.recover(signedHash, signature);
-        uint160 signerHash = uint160(uint256(keccak256(abi.encodePacked(signer))));
-        (uint160 root, uint256 index) = merkleProof.compute(signerHash);
+        (uint160 root, uint256 index) = calcRootAndIndex(signature, merkleProof, abi.encodePacked(msg.sender));
         Distribution storage distribution = distributions[root];
         require(distribution.bitMask[index / 32] & (1 << (index % 32)) == 0);
 
@@ -628,28 +820,29 @@ contract QRToken is InstaLend {
         emit Redeemed(root, index, msg.sender);
     }
 
-    // function redeemWithFee(
-    //     address receiver,
-    //     uint256 feePrecent,
-    //     bytes calldata signature,
-    //     bytes calldata merkleProof
-    // )
-    //     external
-    //     notInLendingMode
-    // {
-    //     bytes32 messageHash = ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(receiver, feePrecent)));
-    //     address signer = ECDSA.recover(messageHash, signature);
-    //     (uint160 root, uint256 index) = merkleProof.compute(uint160(signer));
-    //     Distribution storage distribution = distributions[root];
-    //     require(distribution.bitMask[index / 32] & (1 << (index % 32)) == 0);
+    function redeemWithFee(
+        IKyberNetwork kyber, // 0x818E6FECD516Ecc3849DAf6845e3EC868087B755
+        address receiver,
+        uint256 feePrecent,
+        bytes calldata signature,
+        bytes calldata merkleProof
+    )
+        external
+        notInLendingMode
+    {
+        (uint160 root, uint256 index) = calcRootAndIndex(signature, merkleProof, abi.encodePacked(receiver, feePrecent));
+        Distribution storage distribution = distributions[root];
+        require(distribution.bitMask[index / 32] & (1 << (index % 32)) == 0);
 
-    //     distribution.bitMask[index / 32] = distribution.bitMask[index / 32] | (1 << (index % 32));
-    //     uint256 reward = distribution.sumAmount.div(distribution.codesCount);
-    //     uint256 fee = reward.mul(feePrecent).div(100);
-    //     distribution.token.checkedTransfer(receiver, reward);
-    //     distribution.token.checkedTransfer(msg.sender, fee);
-    //     emit Redeemed(root, index, receiver);
-    // }
+        distribution.bitMask[index / 32] = distribution.bitMask[index / 32] | (1 << (index % 32));
+        uint256 reward = distribution.sumAmount.div(distribution.codesCount);
+        uint256 fee = reward.mul(feePrecent).div(100);
+        distribution.token.checkedTransfer(receiver, reward.sub(fee));
+        emit Redeemed(root, index, msg.sender);
+
+        uint256 gotEther = _processPayment(kyber, address(0), address(distribution.token), fee);
+        msg.sender.transfer(gotEther);
+    }
 
     function abort(uint160 root)
         public

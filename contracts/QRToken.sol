@@ -6,9 +6,11 @@ import "openzeppelin-solidity/contracts/cryptography/ECDSA.sol";
 import "./IndexedMerkleProof.sol";
 import "./InstaLend.sol";
 import "./CheckedERC20.sol";
+import "./IKyberNetwork.sol";
+import "./AnyPaymentReceiver.sol";
 
 
-contract QRToken is InstaLend {
+contract QRToken is InstaLend, AnyPaymentReceiver {
     using SafeMath for uint;
     using ECDSA for bytes;
     using IndexedMerkleProof for bytes;
@@ -65,6 +67,22 @@ contract QRToken is InstaLend {
         return distribution.bitMask[index / 32] & (1 << (index % 32)) != 0;
     }
 
+    function calcRootAndIndex(
+        bytes memory signature,
+        bytes memory merkleProof,
+        bytes memory message
+    )
+        public
+        pure
+        returns(uint160 root, uint256 index)
+    {
+        bytes32 messageHash = keccak256(message);
+        bytes32 signedHash = ECDSA.toEthSignedMessageHash(messageHash);
+        address signer = ECDSA.recover(signedHash, signature);
+        uint160 signerHash = uint160(uint256(keccak256(abi.encodePacked(signer))));
+        return merkleProof.compute(signerHash);
+    }
+
     function redeem(
         bytes calldata signature,
         bytes calldata merkleProof
@@ -72,11 +90,7 @@ contract QRToken is InstaLend {
         external
         notInLendingMode
     {
-        bytes32 messageHash = keccak256(abi.encodePacked(msg.sender));
-        bytes32 signedHash = ECDSA.toEthSignedMessageHash(messageHash);
-        address signer = ECDSA.recover(signedHash, signature);
-        uint160 signerHash = uint160(uint256(keccak256(abi.encodePacked(signer))));
-        (uint160 root, uint256 index) = merkleProof.compute(signerHash);
+        (uint160 root, uint256 index) = calcRootAndIndex(signature, merkleProof, abi.encodePacked(msg.sender));
         Distribution storage distribution = distributions[root];
         require(distribution.bitMask[index / 32] & (1 << (index % 32)) == 0);
 
@@ -85,28 +99,29 @@ contract QRToken is InstaLend {
         emit Redeemed(root, index, msg.sender);
     }
 
-    // function redeemWithFee(
-    //     address receiver,
-    //     uint256 feePrecent,
-    //     bytes calldata signature,
-    //     bytes calldata merkleProof
-    // )
-    //     external
-    //     notInLendingMode
-    // {
-    //     bytes32 messageHash = ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(receiver, feePrecent)));
-    //     address signer = ECDSA.recover(messageHash, signature);
-    //     (uint160 root, uint256 index) = merkleProof.compute(uint160(signer));
-    //     Distribution storage distribution = distributions[root];
-    //     require(distribution.bitMask[index / 32] & (1 << (index % 32)) == 0);
+    function redeemWithFee(
+        IKyberNetwork kyber, // 0x818E6FECD516Ecc3849DAf6845e3EC868087B755
+        address receiver,
+        uint256 feePrecent,
+        bytes calldata signature,
+        bytes calldata merkleProof
+    )
+        external
+        notInLendingMode
+    {
+        (uint160 root, uint256 index) = calcRootAndIndex(signature, merkleProof, abi.encodePacked(receiver, feePrecent));
+        Distribution storage distribution = distributions[root];
+        require(distribution.bitMask[index / 32] & (1 << (index % 32)) == 0);
 
-    //     distribution.bitMask[index / 32] = distribution.bitMask[index / 32] | (1 << (index % 32));
-    //     uint256 reward = distribution.sumAmount.div(distribution.codesCount);
-    //     uint256 fee = reward.mul(feePrecent).div(100);
-    //     distribution.token.checkedTransfer(receiver, reward);
-    //     distribution.token.checkedTransfer(msg.sender, fee);
-    //     emit Redeemed(root, index, receiver);
-    // }
+        distribution.bitMask[index / 32] = distribution.bitMask[index / 32] | (1 << (index % 32));
+        uint256 reward = distribution.sumAmount.div(distribution.codesCount);
+        uint256 fee = reward.mul(feePrecent).div(100);
+        distribution.token.checkedTransfer(receiver, reward.sub(fee));
+        emit Redeemed(root, index, msg.sender);
+
+        uint256 gotEther = _processPayment(kyber, address(0), address(distribution.token), fee);
+        msg.sender.transfer(gotEther);
+    }
 
     function abort(uint160 root)
         public
