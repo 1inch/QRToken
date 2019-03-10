@@ -18,7 +18,7 @@ module.exports = "@media (min-width: 767.98px) {\n\n    #redeem-form {\n        
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\" [hidden]=\"!loading || done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12\">\n            <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!isRedeemed || done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">QRToken is already taken!</h3>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">Your tokens were transmitted.</h3>\n        </div>\n    </div>\n</div>\n\n<div [hidden]=\"loading || isRedeemed || done\">\n    <div class=\"container\" id=\"redeem-form\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-sm-8 ml-auto mr-auto\">\n                <h3 class=\"pb-3 pt-3\">{{tokensAmount}} {{tokenName}}</h3>\n\n                <hr>\n\n                <form (ngSubmit)=\"f.form.valid && onSubmit()\" name=\"form\" #f=\"ngForm\" novalidate>\n                    <div class=\"form-row pt-0 pb-2\">\n                        <div class=\"col-12\">\n                            <input [(ngModel)]=\"receiver\" class=\"form-control\" minlength=\"42\" maxlength=\"42\" required id=\"receiver\" name=\"receiver\"\n                                   placeholder=\"Token receiver\"\n                                   type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"form-row pt-0\" [hidden]=\"!withFee\">\n                        <div class=\"col-12\">\n                            <select [(ngModel)]=\"fee\" class=\"form-control\"\n                                    id=\"fee\" name=\"fee\">\n                                <option *ngFor=\"let fee of fees\" [value]=\"fee.value\">{{fee.name}}</option>\n                            </select>\n                        </div>\n                    </div>\n\n                    <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                        <button class=\"btn btn-success btn-lg\" [disabled]=\"!f.form.valid\" title=\"Approve transfer coins.\"\n                                type=\"submit\">\n                            REDEEM YOUR TOKENS\n                        </button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<div class=\"container-fluid\" [hidden]=\"!loading || done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12\">\n            <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"done && !isRedeemed\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">QRToken is already taken!</h3>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">Your tokens were transmitted.</h3>\n        </div>\n    </div>\n</div>\n\n<div [hidden]=\"loading || isRedeemed || done\">\n    <div class=\"container\" id=\"redeem-form\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-sm-8 ml-auto mr-auto\">\n                <h3 class=\"pb-3 pt-3\">{{tokensAmount}} {{tokenName}}</h3>\n\n                <hr>\n\n                <form (ngSubmit)=\"f.form.valid && onSubmit()\" name=\"form\" #f=\"ngForm\" novalidate>\n                    <div class=\"form-row pt-0 pb-2\">\n                        <div class=\"col-12\">\n                            <input [(ngModel)]=\"receiver\" class=\"form-control\" minlength=\"42\" maxlength=\"42\" required id=\"receiver\" name=\"receiver\"\n                                   placeholder=\"Token receiver\"\n                                   type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"form-row pt-0\" [hidden]=\"!withFee\">\n                        <div class=\"col-12\">\n                            <select [(ngModel)]=\"fee\" class=\"form-control\"\n                                    id=\"fee\" name=\"fee\">\n                                <option *ngFor=\"let fee of fees\" [value]=\"fee.value\">{{fee.name}}</option>\n                            </select>\n                        </div>\n                    </div>\n\n                    <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                        <button class=\"btn btn-success btn-lg\" [disabled]=\"!f.form.valid\" title=\"Approve transfer coins.\"\n                                type=\"submit\">\n                            REDEEM YOUR TOKENS\n                        </button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -83,10 +83,10 @@ var RedeemFormComponent = /** @class */ (function () {
     }
     RedeemFormComponent.prototype.processParams = function () {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var contract, data, buffer, privateKey, proof, proofs, slice, _a, root, index, _b, distribution, _loop_1, this_1, _i, _c, token, state_1;
+            var contract, data, buffer, privateKey, proof, proofs, slice, _a, root, index, distribution, _loop_1, this_1, _i, _b, token, state_1;
             var _this = this;
-            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_d) {
-                switch (_d.label) {
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_4__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
                         data = this.route.snapshot.paramMap.get('data')
@@ -107,13 +107,28 @@ var RedeemFormComponent = /** @class */ (function () {
                         this.account = this.web3Service.web3.eth.accounts
                             .privateKeyToAccount('0x' + privateKey.toString('hex'));
                         _a = _util_merkle_tree__WEBPACK_IMPORTED_MODULE_5__["MerkleTree"].applyProof(this.account.address, proofs), root = _a.root, index = _a.index;
-                        _b = this;
-                        return [4 /*yield*/, contract.methods
-                                .redeemed(root, index)
-                                .call()];
-                    case 1:
-                        _b.isRedeemed = _d.sent();
+                        this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                            var _a;
+                            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_b) {
+                                switch (_b.label) {
+                                    case 0:
+                                        _a = this;
+                                        return [4 /*yield*/, contract.methods
+                                                .redeemed(root, index)
+                                                .call()];
+                                    case 1:
+                                        _a.isRedeemed = _b.sent();
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); });
                         if (this.isRedeemed) {
+                            this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                    this.loading = false;
+                                    return [2 /*return*/];
+                                });
+                            }); });
                             return [2 /*return*/];
                         }
                         //
@@ -124,8 +139,8 @@ var RedeemFormComponent = /** @class */ (function () {
                         return [4 /*yield*/, contract.methods
                                 .distributions('0x' + root.toString('hex'))
                                 .call()];
-                    case 2:
-                        distribution = _d.sent();
+                    case 1:
+                        distribution = _c.sent();
                         console.log('distribution', distribution);
                         _loop_1 = function (token) {
                             if (token.address === distribution['token']) {
@@ -147,8 +162,8 @@ var RedeemFormComponent = /** @class */ (function () {
                             }
                         };
                         this_1 = this;
-                        for (_i = 0, _c = this.tokens; _i < _c.length; _i++) {
-                            token = _c[_i];
+                        for (_i = 0, _b = this.tokens; _i < _b.length; _i++) {
+                            token = _b[_i];
                             state_1 = _loop_1(token);
                             if (state_1 === "break")
                                 break;
@@ -162,17 +177,20 @@ var RedeemFormComponent = /** @class */ (function () {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
             var _this = this;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                this.loading = true;
                 this.web3Service.getAccounts()
                     .subscribe(function (addresses) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                         this.receiver = addresses[0];
                         this.processParams();
+                        this.loading = false;
                         return [2 /*return*/];
                     });
                 }); }, function (err) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                         this.processParams();
                         this.withFee = true;
+                        this.loading = false;
                         return [2 /*return*/];
                     });
                 }); });
@@ -188,19 +206,35 @@ var RedeemFormComponent = /** @class */ (function () {
                 this.web3Service.getAccounts()
                     .subscribe(function (addresses) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
                     var signatureObject, signature;
+                    var _this = this;
                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
-                        signatureObject = this.account.sign(this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(this.receiver, 40), { encoding: 'hex' }));
-                        signature = signatureObject.signature;
-                        // console.log('signatureObject', signatureObject);
-                        // console.log('Signature', signature);
-                        // console.log('Proof', this.proof);
-                        this.walletService
-                            .transferTokens(addresses[0], signature, this.proof);
-                        this.loading = false;
-                        return [2 /*return*/];
+                        switch (_a.label) {
+                            case 0:
+                                signatureObject = this.account.sign(this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(this.receiver, 40), { encoding: 'hex' }));
+                                signature = signatureObject.signature;
+                                // console.log('signatureObject', signatureObject);
+                                // console.log('Signature', signature);
+                                // console.log('Proof', this.proof);
+                                return [4 /*yield*/, this.walletService
+                                        .transferTokens(addresses[0], signature, this.proof)];
+                            case 1:
+                                // console.log('signatureObject', signatureObject);
+                                // console.log('Signature', signature);
+                                // console.log('Proof', this.proof);
+                                _a.sent();
+                                this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                        this.loading = false;
+                                        this.done = true;
+                                        return [2 /*return*/];
+                                    });
+                                }); });
+                                return [2 /*return*/];
+                        }
                     });
                 }); }, function (err) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
                     var transferAccount, e_1;
+                    var _this = this;
                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                         switch (_a.label) {
                             case 0:
@@ -215,7 +249,12 @@ var RedeemFormComponent = /** @class */ (function () {
                                         .transferTokensByZeroTransactionGasFee(this.account, transferAccount.address, this.receiver, this.fee, this.proof)];
                             case 2:
                                 _a.sent();
-                                this.done = true;
+                                this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                        this.done = true;
+                                        return [2 /*return*/];
+                                    });
+                                }); });
                                 return [3 /*break*/, 4];
                             case 3:
                                 e_1 = _a.sent();
@@ -223,7 +262,12 @@ var RedeemFormComponent = /** @class */ (function () {
                                 console.error(e_1);
                                 return [3 /*break*/, 4];
                             case 4:
-                                this.loading = false;
+                                this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                        this.loading = false;
+                                        return [2 /*return*/];
+                                    });
+                                }); });
                                 return [2 /*return*/];
                         }
                     });

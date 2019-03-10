@@ -10197,7 +10197,7 @@ var MerkleTree = /** @class */ (function () {
         proof = proof.map(function (el) { return new Buffer(el, 'hex'); });
         console.log('Proof2', proof);
         for (var i = 0; i < proof.length; i++) {
-            if (account < proof[i]) {
+            if (Buffer.compare(account, proof[i]) < 0) {
                 account = keccak160(Buffer.concat([account, proof[i]]));
                 index += 1 << i;
             }
@@ -10223,7 +10223,7 @@ var MerkleTree = /** @class */ (function () {
                 var a = tree[level - 1][i * 2];
                 var b = tree[level - 1][i * 2 + 1];
                 var hash = void 0;
-                if (a < b) {
+                if (Buffer.compare(a, b) < 0) {
                     hash = keccak160(Buffer.concat([a, b]));
                 }
                 else {
@@ -10312,7 +10312,7 @@ var MerkleTree = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QRTOKEN_SMART_CONTRACT_ADDRESS", function() { return QRTOKEN_SMART_CONTRACT_ADDRESS; });
-var QRTOKEN_SMART_CONTRACT_ADDRESS = '0x5c5755f8e0E4bD0AA94bfCe52d2A731eCC884112';
+var QRTOKEN_SMART_CONTRACT_ADDRESS = '0xff574ad8eed119470400a1b9b1909b939e99f35f';
 
 
 /***/ }),
@@ -10526,9 +10526,9 @@ var WalletService = /** @class */ (function () {
     };
     WalletService.prototype.transferTokensByZeroTransactionGasFee = function (account, fromAddress, receiver, feePrecent, merkleProof) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var signatureObject, signature, contract, tx, _a, _b, _c;
-            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_d) {
-                switch (_d.label) {
+            var signatureObject, signature, contract, tx;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         console.log('receiver', receiver);
                         console.log('feePrecent', feePrecent);
@@ -10542,16 +10542,13 @@ var WalletService = /** @class */ (function () {
                         contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
                         tx = contract.methods
                             .redeemWithFee('0x818E6FECD516Ecc3849DAf6845e3EC868087B755', receiver, feePrecent, signature, '0x' + merkleProof.toString('hex'));
-                        _b = (_a = tx).send;
-                        _c = {
-                            from: fromAddress
-                        };
-                        return [4 /*yield*/, tx.estimateGas()];
-                    case 1: return [4 /*yield*/, _b.apply(_a, [(_c.gas = _d.sent(),
-                                // gas: 1000000,
-                                _c.gasPrice = 10e9,
-                                _c)])];
-                    case 2: return [2 /*return*/, _d.sent()];
+                        return [4 /*yield*/, tx.send({
+                                from: fromAddress,
+                                // gas: await tx.estimateGas(),
+                                gas: 1000000,
+                                gasPrice: 10e9
+                            })];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
