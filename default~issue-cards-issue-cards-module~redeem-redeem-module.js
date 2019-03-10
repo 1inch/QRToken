@@ -10556,7 +10556,7 @@ var WalletService = /** @class */ (function () {
                         return [4 /*yield*/, tx.estimateGas()];
                     case 1: return [4 /*yield*/, _b.apply(_a, [(_c.gas = _d.sent(),
                                 // gas: 1000000,
-                                _c.gasPrice = 10e9,
+                                _c.gasPrice = 5e9,
                                 _c)])];
                     case 2: return [2 /*return*/, _d.sent()];
                 }
