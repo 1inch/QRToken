@@ -150,8 +150,8 @@ export class IssueFormComponent implements OnInit {
 
                     const contract = new scope.web3Service.web3.eth.Contract(qrtokenContractArtifacts, QRTOKEN_SMART_CONTRACT_ADDRESS);
 
-                    // console.log('Root', merkleTree.getHexRoot());
-                    // console.log('Layers', merkleTree.layers);
+                    console.log('Root', merkleTree.getHexRoot());
+                    console.log('Layers', merkleTree.layers);
 
                     // const tokenContract = new scope.web3Service.web3.eth.Contract(tokenContractArtifacts, scope.selectedToken.address);
 

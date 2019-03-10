@@ -24,6 +24,7 @@ export class RedeemFormComponent implements OnInit {
 
     account;
     proof;
+    privateKey;
 
     tokensAmount;
     receiver;
@@ -77,6 +78,8 @@ export class RedeemFormComponent implements OnInit {
 
         console.log('privateKey', privateKey.toString('hex'));
 
+        this.privateKey = privateKey;
+
         const proofs = [];
 
         while (proof.slice(0, 20).length > 0) {
@@ -103,12 +106,12 @@ export class RedeemFormComponent implements OnInit {
         }
 
         //
-        // console.log('Account', account);
-        //
-        // console.log('Root', '0x' + root.toString('hex'));
-        // console.log('Index', index);
-        //
-        // console.log('proofs', proofs);
+        console.log('Account', this.account);
+
+        console.log('Root', '0x' + root.toString('hex'));
+        console.log('Index', index);
+
+        console.log('proofs', proofs);
 
         const distribution = await contract.methods
             .distributions('0x' + root.toString('hex'))
@@ -153,12 +156,18 @@ export class RedeemFormComponent implements OnInit {
 
         this.loading = true;
 
+        console.log('AccountXYY', this.account);
+
         const signatureObject = this.account.sign(
-            this.receiver
+            this.web3Service.web3.utils.keccak256(
+                this.web3Service.web3.utils.padLeft(this.receiver, 40)
+                , {encoding: 'hex'}
+            )
         );
 
         const signature = signatureObject.signature;
 
+        console.log('signatureObject', signatureObject);
         console.log('Signature', signature);
         console.log('Proof', this.proof);
 
