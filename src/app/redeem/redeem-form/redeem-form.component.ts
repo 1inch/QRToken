@@ -32,7 +32,7 @@ export class RedeemFormComponent implements OnInit {
     tokensAmount;
     receiver;
     tokenName;
-    fee = 300000 * 10e9;
+    fee;
     withFee = false;
     isRedeemed;
 

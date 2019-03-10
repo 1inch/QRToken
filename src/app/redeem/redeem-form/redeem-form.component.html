@@ -40,7 +40,7 @@
                     </div>
                     <div class="form-row pt-0" [hidden]="!withFee">
                         <div class="col-12">
-                            <input [(ngModel)]="fee" class="form-control" minlength="42" maxlength="42" required id="fee" name="fee"
+                            <input [value]="fee + ' %'" class="form-control" minlength="42" maxlength="42" required id="fee" name="fee"
                                    disabled
                                    type="text">
                         </div>
