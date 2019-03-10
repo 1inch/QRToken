@@ -18,7 +18,7 @@ module.exports = "@media (min-width: 767.98px) {\n\n    #redeem-form {\n        
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\" [hidden]=\"!loading || done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12\">\n            <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!isRedeemed || loading || done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">QRToken is already taken!</h3>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!done || loading\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">Your tokens were transmitted.</h3>\n        </div>\n    </div>\n</div>\n\n<div [hidden]=\"loading || isRedeemed || done\">\n    <div class=\"container\" id=\"redeem-form\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-sm-8 ml-auto mr-auto\">\n                <h3 class=\"pb-3 pt-3\">{{tokensAmount}} {{tokenName}}</h3>\n\n                <hr>\n\n                <form (ngSubmit)=\"f.form.valid && onSubmit()\" name=\"form\" #f=\"ngForm\" novalidate>\n                    <div class=\"form-row pt-0 pb-2\">\n                        <div class=\"col-12\">\n                            <input [(ngModel)]=\"receiver\" class=\"form-control\" minlength=\"42\" maxlength=\"42\" required id=\"receiver\" name=\"receiver\"\n                                   placeholder=\"Token receiver\"\n                                   type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"form-row pt-0\" [hidden]=\"!withFee\">\n                        <div class=\"col-12\">\n                            <select [(ngModel)]=\"fee\" class=\"form-control\"\n                                    id=\"fee\" name=\"fee\">\n                                <option *ngFor=\"let fee of fees\" [value]=\"fee.value\">{{fee.name}}</option>\n                            </select>\n                        </div>\n                    </div>\n\n                    <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                        <button class=\"btn btn-success btn-lg\" [disabled]=\"!f.form.valid\" title=\"Approve transfer coins.\"\n                                type=\"submit\">\n                            REDEEM YOUR TOKENS\n                        </button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<div class=\"container-fluid\" [hidden]=\"!loading || done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12\">\n            <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!isRedeemed || loading || done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">QRToken is already taken!</h3>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!done || loading\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">Your tokens were transmitted.</h3>\n        </div>\n    </div>\n</div>\n\n<div [hidden]=\"loading || isRedeemed || done\">\n    <div class=\"container\" id=\"redeem-form\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-sm-8 ml-auto mr-auto\">\n                <h3 class=\"pb-3 pt-3\">{{tokensAmount}} {{tokenName}}</h3>\n\n                <hr>\n\n                <form (ngSubmit)=\"f.form.valid && onSubmit()\" name=\"form\" #f=\"ngForm\" novalidate>\n                    <div class=\"form-row pt-0 pb-2\">\n                        <div class=\"col-12\">\n                            <input [(ngModel)]=\"receiver\" class=\"form-control\" minlength=\"42\" maxlength=\"42\" required id=\"receiver\" name=\"receiver\"\n                                   placeholder=\"Token receiver\"\n                                   type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"form-row pt-0\" [hidden]=\"!withFee\">\n                        <div class=\"col-12\">\n                            <input [(ngModel)]=\"fee\" class=\"form-control\" minlength=\"42\" maxlength=\"42\" required id=\"fee\" name=\"fee\"\n                                   disabled\n                                   type=\"text\">\n                        </div>\n                    </div>\n\n                    <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                        <button class=\"btn btn-success btn-lg\" [disabled]=\"!f.form.valid\" title=\"Approve transfer coins.\"\n                                type=\"submit\">\n                            REDEEM YOUR TOKENS\n                        </button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -41,6 +41,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util_tokens__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../util/tokens */ "./src/app/util/tokens.ts");
 /* harmony import */ var _util_wallet_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../util/wallet.service */ "./src/app/util/wallet.service.ts");
 /* harmony import */ var _util_zero_fee_account__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../util/zero-fee-account */ "./src/app/util/zero-fee-account.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+
 
 
 
@@ -52,34 +54,17 @@ __webpack_require__.r(__webpack_exports__);
 
 var qrtokenContractArtifacts = __webpack_require__(/*! ../../util/QRTokenABI.json */ "./src/app/util/QRTokenABI.json");
 var RedeemFormComponent = /** @class */ (function () {
-    function RedeemFormComponent(route, web3Service, walletService, zone) {
+    function RedeemFormComponent(route, web3Service, walletService, zone, http) {
         this.route = route;
         this.web3Service = web3Service;
         this.walletService = walletService;
         this.zone = zone;
+        this.http = http;
         this.loading = false;
         this.done = false;
-        this.fee = 10;
+        this.fee = 300000 * 10e9;
         this.withFee = false;
         this.tokens = _util_tokens__WEBPACK_IMPORTED_MODULE_6__["TOKENS"];
-        this.fees = [
-            {
-                name: '2.5% Transaction Fee',
-                value: 2.5
-            },
-            {
-                name: '5% Transaction Fee',
-                value: 5
-            },
-            {
-                name: '10% Transaction Fee',
-                value: 10
-            },
-            {
-                name: '15% Transaction Fee',
-                value: 15
-            },
-        ];
     }
     RedeemFormComponent.prototype.processParams = function () {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
@@ -145,15 +130,25 @@ var RedeemFormComponent = /** @class */ (function () {
                         _loop_1 = function (token) {
                             if (token.address === distribution['token']) {
                                 this_1.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
-                                    var decimals;
+                                    var decimals, pairs;
+                                    var _this = this;
                                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
                                                 this.tokenName = token.name;
+                                                this.token = token;
                                                 return [4 /*yield*/, this.walletService.getDecimals(token.address)];
                                             case 1:
                                                 decimals = _a.sent();
                                                 this.tokensAmount = distribution['sumAmount'] / (Math.pow(10, decimals));
+                                                pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
+                                                pairs.subscribe(function (d) {
+                                                    var lastPrice = d['ETH_' + _this.token.symbol]['lastPrice'];
+                                                    _this.fee = lastPrice * 300000 * 20e9 / Math.pow(10, d['ETH_' + _this.token.symbol]['decimals']);
+                                                    console.log('Fees', _this.fee);
+                                                    _this.fee = Math.ceil(_this.fee * 100 / _this.tokensAmount);
+                                                    console.log('Fees', _this.fee);
+                                                });
                                                 return [2 /*return*/];
                                         }
                                     });
@@ -285,7 +280,8 @@ var RedeemFormComponent = /** @class */ (function () {
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
             _util_web3_service__WEBPACK_IMPORTED_MODULE_3__["Web3Service"],
             _util_wallet_service__WEBPACK_IMPORTED_MODULE_7__["WalletService"],
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]])
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"],
+            _angular_common_http__WEBPACK_IMPORTED_MODULE_9__["HttpClient"]])
     ], RedeemFormComponent);
     return RedeemFormComponent;
 }());
@@ -312,6 +308,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fortawesome/angular-fontawesome */ "./node_modules/@fortawesome/angular-fontawesome/fesm5/angular-fontawesome.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+
 
 
 
@@ -336,6 +334,7 @@ var RedeemModule = /** @class */ (function () {
                 _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_6__["FormsModule"],
                 _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_5__["FontAwesomeModule"],
+                _angular_common_http__WEBPACK_IMPORTED_MODULE_7__["HttpClientModule"],
                 _angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterModule"].forChild(routes)
             ]
         })

@@ -10312,7 +10312,7 @@ var MerkleTree = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QRTOKEN_SMART_CONTRACT_ADDRESS", function() { return QRTOKEN_SMART_CONTRACT_ADDRESS; });
-var QRTOKEN_SMART_CONTRACT_ADDRESS = '0xee40f63bd8cb6b6d4bbe6cc6417ede202b8cbcdd';
+var QRTOKEN_SMART_CONTRACT_ADDRESS = '0xE687951e1b7049f4aEa2D6598a20A6f2EAda09CC';
 
 
 /***/ }),
@@ -10332,6 +10332,7 @@ var TOKENS = [
         address: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
         icon: 'assets/icons/bnb.png',
         name: 'BNB - Binance Coin',
+        symbol: 'BNB',
         balance: Number(0),
         allowance: 0,
         inApproval: false
@@ -10340,6 +10341,7 @@ var TOKENS = [
         address: '0xdd974D5C2e2928deA5F71b9825b8b646686BD200',
         icon: 'assets/icons/KyberNetwork.jpg',
         name: 'KNC - KyberNetwork Coin',
+        symbol: 'KNC',
         balance: Number(0),
         allowance: 0,
         inApproval: false
@@ -10348,6 +10350,7 @@ var TOKENS = [
         address: '0xE41d2489571d322189246DaFA5ebDe1F4699F498',
         icon: 'assets/icons/0x.png',
         name: 'ZRX - 0x Token',
+        symbol: 'ZRX',
         balance: Number(0),
         allowance: 0,
         inApproval: false
@@ -10356,6 +10359,7 @@ var TOKENS = [
         address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359',
         icon: 'assets/icons/dai_stablecoin.png',
         name: 'DAI - DAI Stable Coin',
+        symbol: 'DAI',
         balance: Number(0),
         allowance: 0,
         inApproval: false
@@ -10364,6 +10368,7 @@ var TOKENS = [
         address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
         icon: 'assets/icons/usdc.png',
         name: 'USDC - USD Coin',
+        symbol: 'USDC',
         balance: Number(0),
         allowance: 0,
         inApproval: false
@@ -10372,6 +10377,7 @@ var TOKENS = [
         address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
         icon: 'assets/icons/wbtc.png',
         name: 'WBTC - Wrapped Bitcoin',
+        symbol: 'WBTC',
         balance: Number(0),
         allowance: 0,
         inApproval: false
@@ -10380,6 +10386,7 @@ var TOKENS = [
         address: '0x4470BB87d77b963A013DB939BE332f927f2b992e',
         icon: 'assets/icons/AdEx.png',
         name: 'ADX - AdEx Token',
+        symbol: 'ADX',
         balance: Number(0),
         allowance: 0,
         inApproval: false
