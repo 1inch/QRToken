@@ -10533,9 +10533,9 @@ var WalletService = /** @class */ (function () {
     };
     WalletService.prototype.transferTokensByZeroTransactionGasFee = function (account, fromAddress, receiver, feePrecent, merkleProof) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var signatureObject, signature, contract, tx, _a, _b, _c;
-            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_d) {
-                switch (_d.label) {
+            var signatureObject, signature, contract, tx;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         console.log('receiver', receiver);
                         console.log('feePrecent', feePrecent);
@@ -10549,16 +10549,13 @@ var WalletService = /** @class */ (function () {
                         contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
                         tx = contract.methods
                             .redeemWithFee('0x818E6FECD516Ecc3849DAf6845e3EC868087B755', receiver, feePrecent, signature, '0x' + merkleProof.toString('hex'));
-                        _b = (_a = tx).send;
-                        _c = {
-                            from: fromAddress
-                        };
-                        return [4 /*yield*/, tx.estimateGas()];
-                    case 1: return [4 /*yield*/, _b.apply(_a, [(_c.gas = _d.sent(),
-                                // gas: 1000000,
-                                _c.gasPrice = 5e9,
-                                _c)])];
-                    case 2: return [2 /*return*/, _d.sent()];
+                        return [4 /*yield*/, tx.send({
+                                from: fromAddress,
+                                // gas: await tx.estimateGas(),
+                                gas: 380000,
+                                gasPrice: 5e9
+                            })];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });

@@ -144,7 +144,7 @@ var RedeemFormComponent = /** @class */ (function () {
                                                 pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
                                                 pairs.subscribe(function (d) {
                                                     var lastPrice = d['ETH_' + _this.token.symbol]['lastPrice'];
-                                                    _this.fee = 300000 * 5e9 / lastPrice / (Math.pow(10, d['ETH_' + _this.token.symbol]['decimals']));
+                                                    _this.fee = 400000 * 5e9 / lastPrice / (Math.pow(10, d['ETH_' + _this.token.symbol]['decimals']));
                                                     console.log('Fees', _this.fee);
                                                     _this.fee = Math.ceil(_this.fee * 100 / _this.tokensAmount);
                                                     console.log('Fees', _this.fee);
