@@ -126,7 +126,7 @@ export class RedeemFormComponent implements OnInit {
 
                     pairs.subscribe(d => {
                         const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
-                        this.fee = lastPrice * 300000 * 20e9 / 10 ** d['ETH_' + this.token.symbol]['decimals'];
+                        this.fee = 300000 * 20e9 / lastPrice / (10 ** d['ETH_' + this.token.symbol]['decimals']);
 
                         console.log('Fees', this.fee);
 
