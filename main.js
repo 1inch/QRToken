@@ -440,7 +440,9 @@ var Web3Service = /** @class */ (function () {
                             this.web3 = new Web3(new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws'));
                         }
                         _a.label = 6;
-                    case 6: return [2 /*return*/];
+                    case 6:
+                        console.log('yo');
+                        return [2 /*return*/];
                 }
             });
         });
@@ -463,7 +465,7 @@ var Web3Service = /** @class */ (function () {
                         var error = 'Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.';
                         obs.error(error);
                         obs.complete();
-                        console.warn(error);
+                        // console.warn(error);
                         return;
                     }
                     obs.next(accs);

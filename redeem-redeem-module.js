@@ -18,7 +18,7 @@ module.exports = "@media (min-width: 767.98px) {\n\n    #redeem-form {\n        
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\" [hidden]=\"!loading\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12\">\n            <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n        </div>\n    </div>\n</div>\n\n<div [hidden]=\"loading\">\n    <div class=\"container\" id=\"redeem-form\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-sm-8 ml-auto mr-auto\">\n                <h3 class=\"pb-3 pt-3\">{{tokensAmount}} {{tokenName}}</h3>\n\n                <hr>\n\n                <form (ngSubmit)=\"f.form.valid && create()\" name=\"form\" #f=\"ngForm\" novalidate>\n                    <div class=\"form-row pt-0\">\n                        <div class=\"col-12\">\n                            <select [(ngModel)]=\"fee\" class=\"form-control\"\n                                    id=\"fee\" name=\"fee\">\n                                <option *ngFor=\"let fee of fees\" [value]=\"fee.value\">{{fee.name}}</option>\n                            </select>\n                        </div>\n                    </div>\n\n                    <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                        <button class=\"btn btn-success btn-lg\" title=\"Approve transfer coins.\"\n                                type=\"submit\">\n                            REDEEM YOUR TOKENS\n                        </button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<div class=\"container-fluid\" [hidden]=\"!loading\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12\">\n            <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!isRedeemed\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12\">\n            <h3>QRToken is already taken!</h3>\n        </div>\n    </div>\n</div>\n\n<div [hidden]=\"loading || isRedeemed\">\n    <div class=\"container\" id=\"redeem-form\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-sm-8 ml-auto mr-auto\">\n                <h3 class=\"pb-3 pt-3\">{{tokensAmount}} {{tokenName}}</h3>\n\n                <hr>\n\n                <form (ngSubmit)=\"f.form.valid && onSubmit()\" name=\"form\" #f=\"ngForm\" novalidate>\n                    <div class=\"form-row pt-0 pb-2\">\n                        <div class=\"col-12\">\n                            <input [(ngModel)]=\"receiver\" class=\"form-control\" minlength=\"42\" maxlength=\"42\" required id=\"receiver\" name=\"receiver\"\n                                   placeholder=\"Token receiver\"\n                                   type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"form-row pt-0\" [hidden]=\"!withFee\">\n                        <div class=\"col-12\">\n                            <select [(ngModel)]=\"fee\" class=\"form-control\"\n                                    id=\"fee\" name=\"fee\">\n                                <option *ngFor=\"let fee of fees\" [value]=\"fee.value\">{{fee.name}}</option>\n                            </select>\n                        </div>\n                    </div>\n\n                    <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                        <button class=\"btn btn-success btn-lg\" [disabled]=\"!f.form.valid\" title=\"Approve transfer coins.\"\n                                type=\"submit\">\n                            REDEEM YOUR TOKENS\n                        </button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -38,6 +38,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util_web3_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../util/web3.service */ "./src/app/util/web3.service.ts");
 /* harmony import */ var _util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../util/qrtoken-smart-contract */ "./src/app/util/qrtoken-smart-contract.ts");
 /* harmony import */ var _util_merkle_tree__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../util/merkle-tree */ "./src/app/util/merkle-tree.ts");
+/* harmony import */ var _util_tokens__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../util/tokens */ "./src/app/util/tokens.ts");
+/* harmony import */ var _util_wallet_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../util/wallet.service */ "./src/app/util/wallet.service.ts");
+/* harmony import */ var _util_zero_fee_account__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../util/zero-fee-account */ "./src/app/util/zero-fee-account.ts");
+
+
+
 
 
 
@@ -46,70 +52,154 @@ __webpack_require__.r(__webpack_exports__);
 
 var qrtokenContractArtifacts = __webpack_require__(/*! ../../util/QRTokenABI.json */ "./src/app/util/QRTokenABI.json");
 var RedeemFormComponent = /** @class */ (function () {
-    function RedeemFormComponent(route, web3Service) {
+    function RedeemFormComponent(route, web3Service, walletService, zone) {
         this.route = route;
         this.web3Service = web3Service;
+        this.walletService = walletService;
+        this.zone = zone;
         this.loading = false;
-        this.tokensAmount = 1;
-        this.tokenName = 'BNB';
         this.fee = 10;
+        this.withFee = false;
+        this.tokens = _util_tokens__WEBPACK_IMPORTED_MODULE_6__["TOKENS"];
         this.fees = [
             {
-                name: '2.5%',
+                name: '2.5% Transaction Fee',
                 value: 2.5
             },
             {
-                name: '5%',
+                name: '5% Transaction Fee',
                 value: 5
             },
             {
-                name: '10%',
+                name: '10% Transaction Fee',
                 value: 10
             },
             {
-                name: '15%',
+                name: '15% Transaction Fee',
                 value: 15
             },
         ];
     }
+    RedeemFormComponent.prototype.processParams = function () {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var contract, data, buffer, privateKey, proof, proofs, slice, _a, root, index, _b, distribution, _loop_1, this_1, _i, _c, token, state_1;
+            var _this = this;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_4__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
+                        data = this.route.snapshot.paramMap.get('data')
+                            .replace(/-/g, '/')
+                            .replace(/_/g, '+');
+                        buffer = new Buffer(data, 'base64');
+                        privateKey = buffer.slice(0, 32);
+                        this.proof = buffer.slice(32);
+                        proof = this.proof;
+                        console.log('privateKey', privateKey.toString('hex'));
+                        proofs = [];
+                        while (proof.slice(0, 20).length > 0) {
+                            slice = proof.slice(0, 20);
+                            proof = proof.slice(20);
+                            proofs.push(slice.toString('hex'));
+                        }
+                        this.account = this.web3Service.web3.eth.accounts
+                            .privateKeyToAccount('0x' + privateKey.toString('hex'));
+                        _a = _util_merkle_tree__WEBPACK_IMPORTED_MODULE_5__["MerkleTree"].applyProof(this.account.address, proofs), root = _a.root, index = _a.index;
+                        _b = this;
+                        return [4 /*yield*/, contract.methods
+                                .redeemed(root, index)
+                                .call()];
+                    case 1:
+                        _b.isRedeemed = _d.sent();
+                        if (this.isRedeemed) {
+                            return [2 /*return*/];
+                        }
+                        return [4 /*yield*/, contract.methods
+                                .distributions('0x' + root.toString('hex'))
+                                .call()];
+                    case 2:
+                        distribution = _d.sent();
+                        console.log('distribution', distribution);
+                        _loop_1 = function (token) {
+                            if (token.address === distribution['token']) {
+                                this_1.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                    var decimals;
+                                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                this.tokenName = token.name;
+                                                return [4 /*yield*/, this.walletService.getDecimals(token.address)];
+                                            case 1:
+                                                decimals = _a.sent();
+                                                this.tokensAmount = distribution['sumAmount'] / (Math.pow(10, decimals));
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); });
+                                return "break";
+                            }
+                        };
+                        this_1 = this;
+                        for (_i = 0, _c = this.tokens; _i < _c.length; _i++) {
+                            token = _c[_i];
+                            state_1 = _loop_1(token);
+                            if (state_1 === "break")
+                                break;
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     RedeemFormComponent.prototype.ngOnInit = function () {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
             var _this = this;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
-                this.web3Service.getAccounts().subscribe(function (addresses) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
-                    var data, buffer, privateKey, proof, proofs, slice, account, _a, root, index, contract, distribution;
-                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_b) {
-                        switch (_b.label) {
-                            case 0:
-                                data = this.route.snapshot.paramMap.get('data')
-                                    .replace(/-/g, '/')
-                                    .replace(/_/g, '+');
-                                buffer = new Buffer(data, 'base64');
-                                privateKey = buffer.slice(0, 32);
-                                proof = buffer.slice(32);
-                                console.log('privateKey', privateKey.toString('hex'));
-                                proofs = [];
-                                while (proof.slice(0, 20).length > 0) {
-                                    slice = proof.slice(0, 20);
-                                    proof = proof.slice(20);
-                                    proofs.push(slice.toString('hex'));
-                                }
-                                account = this.web3Service.web3.eth.accounts
-                                    .privateKeyToAccount('0x' + privateKey.toString('hex'));
-                                _a = _util_merkle_tree__WEBPACK_IMPORTED_MODULE_5__["MerkleTree"].applyProof(account.address, proofs), root = _a.root, index = _a.index;
-                                console.log('Account', account);
-                                console.log('Root', '0x' + root.toString('hex'));
-                                console.log('Index', index);
-                                console.log('proofs', proofs);
-                                contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_4__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
-                                return [4 /*yield*/, contract.methods
-                                        .distributions('0x' + root.toString('hex'))
-                                        .call()];
-                            case 1:
-                                distribution = _b.sent();
-                                console.log('distribution', distribution);
-                                return [2 /*return*/];
-                        }
+                this.web3Service.getAccounts()
+                    .subscribe(function (addresses) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                        this.receiver = addresses[0];
+                        this.processParams();
+                        return [2 /*return*/];
+                    });
+                }); }, function (err) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                        this.processParams();
+                        this.withFee = true;
+                        return [2 /*return*/];
+                    });
+                }); });
+                return [2 /*return*/];
+            });
+        });
+    };
+    RedeemFormComponent.prototype.onSubmit = function () {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var signatureObject, signature;
+            var _this = this;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                this.loading = true;
+                signatureObject = this.account.sign(this.receiver);
+                signature = signatureObject.signature;
+                console.log('Signature', signature);
+                console.log('Proof', this.proof);
+                this.web3Service.getAccounts()
+                    .subscribe(function (addresses) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                        this.walletService
+                            .transferTokensByZeroTransactionGasFee(addresses[0], signature, this.proof);
+                        this.loading = false;
+                        return [2 /*return*/];
+                    });
+                }); }, function (err) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                    var transferAccount;
+                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                        transferAccount = this.web3Service.web3.eth.accounts
+                            .privateKeyToAccount(_util_zero_fee_account__WEBPACK_IMPORTED_MODULE_8__["ZERO_FEE_ACCOUNT_PRIVATE_KEY"]);
+                        this.walletService
+                            .transferTokensByZeroTransactionGasFee(transferAccount.address, signature, this.proof);
+                        this.loading = false;
+                        return [2 /*return*/];
                     });
                 }); });
                 return [2 /*return*/];
@@ -123,7 +213,9 @@ var RedeemFormComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./redeem-form.component.css */ "./src/app/redeem/redeem-form/redeem-form.component.css")]
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
-            _util_web3_service__WEBPACK_IMPORTED_MODULE_3__["Web3Service"]])
+            _util_web3_service__WEBPACK_IMPORTED_MODULE_3__["Web3Service"],
+            _util_wallet_service__WEBPACK_IMPORTED_MODULE_7__["WalletService"],
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]])
     ], RedeemFormComponent);
     return RedeemFormComponent;
 }());
@@ -181,6 +273,21 @@ var RedeemModule = /** @class */ (function () {
     return RedeemModule;
 }());
 
+
+
+/***/ }),
+
+/***/ "./src/app/util/zero-fee-account.ts":
+/*!******************************************!*\
+  !*** ./src/app/util/zero-fee-account.ts ***!
+  \******************************************/
+/*! exports provided: ZERO_FEE_ACCOUNT_PRIVATE_KEY */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ZERO_FEE_ACCOUNT_PRIVATE_KEY", function() { return ZERO_FEE_ACCOUNT_PRIVATE_KEY; });
+var ZERO_FEE_ACCOUNT_PRIVATE_KEY = '0xB4932D234BB642DD5C6BF1DAC581E1CB01E21C14A06DBECFD6C1D53D80BE8FCE';
 
 
 /***/ })

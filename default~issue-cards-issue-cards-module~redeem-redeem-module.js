@@ -10154,6 +10154,17 @@ module.exports = [{"constant":false,"inputs":[{"name":"tokens","type":"address[]
 
 /***/ }),
 
+/***/ "./src/app/util/TokenABI.json":
+/*!************************************!*\
+  !*** ./src/app/util/TokenABI.json ***!
+  \************************************/
+/*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, default */
+/***/ (function(module) {
+
+module.exports = [{"constant":true,"inputs":[],"name":"naturalUnit","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getComponents","outputs":[{"name":"","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getUnits","outputs":[{"name":"","type":"uint256[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_tokenAddress","type":"address"}],"name":"tokenIsComponent","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_issuer","type":"address"},{"name":"_quantity","type":"uint256"}],"name":"mint","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_quantity","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}];
+
+/***/ }),
+
 /***/ "./src/app/util/merkle-tree.ts":
 /*!*************************************!*\
   !*** ./src/app/util/merkle-tree.ts ***!
@@ -10302,6 +10313,210 @@ var MerkleTree = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QRTOKEN_SMART_CONTRACT_ADDRESS", function() { return QRTOKEN_SMART_CONTRACT_ADDRESS; });
 var QRTOKEN_SMART_CONTRACT_ADDRESS = '0xe44d2cC757758B72752600Ed5e93BF513c936c2C';
+
+
+/***/ }),
+
+/***/ "./src/app/util/tokens.ts":
+/*!********************************!*\
+  !*** ./src/app/util/tokens.ts ***!
+  \********************************/
+/*! exports provided: TOKENS */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOKENS", function() { return TOKENS; });
+var TOKENS = [
+    {
+        address: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
+        icon: 'assets/icons/bnb.png',
+        name: 'BNB - Binance Coin',
+        balance: Number(0),
+        allowance: 0,
+        inApproval: false
+    },
+    {
+        address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359',
+        icon: 'assets/icons/dai_stablecoin.png',
+        name: 'DAI - DAI Stable Coin',
+        balance: Number(0),
+        allowance: 0,
+        inApproval: false
+    },
+    {
+        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+        icon: 'assets/icons/usdc.png',
+        name: 'USDC - USD Coin',
+        balance: Number(0),
+        allowance: 0,
+        inApproval: false
+    },
+    {
+        address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
+        icon: 'assets/icons/wbtc.png',
+        name: 'WBTC - Wrapped Bitcoin',
+        balance: Number(0),
+        allowance: 0,
+        inApproval: false
+    },
+    {
+        address: '0x4470BB87d77b963A013DB939BE332f927f2b992e',
+        icon: 'assets/icons/AdEx.png',
+        name: 'ADX - AdEx Token',
+        balance: Number(0),
+        allowance: 0,
+        inApproval: false
+    },
+];
+
+
+/***/ }),
+
+/***/ "./src/app/util/wallet.service.ts":
+/*!****************************************!*\
+  !*** ./src/app/util/wallet.service.ts ***!
+  \****************************************/
+/*! exports provided: WalletService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WalletService", function() { return WalletService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _web3_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./web3.service */ "./src/app/util/web3.service.ts");
+/* harmony import */ var _qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./qrtoken-smart-contract */ "./src/app/util/qrtoken-smart-contract.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+
+
+
+
+
+var tokenContractArtifacts = __webpack_require__(/*! ./TokenABI.json */ "./src/app/util/TokenABI.json");
+var qrtokenContractArtifacts = __webpack_require__(/*! ./QRTokenABI.json */ "./src/app/util/QRTokenABI.json");
+var WalletService = /** @class */ (function () {
+    function WalletService(web3Service) {
+        this.web3Service = web3Service;
+    }
+    WalletService.prototype.ngOnInit = function () {
+    };
+    // getListOfTokens(): any {
+    //
+    //   this.web3Service.accountsObservable.subscribe(addresses => {
+    //
+    //     console.log('Account', addresses[0]);
+    //
+    //     this.web3Service.web3.eth.getPastLogs({
+    //       fromBlock: 6500000,
+    //       topics: [
+    //         this.web3Service.web3.utils.keccak256('Transfer(address,address,uint256)'),
+    //         null,
+    //         this.web3Service.web3.utils.padLeft(addresses[0], 64)
+    //       ]
+    //     })
+    //       .then(data => {
+    //
+    //         console.log('Data', data);
+    //       })
+    //       .catch(err => {
+    //         console.error('Error', err);
+    //       });
+    //   });
+    // }
+    WalletService.prototype.approveToken = function (token) {
+        var _this = this;
+        console.log('approveToken', token);
+        return new rxjs__WEBPACK_IMPORTED_MODULE_4__["Observable"](function (obs) {
+            _this.web3Service.getAccounts()
+                .subscribe(function (addresses) {
+                var contract = new _this.web3Service.web3.eth.Contract(tokenContractArtifacts, token.address);
+                try {
+                    contract.methods
+                        .approve(_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__["QRTOKEN_SMART_CONTRACT_ADDRESS"], _this.web3Service.web3.utils.toHex(_this.web3Service.web3.utils.toBN(2)
+                        .pow(_this.web3Service.web3.utils.toBN(255))))
+                        .send({
+                        from: addresses[0]
+                    })
+                        .then(function (data) {
+                        obs.next(data);
+                        obs.complete();
+                    })
+                        .catch(function (e) {
+                        obs.error(e);
+                        obs.complete();
+                    });
+                }
+                catch (e) {
+                    console.log(e);
+                    // this.setStatus('Error! See log.');
+                }
+            });
+        });
+    };
+    WalletService.prototype.getAllowance = function (token) {
+        // console.log('getAllowance');
+        var _this = this;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_4__["Observable"](function (obs) {
+            _this.web3Service.getAccounts()
+                .subscribe(function (addresses) {
+                // console.log('addresses', addresses);
+                try {
+                    var contract = new _this.web3Service.web3.eth.Contract(tokenContractArtifacts, token.address);
+                    contract.methods
+                        .allowance(addresses[0], _qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__["QRTOKEN_SMART_CONTRACT_ADDRESS"])
+                        .call()
+                        .then(function (data) {
+                        // console.log('getAllowance', data);
+                        token.allowance = data;
+                        obs.next(token);
+                        obs.complete();
+                    })
+                        .catch(function (e) {
+                        console.error('Error', e);
+                        obs.error(e);
+                        obs.complete();
+                        alert('An error has occurred. Try it again.');
+                    });
+                    //    console.log('Allowance: ', this.tokens[i], this.tokens[i].allowance);
+                }
+                catch (e) {
+                    console.log(e);
+                    // this.setStatus('Error getting balance; see log.');
+                }
+            });
+        });
+    };
+    WalletService.prototype.getDecimals = function (tokenAddress) {
+        var tokenContract = new this.web3Service.web3.eth.Contract(tokenContractArtifacts, tokenAddress);
+        return tokenContract.methods.decimals().call();
+    };
+    WalletService.prototype.transferTokensByZeroTransactionGasFee = function (fromAddress, signature, merkleProof) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var contract;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
+                        return [4 /*yield*/, contract.methods
+                                .redeem(signature, '0x' + merkleProof.toString('hex'))
+                                .send({
+                                from: fromAddress
+                            })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    WalletService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            providedIn: 'root'
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_web3_service__WEBPACK_IMPORTED_MODULE_2__["Web3Service"]])
+    ], WalletService);
+    return WalletService;
+}());
+
 
 
 /***/ })
