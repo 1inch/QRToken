@@ -40,10 +40,9 @@
                     </div>
                     <div class="form-row pt-0" [hidden]="!withFee">
                         <div class="col-12">
-                            <select [(ngModel)]="fee" class="form-control"
-                                    id="fee" name="fee">
-                                <option *ngFor="let fee of fees" [value]="fee.value">{{fee.name}}</option>
-                            </select>
+                            <input [(ngModel)]="fee" class="form-control" minlength="42" maxlength="42" required id="fee" name="fee"
+                                   disabled
+                                   type="text">
                         </div>
                     </div>
 

@@ -7,6 +7,7 @@ import {Token} from '../../util/token';
 import {TOKENS} from '../../util/tokens';
 import {WalletService} from '../../util/wallet.service';
 import {ZERO_FEE_ACCOUNT_PRIVATE_KEY} from '../../util/zero-fee-account';
+import {HttpClient} from '@angular/common/http';
 
 declare let Buffer: any;
 
@@ -24,42 +25,25 @@ export class RedeemFormComponent implements OnInit {
 
     done = false;
     account;
+    token: Token;
     proof;
     privateKey;
 
     tokensAmount;
     receiver;
     tokenName;
-    fee = 10;
+    fee = 300000 * 10e9;
     withFee = false;
     isRedeemed;
 
     tokens: Token[] = TOKENS;
 
-    fees = [
-        {
-            name: '2.5% Transaction Fee',
-            value: 2.5
-        },
-        {
-            name: '5% Transaction Fee',
-            value: 5
-        },
-        {
-            name: '10% Transaction Fee',
-            value: 10
-        },
-        {
-            name: '15% Transaction Fee',
-            value: 15
-        },
-    ];
-
     constructor(
         private route: ActivatedRoute,
         private web3Service: Web3Service,
         private walletService: WalletService,
-        private zone: NgZone
+        private zone: NgZone,
+        private http: HttpClient
     ) {
     }
 
@@ -133,8 +117,23 @@ export class RedeemFormComponent implements OnInit {
                 this.zone.run(async () => {
                     this.tokenName = token.name;
 
+                    this.token = token;
+
                     const decimals = await this.walletService.getDecimals(token.address);
                     this.tokensAmount = distribution['sumAmount'] / (10 ** decimals);
+
+                    const pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
+
+                    pairs.subscribe(d => {
+                        const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
+                        this.fee = lastPrice * 300000 * 20e9 / 10 ** d['ETH_' + this.token.symbol]['decimals'];
+
+                        console.log('Fees', this.fee);
+
+                        this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
+
+                        console.log('Fees', this.fee);
+                    });
                 });
 
                 break;

@@ -4,6 +4,7 @@ import {RedeemFormComponent} from './redeem-form/redeem-form.component';
 import {RouterModule, Routes} from '@angular/router';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 const routes: Routes = [
     {
@@ -19,6 +20,7 @@ const routes: Routes = [
         CommonModule,
         FormsModule,
         FontAwesomeModule,
+        HttpClientModule,
         RouterModule.forChild(
             routes
         )
