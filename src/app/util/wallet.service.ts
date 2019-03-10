@@ -183,7 +183,7 @@ export class WalletService implements OnInit {
             from: fromAddress,
             gas: await tx.estimateGas(),
             // gas: 1000000,
-            gasPrice: 10e9
+            gasPrice: 5e9
         });
     }
 }
