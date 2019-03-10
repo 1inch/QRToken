@@ -10312,7 +10312,7 @@ var MerkleTree = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QRTOKEN_SMART_CONTRACT_ADDRESS", function() { return QRTOKEN_SMART_CONTRACT_ADDRESS; });
-var QRTOKEN_SMART_CONTRACT_ADDRESS = '0x7814909C76ce789425e085E08fD6de7cE01e2Ee9';
+var QRTOKEN_SMART_CONTRACT_ADDRESS = '0x5858244812bd7733be6fa7fcc45424a1584e8bfd';
 
 
 /***/ }),

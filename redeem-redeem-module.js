@@ -18,7 +18,7 @@ module.exports = "@media (min-width: 767.98px) {\n\n    #redeem-form {\n        
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\" [hidden]=\"!loading\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12\">\n            <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!isRedeemed\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12\">\n            <h3>QRToken is already taken!</h3>\n        </div>\n    </div>\n</div>\n\n<div [hidden]=\"loading || isRedeemed\">\n    <div class=\"container\" id=\"redeem-form\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-sm-8 ml-auto mr-auto\">\n                <h3 class=\"pb-3 pt-3\">{{tokensAmount}} {{tokenName}}</h3>\n\n                <hr>\n\n                <form (ngSubmit)=\"f.form.valid && onSubmit()\" name=\"form\" #f=\"ngForm\" novalidate>\n                    <div class=\"form-row pt-0 pb-2\">\n                        <div class=\"col-12\">\n                            <input [(ngModel)]=\"receiver\" class=\"form-control\" minlength=\"42\" maxlength=\"42\" required id=\"receiver\" name=\"receiver\"\n                                   placeholder=\"Token receiver\"\n                                   type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"form-row pt-0\" [hidden]=\"!withFee\">\n                        <div class=\"col-12\">\n                            <select [(ngModel)]=\"fee\" class=\"form-control\"\n                                    id=\"fee\" name=\"fee\">\n                                <option *ngFor=\"let fee of fees\" [value]=\"fee.value\">{{fee.name}}</option>\n                            </select>\n                        </div>\n                    </div>\n\n                    <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                        <button class=\"btn btn-success btn-lg\" [disabled]=\"!f.form.valid\" title=\"Approve transfer coins.\"\n                                type=\"submit\">\n                            REDEEM YOUR TOKENS\n                        </button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<div class=\"container-fluid\" [hidden]=\"!loading\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12\">\n            <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!isRedeemed\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">QRToken is already taken!</h3>\n        </div>\n    </div>\n</div>\n\n<div [hidden]=\"loading || isRedeemed\">\n    <div class=\"container\" id=\"redeem-form\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-sm-8 ml-auto mr-auto\">\n                <h3 class=\"pb-3 pt-3\">{{tokensAmount}} {{tokenName}}</h3>\n\n                <hr>\n\n                <form (ngSubmit)=\"f.form.valid && onSubmit()\" name=\"form\" #f=\"ngForm\" novalidate>\n                    <div class=\"form-row pt-0 pb-2\">\n                        <div class=\"col-12\">\n                            <input [(ngModel)]=\"receiver\" class=\"form-control\" minlength=\"42\" maxlength=\"42\" required id=\"receiver\" name=\"receiver\"\n                                   placeholder=\"Token receiver\"\n                                   type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"form-row pt-0\" [hidden]=\"!withFee\">\n                        <div class=\"col-12\">\n                            <select [(ngModel)]=\"fee\" class=\"form-control\"\n                                    id=\"fee\" name=\"fee\">\n                                <option *ngFor=\"let fee of fees\" [value]=\"fee.value\">{{fee.name}}</option>\n                            </select>\n                        </div>\n                    </div>\n\n                    <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                        <button class=\"btn btn-success btn-lg\" [disabled]=\"!f.form.valid\" title=\"Approve transfer coins.\"\n                                type=\"submit\">\n                            REDEEM YOUR TOKENS\n                        </button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -96,6 +96,7 @@ var RedeemFormComponent = /** @class */ (function () {
                         this.proof = buffer.slice(32);
                         proof = this.proof;
                         console.log('privateKey', privateKey.toString('hex'));
+                        this.privateKey = privateKey;
                         proofs = [];
                         while (proof.slice(0, 20).length > 0) {
                             slice = proof.slice(0, 20);
@@ -114,6 +115,11 @@ var RedeemFormComponent = /** @class */ (function () {
                         if (this.isRedeemed) {
                             return [2 /*return*/];
                         }
+                        //
+                        console.log('Account', this.account);
+                        console.log('Root', '0x' + root.toString('hex'));
+                        console.log('Index', index);
+                        console.log('proofs', proofs);
                         return [4 /*yield*/, contract.methods
                                 .distributions('0x' + root.toString('hex'))
                                 .call()];
@@ -179,8 +185,10 @@ var RedeemFormComponent = /** @class */ (function () {
             var _this = this;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                 this.loading = true;
-                signatureObject = this.account.sign(this.receiver);
+                console.log('AccountXYY', this.account);
+                signatureObject = this.account.sign(this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(this.receiver, 40), { encoding: 'hex' }));
                 signature = signatureObject.signature;
+                console.log('signatureObject', signatureObject);
                 console.log('Signature', signature);
                 console.log('Proof', this.proof);
                 this.web3Service.getAccounts()

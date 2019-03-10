@@ -11633,6 +11633,8 @@ var IssueFormComponent = /** @class */ (function () {
                                         switch (_a.label) {
                                             case 0:
                                                 contract = new scope.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_8__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
+                                                console.log('Root', merkleTree.getHexRoot());
+                                                console.log('Layers', merkleTree.layers);
                                                 return [4 /*yield*/, scope.walletService.getDecimals(scope.selectedToken.address)];
                                             case 1:
                                                 decimals = _a.sent();
