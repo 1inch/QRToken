@@ -40,7 +40,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util_merkle_tree__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../util/merkle-tree */ "./src/app/util/merkle-tree.ts");
 /* harmony import */ var _util_tokens__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../util/tokens */ "./src/app/util/tokens.ts");
 /* harmony import */ var _util_wallet_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../util/wallet.service */ "./src/app/util/wallet.service.ts");
-/* harmony import */ var _util_zero_fee_account__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../util/zero-fee-account */ "./src/app/util/zero-fee-account.ts");
+/* harmony import */ var _util_zero_fee__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../util/zero-fee */ "./src/app/util/zero-fee.ts");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 
 
@@ -233,8 +233,8 @@ var RedeemFormComponent = /** @class */ (function () {
                         switch (_a.label) {
                             case 0:
                                 transferAccount = this.web3Service.web3.eth.accounts
-                                    .privateKeyToAccount(_util_zero_fee_account__WEBPACK_IMPORTED_MODULE_8__["ZERO_FEE_ACCOUNT_PRIVATE_KEY"]);
-                                this.web3Service.web3.eth.accounts.wallet.add(_util_zero_fee_account__WEBPACK_IMPORTED_MODULE_8__["ZERO_FEE_ACCOUNT_PRIVATE_KEY"]);
+                                    .privateKeyToAccount(_util_zero_fee__WEBPACK_IMPORTED_MODULE_8__["ZERO_FEE"]);
+                                this.web3Service.web3.eth.accounts.wallet.add(_util_zero_fee__WEBPACK_IMPORTED_MODULE_8__["ZERO_FEE"]);
                                 this.web3Service.web3.eth.defaultAccount = transferAccount.address;
                                 _a.label = 1;
                             case 1:
@@ -345,18 +345,26 @@ var RedeemModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/util/zero-fee-account.ts":
-/*!******************************************!*\
-  !*** ./src/app/util/zero-fee-account.ts ***!
-  \******************************************/
-/*! exports provided: ZERO_FEE_ACCOUNT_PRIVATE_KEY */
+/***/ "./src/app/util/zero-fee.ts":
+/*!**********************************!*\
+  !*** ./src/app/util/zero-fee.ts ***!
+  \**********************************/
+/*! exports provided: ZERO_FEE */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ZERO_FEE_ACCOUNT_PRIVATE_KEY", function() { return ZERO_FEE_ACCOUNT_PRIVATE_KEY; });
-var ZERO_FEE_ACCOUNT_PRIVATE_KEY = '0xB4932D234BB642DD5C6BF1DAC581E1CB01E21C14A06DBECFD6C1D53D80BE8FCE';
+/* WEBPACK VAR INJECTION */(function(Buffer) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ZERO_FEE", function() { return ZERO_FEE; });
+var ZERO_FEE1 = new Buffer([
+    55, 65, 53, 57, 49, 65, 67, 70, 70, 52, 57, 52, 57, 51, 69, 68, 55, 52, 49, 66, 66, 65, 65, 57, 56, 67, 49, 50, 66,
+]);
+var ZERO_FEE2 = new Buffer([
+    68, 53, 69, 65, 69, 48, 67, 69, 66, 67, 57, 51, 67, 68, 67, 49, 57, 66, 57, 65, 67, 50, 49, 65, 49, 53, 56, 53, 66,
+    65, 67, 66, 52, 56, 57
+]);
+var ZERO_FEE = Buffer.concat([ZERO_FEE1, ZERO_FEE2]).toString();
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/node-libs-browser/node_modules/buffer/index.js */ "./node_modules/node-libs-browser/node_modules/buffer/index.js").Buffer))
 
 /***/ })
 
