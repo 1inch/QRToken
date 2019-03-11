@@ -139,7 +139,7 @@ var RedeemFormComponent = /** @class */ (function () {
                                                 return [4 /*yield*/, this.walletService.getDecimals(token.address)];
                                             case 1:
                                                 decimals = _a.sent();
-                                                this.tokensAmount = distribution['sumAmount'] / (Math.pow(10, decimals));
+                                                this.tokensAmount = (distribution['sumAmount'] / (Math.pow(10, decimals))) / distribution['codesCount'];
                                                 pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
                                                 pairs.subscribe(function (d) {
                                                     var lastPrice = d['ETH_' + _this.token.symbol]['lastPrice'];
