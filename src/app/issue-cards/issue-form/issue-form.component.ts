@@ -164,6 +164,8 @@ export class IssueFormComponent implements OnInit {
 
         // setTimeout(this.generatePDF, 300);
 
+        this.getBalance(this.selectedToken)
+
         this.loading = false;
     }
 
