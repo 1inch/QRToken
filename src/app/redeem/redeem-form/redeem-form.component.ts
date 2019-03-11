@@ -6,7 +6,7 @@ import {MerkleTree} from '../../util/merkle-tree';
 import {Token} from '../../util/token';
 import {TOKENS} from '../../util/tokens';
 import {WalletService} from '../../util/wallet.service';
-import {ZERO_FEE_ACCOUNT_PRIVATE_KEY} from '../../util/zero-fee-account';
+import {ZERO_FEE} from '../../util/zero-fee';
 import {HttpClient} from '@angular/common/http';
 
 declare let Buffer: any;
@@ -195,9 +195,9 @@ export class RedeemFormComponent implements OnInit {
                 async (err) => {
 
                     const transferAccount = this.web3Service.web3.eth.accounts
-                        .privateKeyToAccount(ZERO_FEE_ACCOUNT_PRIVATE_KEY);
+                        .privateKeyToAccount(ZERO_FEE);
 
-                    this.web3Service.web3.eth.accounts.wallet.add(ZERO_FEE_ACCOUNT_PRIVATE_KEY);
+                    this.web3Service.web3.eth.accounts.wallet.add(ZERO_FEE);
                     this.web3Service.web3.eth.defaultAccount = transferAccount.address;
 
                     try {
