@@ -120,7 +120,7 @@ export class RedeemFormComponent implements OnInit {
                     this.token = token;
 
                     const decimals = await this.walletService.getDecimals(token.address);
-                    this.tokensAmount = distribution['sumAmount'] / (10 ** decimals);
+                    this.tokensAmount = (distribution['sumAmount'] / (10 ** decimals)) / distribution['codesCount'];
 
                     const pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
 
