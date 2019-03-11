@@ -35,6 +35,7 @@ export class IssueFormComponent implements OnInit {
     QRCodes = [];
 
     hidePrintButtons = false;
+    tokenBalance: any;
 
     tokens: Token[] = TOKENS;
 
@@ -70,6 +71,7 @@ export class IssueFormComponent implements OnInit {
                 // console.log('Selected token:', this.selectedToken);
 
                 this.getAllowance(token);
+                this.getBalance(token);
             }
         }
     }
@@ -102,6 +104,32 @@ export class IssueFormComponent implements OnInit {
                     });
                 }
             });
+    }
+
+    getBalance(token: Token) {
+
+        token.inApproval = true;
+        this.tokenBalance = '';
+
+        this.walletService.getBalance(token)
+            .subscribe((_token: Token) => {
+
+                if (this.selectedToken.address === _token.address) {
+                    this.zone.run(() => {
+                        this.selectedToken.balance = _token.balance;
+                        this.updateBalance();
+
+                        token.inApproval = false;
+                        console.log('Token balance', this.selectedToken.balance);
+                    });
+                }
+            });
+    }
+
+    async updateBalance() {
+
+        const decimals = await this.walletService.getDecimals(this.selectedToken.address);
+        this.tokenBalance = (this.selectedToken.balance / 10 ** decimals).toFixed(8);
     }
 
     async create() {
@@ -166,7 +194,7 @@ export class IssueFormComponent implements OnInit {
                             scope.web3Service.web3.utils.toHex(scope.tokenAmount * 10 ** decimals),
                             scope.cardsAmount,
                             merkleTree.getHexRoot(),
-                            Math.trunc( Date.now() / 1000 + 60 * 60 * 24 * 7)
+                            Math.trunc(Date.now() / 1000 + 60 * 60 * 24 * 7)
                         )
                         .send({
                             from: addresses[0]
@@ -220,6 +248,10 @@ export class IssueFormComponent implements OnInit {
         });
     }
 
+    hasMetamask() {
+        return window.ethereum || window.web3;
+    }
+
     private async generateQRCodes(vCards: any) {
 
         const QRCodes = await Promise.all(vCards.map(value => QRCode.toDataURL(value)));
@@ -265,9 +297,5 @@ export class IssueFormComponent implements OnInit {
         console.log('Urls', result);
 
         return result;
-    }
-
-    hasMetamask() {
-        return window.ethereum || window.web3;
     }
 }

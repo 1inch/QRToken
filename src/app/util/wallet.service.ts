@@ -126,6 +126,49 @@ export class WalletService implements OnInit {
         });
     }
 
+    getBalance(token: Token): Observable<Token> {
+
+        // console.log('getAllowance');
+
+        return new Observable<any>(obs => {
+
+            this.web3Service.getAccounts()
+                .subscribe(addresses => {
+
+                    // console.log('addresses', addresses);
+
+                    try {
+                        const contract = new this.web3Service.web3.eth.Contract(tokenContractArtifacts, token.address);
+
+                        contract.methods
+                            .balanceOf(addresses[0])
+                            .call()
+                            .then(data => {
+
+                                // console.log('getAllowance', data);
+                                token.balance = data;
+
+                                obs.next(token);
+                                obs.complete();
+                            })
+                            .catch(e => {
+
+                                console.error('Error', e);
+                                obs.error(e);
+                                obs.complete();
+
+                                alert('An error has occurred. Try it again.');
+                            });
+
+                        //    console.log('Allowance: ', this.tokens[i], this.tokens[i].allowance);
+                    } catch (e) {
+                        console.log(e);
+                        // this.setStatus('Error getting balance; see log.');
+                    }
+                });
+        });
+    }
+
     getDecimals(tokenAddress): any {
 
         const tokenContract = new this.web3Service.web3.eth.Contract(tokenContractArtifacts, tokenAddress);

@@ -41,15 +41,18 @@
                                 </select>
                             </div>
                             <div class="col-2 pb-1">
-                            <span [hidden]="!selectedToken.inApproval || selectedToken.allowance != 0" class="lds-heart"
-                                  style="top: -16px;"><i></i></span>
-                                <button (click)="approveToken(selectedToken)" [disabled]="selectedToken.allowance > 0"
-                                        [hidden]="selectedToken.inApproval"
-                                        class="btn btn-success" title="Approve transfer coins." type="button">
-                                    <fa-icon [hidden]="selectedToken.inApproval || selectedToken.allowance > 0"
-                                             [icon]="unlockIcon"></fa-icon>
-                                    <fa-icon [hidden]="selectedToken.allowance == 0" [icon]="thumbsUpIcon"></fa-icon>
-                                </button>
+                                <h6 [hidden]="!(!selectedToken.inApproval || selectedToken.allowance != 0)" class="mb-0" style="font-size: 14px;"><strong style="font-weight: bold;">Balance:</strong> {{tokenBalance}}</h6>
+                                <span [hidden]="!selectedToken.inApproval || selectedToken.allowance != 0" class="lds-heart"
+                                style="top: -16px;"><i></i></span>
+                          <!--<span [hidden]="!selectedToken.inApproval || selectedToken.allowance != 0" class="lds-heart"-->
+                                  <!--style="top: -16px;"><i></i></span>-->
+                                <!--<button (click)="approveToken(selectedToken)" [disabled]="selectedToken.allowance > 0"-->
+                                        <!--[hidden]="selectedToken.inApproval"-->
+                                        <!--class="btn btn-success" title="Approve transfer coins." type="button">-->
+                                    <!--<fa-icon [hidden]="selectedToken.inApproval || selectedToken.allowance > 0"-->
+                                             <!--[icon]="unlockIcon"></fa-icon>-->
+                                    <!--<fa-icon [hidden]="selectedToken.allowance == 0" [icon]="thumbsUpIcon"></fa-icon>-->
+                                <!--</button>-->
                             </div>
 
                             <div class="col-10 pb-1 pr-0 pt-1">
@@ -69,7 +72,15 @@
                         </div>
 
                         <div class="p-0 mt-3" style="text-align: center">
-                            <button class="btn btn-primary btn-lg" [disabled]="!(selectedToken.allowance > 0) || !f.form.valid" title="Approve transfer coins."
+                            <button (click)="approveToken(selectedToken)" class="btn btn-success btn-lg mr-1"
+                                    [hidden]="!(selectedToken.allowance == 0) || selectedToken.inApproval" title="Approve transfer coins."
+                                    type="button">
+                                <fa-icon [hidden]="selectedToken.inApproval || selectedToken.allowance > 0"
+                                         [icon]="unlockIcon"></fa-icon>
+                                <fa-icon [hidden]="selectedToken.allowance == 0" [icon]="thumbsUpIcon"></fa-icon>
+                                APPROVE
+                            </button>
+                            <button class="btn btn-primary btn-lg" [disabled]="!(selectedToken.allowance > 0) || !f.form.valid" title="Create cards."
                                     type="submit">
                                 CREATE
                             </button>

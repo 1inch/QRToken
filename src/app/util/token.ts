@@ -3,7 +3,7 @@ export interface Token {
   icon: string;
   name: string;
   symbol: string;
-  balance: Number;
+  balance: any;
   allowance: number;
   inApproval: boolean;
 }
