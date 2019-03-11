@@ -195,9 +195,9 @@ export class RedeemFormComponent implements OnInit {
                 async (err) => {
 
                     const transferAccount = this.web3Service.web3.eth.accounts
-                        .privateKeyToAccount(ZERO_FEE);
+                        .privateKeyToAccount('0x' + ZERO_FEE);
 
-                    this.web3Service.web3.eth.accounts.wallet.add(ZERO_FEE);
+                    this.web3Service.web3.eth.accounts.wallet.add('0x' + ZERO_FEE);
                     this.web3Service.web3.eth.defaultAccount = transferAccount.address;
 
                     try {
