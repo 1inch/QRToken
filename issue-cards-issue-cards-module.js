@@ -11486,7 +11486,7 @@ module.exports = "@media (min-width: 767.98px) {\n\n  #issue-form {\n    padding
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div [hidden]=\"hasMetamask()\">\n    <div class=\"container-fluid\" id=\"select-screen\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-12 text-center pt-4\">\n                <img src=\"assets/metamask.png\" class=\"d-inline-block mb-4\">\n                <h2>Please install Metamask:<br><br><a href=\"https://metamask.io\" class=\"btn btn-warning btn-lg\" target=\"_blank\">https://metamask.io</a></h2>\n            </div>\n        </div>\n    </div>\n</div>\n\n\n<div [hidden]=\"!hasMetamask()\">\n    <div class=\"container-fluid\" [hidden]=\"!loading\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-12\">\n                <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n            </div>\n        </div>\n    </div>\n\n    <div [hidden]=\"loading\">\n        <div class=\"container\" id=\"issue-form\">\n            <div class=\"row align-items-center\">\n                <div class=\"col-sm-8 ml-auto mr-auto\">\n                    <h3 class=\"pb-3 pt-3\">Issue QR Token Cards</h3>\n\n                    <hr>\n\n                    <form (ngSubmit)=\"f.form.valid && create()\" name=\"form\" #f=\"ngForm\" novalidate>\n\n                        <div class=\"text-center mb-3\">\n                            <img [hidden]=\"!selectedToken\" [src]=\"selectedToken.icon\" style=\"height: 5rem;\">\n                        </div>\n\n                        <div class=\"form-row pt-0\">\n                            <div class=\"col-10 pb-1 pr-0\">\n                                <select (change)=\"selectToken($event)\" [(ngModel)]=\"selectedTokenAddress\" class=\"form-control\"\n                                        id=\"selectedToken\" name=\"selectedToken\">\n                                    <option *ngFor=\"let token of tokens\" [value]=\"token.address\">{{token.name}}</option>\n                                </select>\n                            </div>\n                            <div class=\"col-2 pb-1\">\n                            <span [hidden]=\"!selectedToken.inApproval || selectedToken.allowance != 0\" class=\"lds-heart\"\n                                  style=\"top: -16px;\"><i></i></span>\n                                <button (click)=\"approveToken(selectedToken)\" [disabled]=\"selectedToken.allowance > 0\"\n                                        [hidden]=\"selectedToken.inApproval\"\n                                        class=\"btn btn-success\" title=\"Approve transfer coins.\" type=\"button\">\n                                    <fa-icon [hidden]=\"selectedToken.inApproval || selectedToken.allowance > 0\"\n                                             [icon]=\"unlockIcon\"></fa-icon>\n                                    <fa-icon [hidden]=\"selectedToken.allowance == 0\" [icon]=\"thumbsUpIcon\"></fa-icon>\n                                </button>\n                            </div>\n\n                            <div class=\"col-10 pb-1 pr-0 pt-1\">\n                                <input [(ngModel)]=\"tokenAmount\" class=\"form-control mb-2\" required id=\"tokenAmount\" name=\"tokenAmount\"\n                                       placeholder=\"Token amount\"\n                                       type=\"number\">\n\n                                <select [(ngModel)]=\"cardsAmount\" class=\"form-control\" id=\"cardsAmount\" name=\"cardsAmount\"\n                                        required>\n                                    <option selected value=\"\">-- Select Cards Amount --</option>\n                                    <option value=\"4\">4</option>\n                                    <option value=\"8\">8</option>\n                                    <option value=\"16\">16</option>\n                                    <option value=\"32\">32</option>\n                                </select>\n                            </div>\n                        </div>\n\n                        <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                            <button class=\"btn btn-primary btn-lg\" [disabled]=\"!(selectedToken.allowance > 0) || !f.form.valid\" title=\"Approve transfer coins.\"\n                                    type=\"submit\">\n                                CREATE\n                            </button>\n                        </div>\n                    </form>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"container mt-5\" id=\"card-panel\" [hidden]=\"!QRCodes.length\">\n            <div class=\"row align-items-center\">\n                <div class=\"col-sm-8 ml-auto mr-auto\">\n\n                    <div class=\"container-fluid\">\n                        <div class=\"row align-items-center\">\n                            <div class=\"col-sm-12\" *ngFor=\"let QRCode of QRCodes; index as i\" [id]=\"'contentToConvert' + i\">\n                                <div class=\"pb-10\">\n                                    <button class=\"btn btn-info btn-sm float-right\" (click)=\"print(i)\" [hidden]=\"hidePrintButtons\">Print</button>\n                                    <img [src]=\"selectedToken.icon\" width=\"128\" class=\"float-right mr-4\" style=\"margin-top: 10rem;\">\n                                    <img [src]=\"QRCode.qr\" width=\"430\" class=\"mr-auto\">\n                                </div>\n                            </div>\n                            <div class=\"clearfix\"></div>\n                        </div>\n                    </div>\n\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<div [hidden]=\"hasMetamask()\">\n    <div class=\"container-fluid\" id=\"select-screen\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-12 text-center pt-4\">\n                <img src=\"assets/metamask.png\" class=\"d-inline-block mb-4\">\n                <h2>Please install Metamask:<br><br><a href=\"https://metamask.io\" class=\"btn btn-warning btn-lg\" target=\"_blank\">https://metamask.io</a></h2>\n            </div>\n        </div>\n    </div>\n</div>\n\n\n<div [hidden]=\"!hasMetamask()\">\n    <div class=\"container-fluid\" [hidden]=\"!loading\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-12\">\n                <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n            </div>\n        </div>\n    </div>\n\n    <div [hidden]=\"loading\">\n        <div class=\"container\" id=\"issue-form\">\n            <div class=\"row align-items-center\">\n                <div class=\"col-sm-8 ml-auto mr-auto\">\n                    <h3 class=\"pb-3 pt-3\">Issue QR Token Cards</h3>\n\n                    <hr>\n\n                    <form (ngSubmit)=\"f.form.valid && create()\" name=\"form\" #f=\"ngForm\" novalidate>\n\n                        <div class=\"text-center mb-3\">\n                            <img [hidden]=\"!selectedToken\" [src]=\"selectedToken.icon\" style=\"height: 5rem;\">\n                        </div>\n\n                        <div class=\"form-row pt-0\">\n                            <div class=\"col-10 pb-1 pr-0\">\n                                <select (change)=\"selectToken($event)\" [(ngModel)]=\"selectedTokenAddress\" class=\"form-control\"\n                                        id=\"selectedToken\" name=\"selectedToken\">\n                                    <option *ngFor=\"let token of tokens\" [value]=\"token.address\">{{token.name}}</option>\n                                </select>\n                            </div>\n                            <div class=\"col-2 pb-1\">\n                                <h6 [hidden]=\"!(!selectedToken.inApproval || selectedToken.allowance != 0)\" class=\"mb-0\" style=\"font-size: 14px;\"><strong style=\"font-weight: bold;\">Balance:</strong> {{tokenBalance}}</h6>\n                                <span [hidden]=\"!selectedToken.inApproval || selectedToken.allowance != 0\" class=\"lds-heart\"\n                                style=\"top: -16px;\"><i></i></span>\n                          <!--<span [hidden]=\"!selectedToken.inApproval || selectedToken.allowance != 0\" class=\"lds-heart\"-->\n                                  <!--style=\"top: -16px;\"><i></i></span>-->\n                                <!--<button (click)=\"approveToken(selectedToken)\" [disabled]=\"selectedToken.allowance > 0\"-->\n                                        <!--[hidden]=\"selectedToken.inApproval\"-->\n                                        <!--class=\"btn btn-success\" title=\"Approve transfer coins.\" type=\"button\">-->\n                                    <!--<fa-icon [hidden]=\"selectedToken.inApproval || selectedToken.allowance > 0\"-->\n                                             <!--[icon]=\"unlockIcon\"></fa-icon>-->\n                                    <!--<fa-icon [hidden]=\"selectedToken.allowance == 0\" [icon]=\"thumbsUpIcon\"></fa-icon>-->\n                                <!--</button>-->\n                            </div>\n\n                            <div class=\"col-10 pb-1 pr-0 pt-1\">\n                                <input [(ngModel)]=\"tokenAmount\" class=\"form-control mb-2\" required id=\"tokenAmount\" name=\"tokenAmount\"\n                                       placeholder=\"Token amount\"\n                                       type=\"number\">\n\n                                <select [(ngModel)]=\"cardsAmount\" class=\"form-control\" id=\"cardsAmount\" name=\"cardsAmount\"\n                                        required>\n                                    <option selected value=\"\">-- Select Cards Amount --</option>\n                                    <option value=\"4\">4</option>\n                                    <option value=\"8\">8</option>\n                                    <option value=\"16\">16</option>\n                                    <option value=\"32\">32</option>\n                                </select>\n                            </div>\n                        </div>\n\n                        <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                            <button (click)=\"approveToken(selectedToken)\" class=\"btn btn-success btn-lg mr-1\"\n                                    [hidden]=\"!(selectedToken.allowance == 0) || selectedToken.inApproval\" title=\"Approve transfer coins.\"\n                                    type=\"button\">\n                                <fa-icon [hidden]=\"selectedToken.inApproval || selectedToken.allowance > 0\"\n                                         [icon]=\"unlockIcon\"></fa-icon>\n                                <fa-icon [hidden]=\"selectedToken.allowance == 0\" [icon]=\"thumbsUpIcon\"></fa-icon>\n                                APPROVE\n                            </button>\n                            <button class=\"btn btn-primary btn-lg\" [disabled]=\"!(selectedToken.allowance > 0) || !f.form.valid\" title=\"Create cards.\"\n                                    type=\"submit\">\n                                CREATE\n                            </button>\n                        </div>\n                    </form>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"container mt-5\" id=\"card-panel\" [hidden]=\"!QRCodes.length\">\n            <div class=\"row align-items-center\">\n                <div class=\"col-sm-8 ml-auto mr-auto\">\n\n                    <div class=\"container-fluid\">\n                        <div class=\"row align-items-center\">\n                            <div class=\"col-sm-12\" *ngFor=\"let QRCode of QRCodes; index as i\" [id]=\"'contentToConvert' + i\">\n                                <div class=\"pb-10\">\n                                    <button class=\"btn btn-info btn-sm float-right\" (click)=\"print(i)\" [hidden]=\"hidePrintButtons\">Print</button>\n                                    <img [src]=\"selectedToken.icon\" width=\"128\" class=\"float-right mr-4\" style=\"margin-top: 10rem;\">\n                                    <img [src]=\"QRCode.qr\" width=\"430\" class=\"mr-auto\">\n                                </div>\n                            </div>\n                            <div class=\"clearfix\"></div>\n                        </div>\n                    </div>\n\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -11556,6 +11556,7 @@ var IssueFormComponent = /** @class */ (function () {
                 this.selectedToken = token;
                 // console.log('Selected token:', this.selectedToken);
                 this.getAllowance(token);
+                this.getBalance(token);
             }
         }
     };
@@ -11580,6 +11581,36 @@ var IssueFormComponent = /** @class */ (function () {
                     console.log('Token allowance', _this.selectedToken.allowance);
                 });
             }
+        });
+    };
+    IssueFormComponent.prototype.getBalance = function (token) {
+        var _this = this;
+        token.inApproval = true;
+        this.tokenBalance = '';
+        this.walletService.getBalance(token)
+            .subscribe(function (_token) {
+            if (_this.selectedToken.address === _token.address) {
+                _this.zone.run(function () {
+                    _this.selectedToken.balance = _token.balance;
+                    _this.updateBalance();
+                    token.inApproval = false;
+                    console.log('Token balance', _this.selectedToken.balance);
+                });
+            }
+        });
+    };
+    IssueFormComponent.prototype.updateBalance = function () {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var decimals;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.walletService.getDecimals(this.selectedToken.address)];
+                    case 1:
+                        decimals = _a.sent();
+                        this.tokenBalance = (this.selectedToken.balance / Math.pow(10, decimals)).toFixed(8);
+                        return [2 /*return*/];
+                }
+            });
         });
     };
     IssueFormComponent.prototype.create = function () {
@@ -11612,6 +11643,7 @@ var IssueFormComponent = /** @class */ (function () {
                             };
                         });
                         // setTimeout(this.generatePDF, 300);
+                        this.getBalance(this.selectedToken);
                         this.loading = false;
                         return [2 /*return*/];
                 }
@@ -11687,6 +11719,9 @@ var IssueFormComponent = /** @class */ (function () {
             _this.hidePrintButtons = false;
         });
     };
+    IssueFormComponent.prototype.hasMetamask = function () {
+        return window.ethereum || window.web3;
+    };
     IssueFormComponent.prototype.generateQRCodes = function (vCards) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
             var QRCodes;
@@ -11723,9 +11758,6 @@ var IssueFormComponent = /** @class */ (function () {
         console.log('privateKeys', privateKeys);
         console.log('Urls', result);
         return result;
-    };
-    IssueFormComponent.prototype.hasMetamask = function () {
-        return window.ethereum || window.web3;
     };
     IssueFormComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({

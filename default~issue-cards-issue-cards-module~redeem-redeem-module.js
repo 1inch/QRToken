@@ -10510,6 +10510,39 @@ var WalletService = /** @class */ (function () {
             });
         });
     };
+    WalletService.prototype.getBalance = function (token) {
+        // console.log('getAllowance');
+        var _this = this;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_4__["Observable"](function (obs) {
+            _this.web3Service.getAccounts()
+                .subscribe(function (addresses) {
+                // console.log('addresses', addresses);
+                try {
+                    var contract = new _this.web3Service.web3.eth.Contract(tokenContractArtifacts, token.address);
+                    contract.methods
+                        .balanceOf(addresses[0])
+                        .call()
+                        .then(function (data) {
+                        // console.log('getAllowance', data);
+                        token.balance = data;
+                        obs.next(token);
+                        obs.complete();
+                    })
+                        .catch(function (e) {
+                        console.error('Error', e);
+                        obs.error(e);
+                        obs.complete();
+                        alert('An error has occurred. Try it again.');
+                    });
+                    //    console.log('Allowance: ', this.tokens[i], this.tokens[i].allowance);
+                }
+                catch (e) {
+                    console.log(e);
+                    // this.setStatus('Error getting balance; see log.');
+                }
+            });
+        });
+    };
     WalletService.prototype.getDecimals = function (tokenAddress) {
         var tokenContract = new this.web3Service.web3.eth.Contract(tokenContractArtifacts, tokenAddress);
         return tokenContract.methods.decimals().call();
