@@ -29,7 +29,7 @@ export const TOKENS: Token[] = [
         inApproval: false
     },
     {
-        address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359',
+        address: '0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359',
         icon: 'assets/icons/dai_stablecoin.png',
         name: 'DAI - DAI Stable Coin',
         symbol: 'DAI',
