@@ -127,7 +127,7 @@ var RedeemFormComponent = /** @class */ (function () {
                         distribution = _c.sent();
                         console.log('distribution', distribution);
                         _loop_1 = function (token) {
-                            if (token.address === distribution['token']) {
+                            if (token.address.toLowerCase() === distribution['token'].toLowerCase()) {
                                 this_1.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
                                     var decimals, pairs;
                                     var _this = this;

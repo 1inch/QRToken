@@ -11552,7 +11552,7 @@ var IssueFormComponent = /** @class */ (function () {
     IssueFormComponent.prototype.setTokenBySelectedAddress = function () {
         for (var _i = 0, _a = this.tokens; _i < _a.length; _i++) {
             var token = _a[_i];
-            if (token.address === this.selectedTokenAddress) {
+            if (token.address.toLowerCase() === this.selectedTokenAddress.toLowerCase()) {
                 this.selectedToken = token;
                 // console.log('Selected token:', this.selectedToken);
                 this.getAllowance(token);
@@ -11574,7 +11574,7 @@ var IssueFormComponent = /** @class */ (function () {
         token.inApproval = true;
         this.walletService.getAllowance(token)
             .subscribe(function (_token) {
-            if (_this.selectedToken.address === _token.address) {
+            if (_this.selectedToken.address.toLowerCase() === _token.address.toLowerCase()) {
                 _this.zone.run(function () {
                     _this.selectedToken.allowance = _token.allowance;
                     _this.selectedToken.inApproval = false;
@@ -11589,7 +11589,7 @@ var IssueFormComponent = /** @class */ (function () {
         this.tokenBalance = '';
         this.walletService.getBalance(token)
             .subscribe(function (_token) {
-            if (_this.selectedToken.address === _token.address) {
+            if (_this.selectedToken.address.toLowerCase() === _token.address.toLowerCase()) {
                 _this.zone.run(function () {
                     _this.selectedToken.balance = _token.balance;
                     _this.updateBalance();
