@@ -65,7 +65,7 @@ export class IssueFormComponent implements OnInit {
 
         for (const token of this.tokens) {
 
-            if (token.address === this.selectedTokenAddress) {
+            if (token.address.toLowerCase() === this.selectedTokenAddress.toLowerCase()) {
                 this.selectedToken = token;
 
                 // console.log('Selected token:', this.selectedToken);
@@ -96,7 +96,7 @@ export class IssueFormComponent implements OnInit {
         this.walletService.getAllowance(token)
             .subscribe((_token: Token) => {
 
-                if (this.selectedToken.address === _token.address) {
+                if (this.selectedToken.address.toLowerCase() === _token.address.toLowerCase()) {
                     this.zone.run(() => {
                         this.selectedToken.allowance = _token.allowance;
                         this.selectedToken.inApproval = false;
@@ -114,7 +114,7 @@ export class IssueFormComponent implements OnInit {
         this.walletService.getBalance(token)
             .subscribe((_token: Token) => {
 
-                if (this.selectedToken.address === _token.address) {
+                if (this.selectedToken.address.toLowerCase() === _token.address.toLowerCase()) {
                     this.zone.run(() => {
                         this.selectedToken.balance = _token.balance;
                         this.updateBalance();
