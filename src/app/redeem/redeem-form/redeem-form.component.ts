@@ -112,7 +112,7 @@ export class RedeemFormComponent implements OnInit {
 
         for (const token of this.tokens) {
 
-            if (token.address === distribution['token']) {
+            if (token.address.toLowerCase() === distribution['token'].toLowerCase()) {
 
                 this.zone.run(async () => {
                     this.tokenName = token.name;
