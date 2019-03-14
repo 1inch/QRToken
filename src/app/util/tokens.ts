@@ -38,7 +38,7 @@ export const TOKENS: Token[] = [
         inApproval: false
     },
     {
-        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+        address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
         icon: 'assets/icons/usdc.png',
         name: 'USDC - USD Coin',
         symbol: 'USDC',
@@ -47,7 +47,7 @@ export const TOKENS: Token[] = [
         inApproval: false
     },
     {
-        address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
+        address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
         icon: 'assets/icons/wbtc.png',
         name: 'WBTC - Wrapped Bitcoin',
         symbol: 'WBTC',
