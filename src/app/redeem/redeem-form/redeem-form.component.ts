@@ -125,8 +125,11 @@ export class RedeemFormComponent implements OnInit {
                     const pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
 
                     pairs.subscribe(d => {
+
+                        console.log('Token Pair', d['ETH_' + this.token.symbol]);
+
                         const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
-                        this.fee = 400000 * 5e9 / lastPrice / (10 ** d['ETH_' + this.token.symbol]['decimals']);
+                        this.fee = 400000 * 5e9 / lastPrice / 10 ** 18;
 
                         console.log('Fees', this.fee);
 

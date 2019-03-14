@@ -38,11 +38,9 @@
                                    type="text">
                         </div>
                     </div>
-                    <div class="form-row pt-0" [hidden]="!withFee">
+                    <div class="form-row pt-0" [hidden]="!withFee || !fee">
                         <div class="col-12">
-                            <input [value]="fee + ' %'" class="form-control" minlength="42" maxlength="42" required id="fee" name="fee"
-                                   disabled
-                                   type="text">
+                            <label>Transaction Fee: {{fee}} %</label>
                         </div>
                     </div>
 
