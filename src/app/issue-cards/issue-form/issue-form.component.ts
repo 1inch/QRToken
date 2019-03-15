@@ -211,8 +211,8 @@ export class IssueFormComponent implements OnInit {
 
                     const contract = new scope.web3Service.web3.eth.Contract(qrtokenContractArtifacts, QRTOKEN_SMART_CONTRACT_ADDRESS);
 
-                    console.log('Root', merkleTree.getHexRoot());
-                    console.log('Layers', merkleTree.layers);
+                    // console.log('Root', merkleTree.getHexRoot());
+                    // console.log('Layers', merkleTree.layers);
 
                     // const tokenContract = new scope.web3Service.web3.eth.Contract(tokenContractArtifacts, scope.selectedToken.address);
 
@@ -303,7 +303,7 @@ export class IssueFormComponent implements OnInit {
             const privateKeyBuffer = new Buffer(this.web3Service.web3.utils.hexToBytes(privateKeys[index]));
             const merkleTreeBuffer = Buffer.concat(merkleTree.getProof(index));
 
-            console.log('Proof', Buffer.concat(merkleTree.getProof(index)).toString('hex'));
+            // console.log('Proof', Buffer.concat(merkleTree.getProof(index)).toString('hex'));
 
             const smartContractAddressBuffer = new Buffer(this.web3Service.web3.utils.hexToBytes(QRTOKEN_SMART_CONTRACT_ADDRESS));
 
@@ -322,15 +322,15 @@ export class IssueFormComponent implements OnInit {
 
             const content = bufferToBase64(c).replace(/\//g, '-').replace(/\+/g, '_');
 
-            console.log('Base64', content);
+            // console.log('Base64', content);
 
             result.push(
                 'https://qrtoken.io/#/r2/' + content
             );
         }
 
-        console.log('privateKeys', privateKeys);
-        console.log('Urls', result);
+        // console.log('privateKeys', privateKeys);
+        // console.log('Urls', result);
 
         return result;
     }

@@ -48,7 +48,7 @@ export class WalletService implements OnInit {
 
     approveToken(token: Token): Observable<any> {
 
-        console.log('approveToken', token);
+        // console.log('approveToken', token);
 
         return new Observable<any>(obs => {
 
@@ -204,8 +204,8 @@ export class WalletService implements OnInit {
 
     async transferTokensByZeroTransactionGasFee(account, fromAddress, receiver, feePrecent, gasPrice, merkleProof) {
 
-        console.log('receiver', receiver);
-        console.log('feePrecent', feePrecent);
+        // console.log('receiver', receiver);
+        // console.log('feePrecent', feePrecent);
 
         const signatureObject = account.sign(
             this.web3Service.web3.utils.keccak256(
@@ -216,16 +216,16 @@ export class WalletService implements OnInit {
             )
         );
 
-        console.log('receiver', receiver);
-        console.log('fromAddress', fromAddress);
-
-        console.log('Message',  this.web3Service.web3.utils.padLeft(receiver, 40)
-            .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2))
-            .concat(this.web3Service.web3.utils.padLeft(fromAddress, 40).substr(2)));
-
-
-        console.log('Message Keccak', this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
-            .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)), {encoding: 'hex'}));
+        // console.log('receiver', receiver);
+        // console.log('fromAddress', fromAddress);
+        //
+        // console.log('Message',  this.web3Service.web3.utils.padLeft(receiver, 40)
+        //     .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2))
+        //     .concat(this.web3Service.web3.utils.padLeft(fromAddress, 40).substr(2)));
+        //
+        //
+        // console.log('Message Keccak', this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
+        //     .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)), {encoding: 'hex'}));
 
         const signature = signatureObject.signature;
 

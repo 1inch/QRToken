@@ -73,7 +73,7 @@ export class RedeemFormComponent implements OnInit {
 
         let proof = this.proof;
 
-        console.log('privateKey', privateKey.toString('hex'));
+        // console.log('privateKey', privateKey.toString('hex'));
 
         this.privateKey = privateKey;
 
@@ -109,18 +109,18 @@ export class RedeemFormComponent implements OnInit {
         }
 
         //
-        console.log('Account', this.account);
+        // console.log('Account', this.account);
 
-        console.log('Root', '0x' + root.toString('hex'));
-        console.log('Index', index);
-
-        console.log('proofs', proofs);
+        // console.log('Root', '0x' + root.toString('hex'));
+        // console.log('Index', index);
+        //
+        // console.log('proofs', proofs);
 
         const distribution = await contract.methods
             .distributions('0x' + root.toString('hex'))
             .call();
 
-        console.log('distribution', distribution);
+        // console.log('distribution', distribution);
 
         for (const token of this.tokens) {
 
@@ -141,17 +141,17 @@ export class RedeemFormComponent implements OnInit {
 
                         gasPriceRequest.subscribe(gasPriceResponse => {
 
-                            console.log('Token Pair', d['ETH_' + this.token.symbol]);
+                            // console.log('Token Pair', d['ETH_' + this.token.symbol]);
 
                             const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
                             this.gasPrice = gasPriceResponse['fast'] * 1e9;
                             this.fee = 400000 * this.gasPrice / lastPrice / 10 ** 18;
 
-                            console.log('Fees', this.fee);
+                            // console.log('Fees', this.fee);
 
                             this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
 
-                            console.log('Fees', this.fee);
+                            // console.log('Fees', this.fee);
                         });
                     });
                 });
