@@ -175,6 +175,19 @@ export class WalletService implements OnInit {
         return tokenContract.methods.decimals().call();
     }
 
+
+    getTokenName(tokenAddress): any {
+
+        const tokenContract = new this.web3Service.web3.eth.Contract(tokenContractArtifacts, tokenAddress);
+        return tokenContract.methods.name().call();
+    }
+
+    getTokenSymbol(tokenAddress): any {
+
+        const tokenContract = new this.web3Service.web3.eth.Contract(tokenContractArtifacts, tokenAddress);
+        return tokenContract.methods.symbol().call();
+    }
+
     async transferTokens(fromAddress, signature, merkleProof) {
 
         const contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, QRTOKEN_SMART_CONTRACT_ADDRESS);
@@ -189,7 +202,7 @@ export class WalletService implements OnInit {
             });
     }
 
-    async transferTokensByZeroTransactionGasFee(account, fromAddress, receiver, feePrecent, merkleProof) {
+    async transferTokensByZeroTransactionGasFee(account, fromAddress, receiver, feePrecent, gasPrice, merkleProof) {
 
         console.log('receiver', receiver);
         console.log('feePrecent', feePrecent);
@@ -198,6 +211,7 @@ export class WalletService implements OnInit {
             this.web3Service.web3.utils.keccak256(
                 this.web3Service.web3.utils.padLeft(receiver, 40)
                     .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2))
+                    .concat(this.web3Service.web3.utils.padLeft(fromAddress, 40))
                 , {encoding: 'hex'}
             )
         );
@@ -226,7 +240,7 @@ export class WalletService implements OnInit {
             from: fromAddress,
             // gas: await tx.estimateGas(),
             gas: 380000,
-            gasPrice: 5e9
+            gasPrice: gasPrice
         });
     }
 }

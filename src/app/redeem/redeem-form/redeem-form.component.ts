@@ -1,7 +1,7 @@
 import {Component, NgZone, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Web3Service} from '../../util/web3.service';
-import {QRTOKEN_SMART_CONTRACT_ADDRESS} from '../../util/qrtoken-smart-contract';
+import {QRTOKEN_SMART_CONTRACT_ADDRESS, QRTOKEN_SMART_CONTRACT_ADDRESS_v1} from '../../util/qrtoken-smart-contract';
 import {MerkleTree} from '../../util/merkle-tree';
 import {Token} from '../../util/token';
 import {TOKENS} from '../../util/tokens';
@@ -33,6 +33,7 @@ export class RedeemFormComponent implements OnInit {
     receiver;
     tokenName;
     fee;
+    gasPrice;
     withFee = false;
     isRedeemed;
 
@@ -40,16 +41,16 @@ export class RedeemFormComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private web3Service: Web3Service,
         private walletService: WalletService,
         private zone: NgZone,
         private http: HttpClient
     ) {
+
     }
 
     async processParams() {
-
-        const contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, QRTOKEN_SMART_CONTRACT_ADDRESS);
 
         const data = this.route.snapshot.paramMap.get('data')
             .replace(/-/g, '/')
@@ -57,8 +58,19 @@ export class RedeemFormComponent implements OnInit {
 
         const buffer = new Buffer(data, 'base64');
 
-        const privateKey = buffer.slice(0, 32);
-        this.proof = buffer.slice(32);
+        let contract;
+        let privateKey;
+
+        if (this.router.url.substr(0, 3) === '/r/') {
+            contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, QRTOKEN_SMART_CONTRACT_ADDRESS_v1);
+            privateKey = buffer.slice(0, 32);
+            this.proof = buffer.slice(32);
+        } else {
+            contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, '0x' + buffer.slice(0, 20).toString('hex'));
+            privateKey = buffer.slice(20, 52);
+            this.proof = buffer.slice(52);
+        }
+
         let proof = this.proof;
 
         console.log('privateKey', privateKey.toString('hex'));
@@ -122,20 +134,25 @@ export class RedeemFormComponent implements OnInit {
                     const decimals = await this.walletService.getDecimals(token.address);
                     this.tokensAmount = (distribution['sumAmount'] / (10 ** decimals)) / distribution['codesCount'];
 
+                    const gasPriceRequest = this.http.get('https://gasprice.poa.network');
                     const pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
 
                     pairs.subscribe(d => {
 
-                        console.log('Token Pair', d['ETH_' + this.token.symbol]);
+                        gasPriceRequest.subscribe(gasPriceResponse => {
 
-                        const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
-                        this.fee = 400000 * 5e9 / lastPrice / 10 ** 18;
+                            console.log('Token Pair', d['ETH_' + this.token.symbol]);
 
-                        console.log('Fees', this.fee);
+                            const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
+                            this.gasPrice = gasPriceResponse['fast'] * 1e9;
+                            this.fee = 400000 * this.gasPrice / lastPrice / 10 ** 18;
 
-                        this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
+                            console.log('Fees', this.fee);
 
-                        console.log('Fees', this.fee);
+                            this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
+
+                            console.log('Fees', this.fee);
+                        });
                     });
                 });
 
@@ -206,7 +223,7 @@ export class RedeemFormComponent implements OnInit {
                     try {
                         await this.walletService
                             .transferTokensByZeroTransactionGasFee(
-                                this.account, transferAccount.address, this.receiver, this.fee, this.proof);
+                                this.account, transferAccount.address, this.receiver, this.fee, this.gasPrice, this.proof);
 
                         this.zone.run(async () => {
                             this.done = true;

@@ -1,56 +1,70 @@
-<div class="container-fluid" [hidden]="!loading || done">
-    <div class="row align-items-center">
-        <div class="col-12">
-            <div class="lds-ripple m-auto d-block"><div></div><div></div></div>
-        </div>
-    </div>
-</div>
-
-<div class="container-fluid" [hidden]="!isRedeemed || loading || done">
-    <div class="row align-items-center">
-        <div class="col-12 text-center">
-            <h3 class="mt-5">QRToken is already taken!</h3>
-        </div>
-    </div>
-</div>
-
-<div class="container-fluid" [hidden]="!done || loading">
-    <div class="row align-items-center">
-        <div class="col-12 text-center">
-            <h3 class="mt-5">Your tokens were transmitted.</h3>
-        </div>
-    </div>
-</div>
-
-<div [hidden]="loading || isRedeemed || done">
-    <div class="container" id="redeem-form">
+<div [hidden]="!(withFee && fee >= 100)">
+    <div class="container-fluid" id="select-screen">
         <div class="row align-items-center">
-            <div class="col-sm-8 ml-auto mr-auto">
-                <h3 class="pb-3 pt-3">{{tokensAmount}} {{tokenName}}</h3>
+            <div class="col-12 text-center pt-4">
+                <img class="d-inline-block mb-4" src="assets/metamask.png">
+                <h2>Please install Metamask:<br><br><a class="btn btn-warning btn-lg" href="https://metamask.io"
+                                                       target="_blank">https://metamask.io</a></h2>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <hr>
+<div [hidden]="withFee && fee >= 100">
+    <div class="container-fluid" [hidden]="!loading || done">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="lds-ripple m-auto d-block"><div></div><div></div></div>
+            </div>
+        </div>
+    </div>
 
-                <form (ngSubmit)="f.form.valid && onSubmit()" name="form" #f="ngForm" novalidate>
-                    <div class="form-row pt-0 pb-2">
-                        <div class="col-12">
-                            <input [(ngModel)]="receiver" class="form-control" minlength="42" maxlength="42" required id="receiver" name="receiver"
-                                   placeholder="Ethereum Wallet Address"
-                                   type="text">
+    <div class="container-fluid" [hidden]="!isRedeemed || loading || done">
+        <div class="row align-items-center">
+            <div class="col-12 text-center">
+                <h3 class="mt-5">QRToken is already taken!</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" [hidden]="!done || loading">
+        <div class="row align-items-center">
+            <div class="col-12 text-center">
+                <h3 class="mt-5">Your tokens were transmitted.</h3>
+            </div>
+        </div>
+    </div>
+
+    <div [hidden]="loading || isRedeemed || done">
+        <div class="container" id="redeem-form">
+            <div class="row align-items-center">
+                <div class="col-sm-8 ml-auto mr-auto">
+                    <h3 class="pb-3 pt-3">{{tokensAmount}} {{tokenName}}</h3>
+
+                    <hr>
+
+                    <form (ngSubmit)="f.form.valid && onSubmit()" name="form" #f="ngForm" novalidate>
+                        <div class="form-row pt-0 pb-2">
+                            <div class="col-12">
+                                <input [(ngModel)]="receiver" class="form-control" minlength="42" maxlength="42" required id="receiver" name="receiver"
+                                       placeholder="Ethereum Wallet Address"
+                                       type="text">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row pt-0" [hidden]="!withFee || !fee">
-                        <div class="col-12">
-                            <label>Transaction Fee: {{fee}} %</label>
+                        <div class="form-row pt-0" [hidden]="!withFee || !fee">
+                            <div class="col-12">
+                                <label>Transaction Fee: {{fee}} %</label>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="p-0 mt-3" style="text-align: center">
-                        <button class="btn btn-success btn-lg" [disabled]="!f.form.valid" title="Approve transfer coins."
-                                type="submit">
-                            REDEEM YOUR TOKENS
-                        </button>
-                    </div>
-                </form>
+                        <div class="p-0 mt-3" style="text-align: center">
+                            <button class="btn btn-success btn-lg" [disabled]="!f.form.valid" title="Approve transfer coins."
+                                    type="submit">
+                                REDEEM YOUR TOKENS
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

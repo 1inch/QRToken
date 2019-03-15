@@ -26,12 +26,14 @@ declare let window: any;
 export class IssueFormComponent implements OnInit {
 
     selectedTokenAddress = '0xB8c77482e45F1F44dE1745F52C74426C631bDD52';
+    customTokenAddress = '';
     selectedToken: Token;
     cardsAmount = 4;
     tokenAmount = 0.01;
     unlockIcon = faUnlock;
     thumbsUpIcon = faThumbsUp;
     loading = false;
+    created = false;
     QRCodes = [];
 
     hidePrintButtons = false;
@@ -56,22 +58,45 @@ export class IssueFormComponent implements OnInit {
         }
     }
 
-    selectToken($event) {
+    async selectToken($event) {
 
         this.setTokenBySelectedAddress();
     }
 
-    setTokenBySelectedAddress() {
+    async setTokenBySelectedAddress() {
 
-        for (const token of this.tokens) {
+        this.created = false;
 
-            if (token.address.toLowerCase() === this.selectedTokenAddress.toLowerCase()) {
-                this.selectedToken = token;
+        if (this.selectedTokenAddress === 'CUSTOM' && this.customTokenAddress.length === 42) {
 
-                // console.log('Selected token:', this.selectedToken);
+            const customTokenName = await this.walletService.getTokenName(this.customTokenAddress.trim());
+            const customTokenSymbol = await this.walletService.getTokenSymbol(this.customTokenAddress.trim());
 
-                this.getAllowance(token);
-                this.getBalance(token);
+            const token: Token = {
+                address: this.customTokenAddress.trim(),
+                icon: 'assets/logo.svg',
+                name: customTokenName,
+                symbol: customTokenSymbol,
+                balance: Number(0),
+                allowance: 0,
+                inApproval: false
+            };
+
+            this.getAllowance(token);
+            this.getBalance(token);
+
+            this.selectedToken = token;
+        } else if (this.selectedTokenAddress !== 'CUSTOM') {
+            for (const token of this.tokens) {
+
+                if (token.address.toLowerCase() === this.selectedTokenAddress.toLowerCase()) {
+                    this.selectedToken = token;
+
+                    // console.log('Selected token:', this.selectedToken);
+
+                    this.getAllowance(token);
+                    this.getBalance(token);
+                }
             }
         }
     }
@@ -162,11 +187,17 @@ export class IssueFormComponent implements OnInit {
             };
         });
 
-        // setTimeout(this.generatePDF, 300);
+        this.getBalance(this.selectedToken);
 
-        this.getBalance(this.selectedToken)
-
+        this.created = true;
         this.loading = false;
+    }
+
+    printAll() {
+
+        for (let i in this.QRCodes) {
+            this.print(i);
+        }
     }
 
     async storeMerkleTree(merkleTree: MerkleTree) {
@@ -207,7 +238,7 @@ export class IssueFormComponent implements OnInit {
             });
     }
 
-    print(index: number) {
+    print(index: any) {
 
         this.hidePrintButtons = true;
 
@@ -274,9 +305,12 @@ export class IssueFormComponent implements OnInit {
 
             console.log('Proof', Buffer.concat(merkleTree.getProof(index)).toString('hex'));
 
-            const c = new Uint8Array(privateKeyBuffer.length + merkleTreeBuffer.length);
-            c.set(privateKeyBuffer);
-            c.set(merkleTreeBuffer, privateKeyBuffer.length);
+            const smartContractAddressBuffer = new Buffer(this.web3Service.web3.utils.hexToBytes(QRTOKEN_SMART_CONTRACT_ADDRESS));
+
+            const c = new Uint8Array(smartContractAddressBuffer.length + privateKeyBuffer.length + merkleTreeBuffer.length);
+            c.set(smartContractAddressBuffer);
+            c.set(privateKeyBuffer, smartContractAddressBuffer.length);
+            c.set(merkleTreeBuffer, smartContractAddressBuffer.length + privateKeyBuffer.length);
 
             const bufferToBase64 = function (buf) {
                 const binstr = Array.prototype.map.call(buf, function (ch) {
@@ -291,7 +325,7 @@ export class IssueFormComponent implements OnInit {
             console.log('Base64', content);
 
             result.push(
-                'https://qrtoken.io/#/r/' + content
+                'https://qrtoken.io/#/r2/' + content
             );
         }
 
