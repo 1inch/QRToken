@@ -10584,9 +10584,12 @@ var WalletService = /** @class */ (function () {
                         console.log('feePrecent', feePrecent);
                         signatureObject = account.sign(this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
                             .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2))
-                            .concat(this.web3Service.web3.utils.padLeft(fromAddress, 40)), { encoding: 'hex' }));
+                            .concat(this.web3Service.web3.utils.padLeft(fromAddress, 40).substr(2)), { encoding: 'hex' }));
+                        console.log('receiver', receiver);
+                        console.log('fromAddress', fromAddress);
                         console.log('Message', this.web3Service.web3.utils.padLeft(receiver, 40)
-                            .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)));
+                            .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2))
+                            .concat(this.web3Service.web3.utils.padLeft(fromAddress, 40).substr(2)));
                         console.log('Message Keccak', this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
                             .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)), { encoding: 'hex' }));
                         signature = signatureObject.signature;
