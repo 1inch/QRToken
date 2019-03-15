@@ -11711,8 +11711,6 @@ var IssueFormComponent = /** @class */ (function () {
                                         switch (_a.label) {
                                             case 0:
                                                 contract = new scope.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_8__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
-                                                console.log('Root', merkleTree.getHexRoot());
-                                                console.log('Layers', merkleTree.layers);
                                                 return [4 /*yield*/, scope.walletService.getDecimals(scope.selectedToken.address)];
                                             case 1:
                                                 decimals = _a.sent();
@@ -11787,7 +11785,7 @@ var IssueFormComponent = /** @class */ (function () {
         for (var index = 0; index < privateKeys.length; index++) {
             var privateKeyBuffer = new Buffer(this.web3Service.web3.utils.hexToBytes(privateKeys[index]));
             var merkleTreeBuffer = Buffer.concat(merkleTree.getProof(index));
-            console.log('Proof', Buffer.concat(merkleTree.getProof(index)).toString('hex'));
+            // console.log('Proof', Buffer.concat(merkleTree.getProof(index)).toString('hex'));
             var smartContractAddressBuffer = new Buffer(this.web3Service.web3.utils.hexToBytes(_util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_8__["QRTOKEN_SMART_CONTRACT_ADDRESS"]));
             var c = new Uint8Array(smartContractAddressBuffer.length + privateKeyBuffer.length + merkleTreeBuffer.length);
             c.set(smartContractAddressBuffer);
@@ -11800,11 +11798,11 @@ var IssueFormComponent = /** @class */ (function () {
                 return btoa(binstr);
             };
             var content = bufferToBase64(c).replace(/\//g, '-').replace(/\+/g, '_');
-            console.log('Base64', content);
+            // console.log('Base64', content);
             result.push('https://qrtoken.io/#/r2/' + content);
         }
-        console.log('privateKeys', privateKeys);
-        console.log('Urls', result);
+        // console.log('privateKeys', privateKeys);
+        // console.log('Urls', result);
         return result;
     };
     IssueFormComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([

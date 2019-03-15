@@ -10450,8 +10450,8 @@ var WalletService = /** @class */ (function () {
     //   });
     // }
     WalletService.prototype.approveToken = function (token) {
+        // console.log('approveToken', token);
         var _this = this;
-        console.log('approveToken', token);
         return new rxjs__WEBPACK_IMPORTED_MODULE_4__["Observable"](function (obs) {
             _this.web3Service.getAccounts()
                 .subscribe(function (addresses) {
@@ -10580,18 +10580,9 @@ var WalletService = /** @class */ (function () {
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log('receiver', receiver);
-                        console.log('feePrecent', feePrecent);
                         signatureObject = account.sign(this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
                             .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2))
                             .concat(this.web3Service.web3.utils.padLeft(fromAddress, 40).substr(2)), { encoding: 'hex' }));
-                        console.log('receiver', receiver);
-                        console.log('fromAddress', fromAddress);
-                        console.log('Message', this.web3Service.web3.utils.padLeft(receiver, 40)
-                            .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2))
-                            .concat(this.web3Service.web3.utils.padLeft(fromAddress, 40).substr(2)));
-                        console.log('Message Keccak', this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
-                            .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)), { encoding: 'hex' }));
                         signature = signatureObject.signature;
                         contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
                         tx = contract.methods

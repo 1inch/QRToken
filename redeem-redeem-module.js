@@ -88,7 +88,7 @@ var RedeemFormComponent = /** @class */ (function () {
                             this.proof = buffer.slice(52);
                         }
                         proof = this.proof;
-                        console.log('privateKey', privateKey.toString('hex'));
+                        // console.log('privateKey', privateKey.toString('hex'));
                         this.privateKey = privateKey;
                         proofs = [];
                         while (proof.slice(0, 20).length > 0) {
@@ -123,17 +123,11 @@ var RedeemFormComponent = /** @class */ (function () {
                             }); });
                             return [2 /*return*/];
                         }
-                        //
-                        console.log('Account', this.account);
-                        console.log('Root', '0x' + root.toString('hex'));
-                        console.log('Index', index);
-                        console.log('proofs', proofs);
                         return [4 /*yield*/, contract.methods
                                 .distributions('0x' + root.toString('hex'))
                                 .call()];
                     case 1:
                         distribution = _c.sent();
-                        console.log('distribution', distribution);
                         _loop_1 = function (token) {
                             if (token.address.toLowerCase() === distribution['token'].toLowerCase()) {
                                 this_1.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
@@ -152,13 +146,13 @@ var RedeemFormComponent = /** @class */ (function () {
                                                 pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
                                                 pairs.subscribe(function (d) {
                                                     gasPriceRequest.subscribe(function (gasPriceResponse) {
-                                                        console.log('Token Pair', d['ETH_' + _this.token.symbol]);
+                                                        // console.log('Token Pair', d['ETH_' + this.token.symbol]);
                                                         var lastPrice = d['ETH_' + _this.token.symbol]['lastPrice'];
                                                         _this.gasPrice = gasPriceResponse['fast'] * 1e9;
                                                         _this.fee = 400000 * _this.gasPrice / lastPrice / Math.pow(10, 18);
-                                                        console.log('Fees', _this.fee);
+                                                        // console.log('Fees', this.fee);
                                                         _this.fee = Math.ceil(_this.fee * 100 / _this.tokensAmount);
-                                                        console.log('Fees', _this.fee);
+                                                        // console.log('Fees', this.fee);
                                                     });
                                                 });
                                                 return [2 /*return*/];
@@ -169,6 +163,7 @@ var RedeemFormComponent = /** @class */ (function () {
                             }
                         };
                         this_1 = this;
+                        // console.log('distribution', distribution);
                         for (_i = 0, _b = this.tokens; _i < _b.length; _i++) {
                             token = _b[_i];
                             state_1 = _loop_1(token);
