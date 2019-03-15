@@ -172,6 +172,10 @@ var routes = [
             {
                 path: 'r/:data',
                 loadChildren: './redeem/redeem.module#RedeemModule'
+            },
+            {
+                path: 'r2/:data',
+                loadChildren: './redeem/redeem.module#RedeemModule'
             }
         ]
     },

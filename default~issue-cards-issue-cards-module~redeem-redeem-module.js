@@ -10158,10 +10158,10 @@ module.exports = [{"constant":false,"inputs":[{"name":"tokens","type":"address[]
 /*!************************************!*\
   !*** ./src/app/util/TokenABI.json ***!
   \************************************/
-/*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, default */
+/*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, default */
 /***/ (function(module) {
 
-module.exports = [{"constant":true,"inputs":[],"name":"naturalUnit","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getComponents","outputs":[{"name":"","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getUnits","outputs":[{"name":"","type":"uint256[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_tokenAddress","type":"address"}],"name":"tokenIsComponent","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_issuer","type":"address"},{"name":"_quantity","type":"uint256"}],"name":"mint","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_quantity","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}];
+module.exports = [{"constant":true,"inputs":[],"name":"naturalUnit","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getComponents","outputs":[{"name":"","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getUnits","outputs":[{"name":"","type":"uint256[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_tokenAddress","type":"address"}],"name":"tokenIsComponent","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_issuer","type":"address"},{"name":"_quantity","type":"uint256"}],"name":"mint","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_quantity","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"}];
 
 /***/ }),
 
@@ -10306,13 +10306,15 @@ var MerkleTree = /** @class */ (function () {
 /*!************************************************!*\
   !*** ./src/app/util/qrtoken-smart-contract.ts ***!
   \************************************************/
-/*! exports provided: QRTOKEN_SMART_CONTRACT_ADDRESS */
+/*! exports provided: QRTOKEN_SMART_CONTRACT_ADDRESS, QRTOKEN_SMART_CONTRACT_ADDRESS_v1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QRTOKEN_SMART_CONTRACT_ADDRESS", function() { return QRTOKEN_SMART_CONTRACT_ADDRESS; });
-var QRTOKEN_SMART_CONTRACT_ADDRESS = '0xE687951e1b7049f4aEa2D6598a20A6f2EAda09CC';
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QRTOKEN_SMART_CONTRACT_ADDRESS_v1", function() { return QRTOKEN_SMART_CONTRACT_ADDRESS_v1; });
+var QRTOKEN_SMART_CONTRACT_ADDRESS = '0x1ab601a2e158fbfd44b314e3a9dae742332c7f48';
+var QRTOKEN_SMART_CONTRACT_ADDRESS_v1 = '0xE687951e1b7049f4aEa2D6598a20A6f2EAda09CC';
 
 
 /***/ }),
@@ -10547,6 +10549,14 @@ var WalletService = /** @class */ (function () {
         var tokenContract = new this.web3Service.web3.eth.Contract(tokenContractArtifacts, tokenAddress);
         return tokenContract.methods.decimals().call();
     };
+    WalletService.prototype.getTokenName = function (tokenAddress) {
+        var tokenContract = new this.web3Service.web3.eth.Contract(tokenContractArtifacts, tokenAddress);
+        return tokenContract.methods.name().call();
+    };
+    WalletService.prototype.getTokenSymbol = function (tokenAddress) {
+        var tokenContract = new this.web3Service.web3.eth.Contract(tokenContractArtifacts, tokenAddress);
+        return tokenContract.methods.symbol().call();
+    };
     WalletService.prototype.transferTokens = function (fromAddress, signature, merkleProof) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
             var contract;
@@ -10564,7 +10574,7 @@ var WalletService = /** @class */ (function () {
             });
         });
     };
-    WalletService.prototype.transferTokensByZeroTransactionGasFee = function (account, fromAddress, receiver, feePrecent, merkleProof) {
+    WalletService.prototype.transferTokensByZeroTransactionGasFee = function (account, fromAddress, receiver, feePrecent, gasPrice, merkleProof) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
             var signatureObject, signature, contract, tx;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
@@ -10573,7 +10583,8 @@ var WalletService = /** @class */ (function () {
                         console.log('receiver', receiver);
                         console.log('feePrecent', feePrecent);
                         signatureObject = account.sign(this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
-                            .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)), { encoding: 'hex' }));
+                            .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2))
+                            .concat(this.web3Service.web3.utils.padLeft(fromAddress, 40)), { encoding: 'hex' }));
                         console.log('Message', this.web3Service.web3.utils.padLeft(receiver, 40)
                             .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)));
                         console.log('Message Keccak', this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
@@ -10586,7 +10597,7 @@ var WalletService = /** @class */ (function () {
                                 from: fromAddress,
                                 // gas: await tx.estimateGas(),
                                 gas: 380000,
-                                gasPrice: 5e9
+                                gasPrice: gasPrice
                             })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }

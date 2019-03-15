@@ -11486,7 +11486,7 @@ module.exports = "@media (min-width: 767.98px) {\n\n  #issue-form {\n    padding
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div [hidden]=\"hasMetamask()\">\n    <div class=\"container-fluid\" id=\"select-screen\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-12 text-center pt-4\">\n                <img src=\"assets/metamask.png\" class=\"d-inline-block mb-4\">\n                <h2>Please install Metamask:<br><br><a href=\"https://metamask.io\" class=\"btn btn-warning btn-lg\" target=\"_blank\">https://metamask.io</a></h2>\n            </div>\n        </div>\n    </div>\n</div>\n\n\n<div [hidden]=\"!hasMetamask()\">\n    <div class=\"container-fluid\" [hidden]=\"!loading\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-12\">\n                <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n            </div>\n        </div>\n    </div>\n\n    <div [hidden]=\"loading\">\n        <div class=\"container\" id=\"issue-form\">\n            <div class=\"row align-items-center\">\n                <div class=\"col-sm-8 ml-auto mr-auto\">\n                    <h3 class=\"pb-3 pt-3\">Issue QR Token Cards</h3>\n\n                    <hr>\n\n                    <form (ngSubmit)=\"f.form.valid && create()\" name=\"form\" #f=\"ngForm\" novalidate>\n\n                        <div class=\"text-center mb-3\">\n                            <img [hidden]=\"!selectedToken\" [src]=\"selectedToken.icon\" style=\"height: 5rem;\">\n                        </div>\n\n                        <div class=\"form-row pt-0\">\n                            <div class=\"col-10 pb-1 pr-0\">\n                                <select (change)=\"selectToken($event)\" [(ngModel)]=\"selectedTokenAddress\" class=\"form-control\"\n                                        id=\"selectedToken\" name=\"selectedToken\">\n                                    <option *ngFor=\"let token of tokens\" [value]=\"token.address\">{{token.name}}</option>\n                                </select>\n                            </div>\n                            <div class=\"col-2 pb-1\">\n                                <h6 [hidden]=\"!(!selectedToken.inApproval || selectedToken.allowance != 0)\" class=\"mb-0\" style=\"font-size: 14px;\"><strong style=\"font-weight: bold;\">Balance:</strong> {{tokenBalance}}</h6>\n                                <span [hidden]=\"!selectedToken.inApproval || selectedToken.allowance != 0\" class=\"lds-heart\"\n                                style=\"top: -16px;\"><i></i></span>\n                          <!--<span [hidden]=\"!selectedToken.inApproval || selectedToken.allowance != 0\" class=\"lds-heart\"-->\n                                  <!--style=\"top: -16px;\"><i></i></span>-->\n                                <!--<button (click)=\"approveToken(selectedToken)\" [disabled]=\"selectedToken.allowance > 0\"-->\n                                        <!--[hidden]=\"selectedToken.inApproval\"-->\n                                        <!--class=\"btn btn-success\" title=\"Approve transfer coins.\" type=\"button\">-->\n                                    <!--<fa-icon [hidden]=\"selectedToken.inApproval || selectedToken.allowance > 0\"-->\n                                             <!--[icon]=\"unlockIcon\"></fa-icon>-->\n                                    <!--<fa-icon [hidden]=\"selectedToken.allowance == 0\" [icon]=\"thumbsUpIcon\"></fa-icon>-->\n                                <!--</button>-->\n                            </div>\n\n                            <div class=\"col-10 pb-1 pr-0 pt-1\">\n                                <input [(ngModel)]=\"tokenAmount\" class=\"form-control mb-2\" required id=\"tokenAmount\" name=\"tokenAmount\"\n                                       placeholder=\"Token amount\"\n                                       type=\"number\">\n\n                                <select [(ngModel)]=\"cardsAmount\" class=\"form-control\" id=\"cardsAmount\" name=\"cardsAmount\"\n                                        required>\n                                    <option selected value=\"\">-- Select Cards Amount --</option>\n                                    <option value=\"4\">4</option>\n                                    <option value=\"8\">8</option>\n                                    <option value=\"16\">16</option>\n                                    <option value=\"32\">32</option>\n                                </select>\n                            </div>\n                        </div>\n\n                        <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                            <button (click)=\"approveToken(selectedToken)\" class=\"btn btn-success btn-lg mr-1\"\n                                    [hidden]=\"!(selectedToken.allowance == 0) || selectedToken.inApproval\" title=\"Approve transfer coins.\"\n                                    type=\"button\">\n                                <fa-icon [hidden]=\"selectedToken.inApproval || selectedToken.allowance > 0\"\n                                         [icon]=\"unlockIcon\"></fa-icon>\n                                <fa-icon [hidden]=\"selectedToken.allowance == 0\" [icon]=\"thumbsUpIcon\"></fa-icon>\n                                APPROVE\n                            </button>\n                            <button class=\"btn btn-primary btn-lg\" [disabled]=\"!(selectedToken.allowance > 0) || !f.form.valid\" title=\"Create cards.\"\n                                    type=\"submit\">\n                                CREATE\n                            </button>\n                        </div>\n                    </form>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"container mt-5\" id=\"card-panel\" [hidden]=\"!QRCodes.length\">\n            <div class=\"row align-items-center\">\n                <div class=\"col-sm-8 ml-auto mr-auto\">\n\n                    <div class=\"container-fluid\">\n                        <div class=\"row align-items-center\">\n                            <div class=\"col-sm-12\" *ngFor=\"let QRCode of QRCodes; index as i\" [id]=\"'contentToConvert' + i\">\n                                <div class=\"pb-10\">\n                                    <button class=\"btn btn-info btn-sm float-right\" (click)=\"print(i)\" [hidden]=\"hidePrintButtons\">Print</button>\n                                    <img [src]=\"selectedToken.icon\" width=\"128\" class=\"float-right mr-4\" style=\"margin-top: 10rem;\">\n                                    <img [src]=\"QRCode.qr\" width=\"430\" class=\"mr-auto\">\n                                </div>\n                            </div>\n                            <div class=\"clearfix\"></div>\n                        </div>\n                    </div>\n\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<div [hidden]=\"hasMetamask()\">\n    <div class=\"container-fluid\" id=\"select-screen\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-12 text-center pt-4\">\n                <img class=\"d-inline-block mb-4\" src=\"assets/metamask.png\">\n                <h2>Please install Metamask:<br><br><a class=\"btn btn-warning btn-lg\" href=\"https://metamask.io\"\n                                                       target=\"_blank\">https://metamask.io</a></h2>\n            </div>\n        </div>\n    </div>\n</div>\n\n\n<div [hidden]=\"!hasMetamask()\">\n    <div class=\"container-fluid\" [hidden]=\"!loading\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-12\">\n                <div class=\"lds-ripple m-auto d-block\">\n                    <div></div>\n                    <div></div>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <div [hidden]=\"loading\">\n        <div class=\"container\" id=\"issue-form\">\n            <div class=\"row align-items-center\">\n                <div class=\"col-sm-8 ml-auto mr-auto\">\n                    <h3 class=\"pb-3 pt-3\">Issue QR Token Cards</h3>\n\n                    <hr>\n\n                    <form (ngSubmit)=\"f.form.valid && create()\" name=\"form\" #f=\"ngForm\" novalidate>\n\n                        <div class=\"text-center mb-3\" [hidden]=\"selectedTokenAddress === 'CUSTOM' && !this.customTokenAddress\">\n                            <img [hidden]=\"!selectedToken\" [src]=\"selectedToken.icon\" class=\"mb-2\" style=\"height: 5rem;\">\n                            <h5>{{selectedToken.name}} ({{selectedToken.symbol}})</h5>\n                        </div>\n\n                        <div class=\"form-row pt-0\">\n                            <div class=\"col-10 pb-1 pr-0\">\n                                <select (change)=\"selectToken($event)\" [(ngModel)]=\"selectedTokenAddress\"\n                                        class=\"form-control\"\n                                        id=\"selectedToken\" name=\"selectedToken\">\n                                    <option *ngFor=\"let token of tokens\" [value]=\"token.address\">{{token.name}}</option>\n                                    <option value=\"CUSTOM\">CUSTOM</option>\n                                </select>\n                                <input (keyup)=\"selectToken($event)\" (change)=\"selectToken($event)\" [(ngModel)]=\"customTokenAddress\"\n                                       [hidden]=\"selectedTokenAddress !== 'CUSTOM'\"\n                                       class=\"form-control mt-2\" [required]=\"selectedTokenAddress === 'CUSTOM'\"\n                                       id=\"customTokenAddress\" name=\"customTokenAddress\"\n                                       placeholder=\"Custom Token Address\"\n                                       type=\"text\">\n                            </div>\n                            <div class=\"col-2 pb-1\">\n                                <h6 [hidden]=\"!(!selectedToken.inApproval || selectedToken.allowance != 0)\" class=\"mb-0\"\n                                    style=\"font-size: 14px;\"><strong\n                                    style=\"font-weight: bold;\">Balance:</strong> {{tokenBalance}}</h6>\n                                <span [hidden]=\"!selectedToken.inApproval || selectedToken.allowance != 0\"\n                                      class=\"lds-heart\"\n                                      style=\"top: -16px;\"><i></i></span>\n                            </div>\n\n                            <div class=\"col-10 pb-1 pr-0 pt-1\">\n                                <input (change)=\"created=false\" [(ngModel)]=\"tokenAmount\" class=\"form-control mb-2\" required id=\"tokenAmount\"\n                                       name=\"tokenAmount\"\n                                       placeholder=\"Token amount\"\n                                       type=\"number\">\n\n                                <input (change)=\"created=false\" [(ngModel)]=\"cardsAmount\" class=\"form-control\" required id=\"cardsAmount\"\n                                       name=\"cardsAmount\"\n                                       placeholder=\"Cards amount\"\n                                       type=\"number\">\n                            </div>\n                        </div>\n\n                        <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                            <button (click)=\"approveToken(selectedToken)\" class=\"btn btn-success btn-lg mr-1\"\n                                    [hidden]=\"!(selectedToken.allowance == 0) || selectedToken.inApproval\"\n                                    title=\"Approve transfer coins.\"\n                                    type=\"button\">\n                                <fa-icon [hidden]=\"selectedToken.inApproval || selectedToken.allowance > 0\"\n                                         [icon]=\"unlockIcon\"></fa-icon>\n                                <fa-icon [hidden]=\"selectedToken.allowance == 0\" [icon]=\"thumbsUpIcon\"></fa-icon>\n                                APPROVE\n                            </button>\n                            <button class=\"btn btn-primary btn-lg\"\n                                    [disabled]=\"!(selectedToken.allowance > 0) || !f.form.valid || created\" title=\"Create cards.\"\n                                    type=\"submit\">\n                                CREATE\n                            </button>\n                            <button class=\"btn btn-dark btn-lg ml-1\"\n                                    [hidden]=\"!created\" (click)=\"printAll()\" title=\"Print cards.\"\n                                    type=\"button\">\n                                PRINT\n                            </button>\n                        </div>\n                    </form>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"container mt-5\" id=\"card-panel\" [hidden]=\"!QRCodes.length || !created\">\n            <div class=\"row align-items-center\">\n                <div class=\"col-sm-8 ml-auto mr-auto\">\n\n                    <div class=\"container-fluid\">\n                        <div class=\"row align-items-center\">\n                            <div class=\"col-sm-12\" *ngFor=\"let QRCode of QRCodes; index as i\"\n                                 [id]=\"'contentToConvert' + i\">\n                                <div class=\"pb-10\">\n                                    <span style=\"margin-top: 8rem; text-align: center;\" class=\"d-inline-block float-right mr-4\">\n                                        <img [src]=\"selectedToken.icon\" width=\"128\">\n                                        <h5 style=\"max-width: 128px;\" class=\"mt-1\">{{selectedToken.name}} ({{selectedToken.symbol}})</h5>\n                                    </span>\n                                    <img [src]=\"QRCode.qr\" width=\"430\" class=\"mr-auto\">\n                                </div>\n                            </div>\n                            <div class=\"clearfix\"></div>\n                        </div>\n                    </div>\n\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -11530,11 +11530,13 @@ var IssueFormComponent = /** @class */ (function () {
         this.zone = zone;
         this.web3Service = web3Service;
         this.selectedTokenAddress = '0xB8c77482e45F1F44dE1745F52C74426C631bDD52';
+        this.customTokenAddress = '';
         this.cardsAmount = 4;
         this.tokenAmount = 0.01;
         this.unlockIcon = _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_2__["faUnlock"];
         this.thumbsUpIcon = _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_2__["faThumbsUp"];
         this.loading = false;
+        this.created = false;
         this.QRCodes = [];
         this.hidePrintButtons = false;
         this.tokens = _util_tokens__WEBPACK_IMPORTED_MODULE_9__["TOKENS"];
@@ -11547,18 +11549,57 @@ var IssueFormComponent = /** @class */ (function () {
         }
     };
     IssueFormComponent.prototype.selectToken = function ($event) {
-        this.setTokenBySelectedAddress();
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                this.setTokenBySelectedAddress();
+                return [2 /*return*/];
+            });
+        });
     };
     IssueFormComponent.prototype.setTokenBySelectedAddress = function () {
-        for (var _i = 0, _a = this.tokens; _i < _a.length; _i++) {
-            var token = _a[_i];
-            if (token.address.toLowerCase() === this.selectedTokenAddress.toLowerCase()) {
-                this.selectedToken = token;
-                // console.log('Selected token:', this.selectedToken);
-                this.getAllowance(token);
-                this.getBalance(token);
-            }
-        }
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var customTokenName, customTokenSymbol, token, _i, _a, token;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        this.created = false;
+                        if (!(this.selectedTokenAddress === 'CUSTOM' && this.customTokenAddress.length === 42)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.walletService.getTokenName(this.customTokenAddress.trim())];
+                    case 1:
+                        customTokenName = _b.sent();
+                        return [4 /*yield*/, this.walletService.getTokenSymbol(this.customTokenAddress.trim())];
+                    case 2:
+                        customTokenSymbol = _b.sent();
+                        token = {
+                            address: this.customTokenAddress.trim(),
+                            icon: 'assets/logo.svg',
+                            name: customTokenName,
+                            symbol: customTokenSymbol,
+                            balance: Number(0),
+                            allowance: 0,
+                            inApproval: false
+                        };
+                        this.getAllowance(token);
+                        this.getBalance(token);
+                        this.selectedToken = token;
+                        return [3 /*break*/, 4];
+                    case 3:
+                        if (this.selectedTokenAddress !== 'CUSTOM') {
+                            for (_i = 0, _a = this.tokens; _i < _a.length; _i++) {
+                                token = _a[_i];
+                                if (token.address.toLowerCase() === this.selectedTokenAddress.toLowerCase()) {
+                                    this.selectedToken = token;
+                                    // console.log('Selected token:', this.selectedToken);
+                                    this.getAllowance(token);
+                                    this.getBalance(token);
+                                }
+                            }
+                        }
+                        _b.label = 4;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
     };
     IssueFormComponent.prototype.approveToken = function (token) {
         // console.log('Approve');
@@ -11642,13 +11683,18 @@ var IssueFormComponent = /** @class */ (function () {
                                 qr: qr, index: null
                             };
                         });
-                        // setTimeout(this.generatePDF, 300);
                         this.getBalance(this.selectedToken);
+                        this.created = true;
                         this.loading = false;
                         return [2 /*return*/];
                 }
             });
         });
+    };
+    IssueFormComponent.prototype.printAll = function () {
+        for (var i in this.QRCodes) {
+            this.print(i);
+        }
     };
     IssueFormComponent.prototype.storeMerkleTree = function (merkleTree) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
@@ -11742,9 +11788,11 @@ var IssueFormComponent = /** @class */ (function () {
             var privateKeyBuffer = new Buffer(this.web3Service.web3.utils.hexToBytes(privateKeys[index]));
             var merkleTreeBuffer = Buffer.concat(merkleTree.getProof(index));
             console.log('Proof', Buffer.concat(merkleTree.getProof(index)).toString('hex'));
-            var c = new Uint8Array(privateKeyBuffer.length + merkleTreeBuffer.length);
-            c.set(privateKeyBuffer);
-            c.set(merkleTreeBuffer, privateKeyBuffer.length);
+            var smartContractAddressBuffer = new Buffer(this.web3Service.web3.utils.hexToBytes(_util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_8__["QRTOKEN_SMART_CONTRACT_ADDRESS"]));
+            var c = new Uint8Array(smartContractAddressBuffer.length + privateKeyBuffer.length + merkleTreeBuffer.length);
+            c.set(smartContractAddressBuffer);
+            c.set(privateKeyBuffer, smartContractAddressBuffer.length);
+            c.set(merkleTreeBuffer, smartContractAddressBuffer.length + privateKeyBuffer.length);
             var bufferToBase64 = function (buf) {
                 var binstr = Array.prototype.map.call(buf, function (ch) {
                     return String.fromCharCode(ch);
@@ -11753,7 +11801,7 @@ var IssueFormComponent = /** @class */ (function () {
             };
             var content = bufferToBase64(c).replace(/\//g, '-').replace(/\+/g, '_');
             console.log('Base64', content);
-            result.push('https://qrtoken.io/#/r/' + content);
+            result.push('https://qrtoken.io/#/r2/' + content);
         }
         console.log('privateKeys', privateKeys);
         console.log('Urls', result);

@@ -18,7 +18,7 @@ module.exports = "@media (min-width: 767.98px) {\n\n    #redeem-form {\n        
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\" [hidden]=\"!loading || done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12\">\n            <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!isRedeemed || loading || done\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">QRToken is already taken!</h3>\n        </div>\n    </div>\n</div>\n\n<div class=\"container-fluid\" [hidden]=\"!done || loading\">\n    <div class=\"row align-items-center\">\n        <div class=\"col-12 text-center\">\n            <h3 class=\"mt-5\">Your tokens were transmitted.</h3>\n        </div>\n    </div>\n</div>\n\n<div [hidden]=\"loading || isRedeemed || done\">\n    <div class=\"container\" id=\"redeem-form\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-sm-8 ml-auto mr-auto\">\n                <h3 class=\"pb-3 pt-3\">{{tokensAmount}} {{tokenName}}</h3>\n\n                <hr>\n\n                <form (ngSubmit)=\"f.form.valid && onSubmit()\" name=\"form\" #f=\"ngForm\" novalidate>\n                    <div class=\"form-row pt-0 pb-2\">\n                        <div class=\"col-12\">\n                            <input [(ngModel)]=\"receiver\" class=\"form-control\" minlength=\"42\" maxlength=\"42\" required id=\"receiver\" name=\"receiver\"\n                                   placeholder=\"Ethereum Wallet Address\"\n                                   type=\"text\">\n                        </div>\n                    </div>\n                    <div class=\"form-row pt-0\" [hidden]=\"!withFee || !fee\">\n                        <div class=\"col-12\">\n                            <label>Transaction Fee: {{fee}} %</label>\n                        </div>\n                    </div>\n\n                    <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                        <button class=\"btn btn-success btn-lg\" [disabled]=\"!f.form.valid\" title=\"Approve transfer coins.\"\n                                type=\"submit\">\n                            REDEEM YOUR TOKENS\n                        </button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<div [hidden]=\"!(withFee && fee >= 100)\">\n    <div class=\"container-fluid\" id=\"select-screen\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-12 text-center pt-4\">\n                <img class=\"d-inline-block mb-4\" src=\"assets/metamask.png\">\n                <h2>Please install Metamask:<br><br><a class=\"btn btn-warning btn-lg\" href=\"https://metamask.io\"\n                                                       target=\"_blank\">https://metamask.io</a></h2>\n            </div>\n        </div>\n    </div>\n</div>\n\n<div [hidden]=\"withFee && fee >= 100\">\n    <div class=\"container-fluid\" [hidden]=\"!loading || done\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-12\">\n                <div class=\"lds-ripple m-auto d-block\"><div></div><div></div></div>\n            </div>\n        </div>\n    </div>\n\n    <div class=\"container-fluid\" [hidden]=\"!isRedeemed || loading || done\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-12 text-center\">\n                <h3 class=\"mt-5\">QRToken is already taken!</h3>\n            </div>\n        </div>\n    </div>\n\n    <div class=\"container-fluid\" [hidden]=\"!done || loading\">\n        <div class=\"row align-items-center\">\n            <div class=\"col-12 text-center\">\n                <h3 class=\"mt-5\">Your tokens were transmitted.</h3>\n            </div>\n        </div>\n    </div>\n\n    <div [hidden]=\"loading || isRedeemed || done\">\n        <div class=\"container\" id=\"redeem-form\">\n            <div class=\"row align-items-center\">\n                <div class=\"col-sm-8 ml-auto mr-auto\">\n                    <h3 class=\"pb-3 pt-3\">{{tokensAmount}} {{tokenName}}</h3>\n\n                    <hr>\n\n                    <form (ngSubmit)=\"f.form.valid && onSubmit()\" name=\"form\" #f=\"ngForm\" novalidate>\n                        <div class=\"form-row pt-0 pb-2\">\n                            <div class=\"col-12\">\n                                <input [(ngModel)]=\"receiver\" class=\"form-control\" minlength=\"42\" maxlength=\"42\" required id=\"receiver\" name=\"receiver\"\n                                       placeholder=\"Ethereum Wallet Address\"\n                                       type=\"text\">\n                            </div>\n                        </div>\n                        <div class=\"form-row pt-0\" [hidden]=\"!withFee || !fee\">\n                            <div class=\"col-12\">\n                                <label>Transaction Fee: {{fee}} %</label>\n                            </div>\n                        </div>\n\n                        <div class=\"p-0 mt-3\" style=\"text-align: center\">\n                            <button class=\"btn btn-success btn-lg\" [disabled]=\"!f.form.valid\" title=\"Approve transfer coins.\"\n                                    type=\"submit\">\n                                REDEEM YOUR TOKENS\n                            </button>\n                        </div>\n                    </form>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -54,8 +54,9 @@ __webpack_require__.r(__webpack_exports__);
 
 var qrtokenContractArtifacts = __webpack_require__(/*! ../../util/QRTokenABI.json */ "./src/app/util/QRTokenABI.json");
 var RedeemFormComponent = /** @class */ (function () {
-    function RedeemFormComponent(route, web3Service, walletService, zone, http) {
+    function RedeemFormComponent(route, router, web3Service, walletService, zone, http) {
         this.route = route;
+        this.router = router;
         this.web3Service = web3Service;
         this.walletService = walletService;
         this.zone = zone;
@@ -67,18 +68,25 @@ var RedeemFormComponent = /** @class */ (function () {
     }
     RedeemFormComponent.prototype.processParams = function () {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var contract, data, buffer, privateKey, proof, proofs, slice, _a, root, index, distribution, _loop_1, this_1, _i, _b, token, state_1;
+            var data, buffer, contract, privateKey, proof, proofs, slice, _a, root, index, distribution, _loop_1, this_1, _i, _b, token, state_1;
             var _this = this;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_4__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
                         data = this.route.snapshot.paramMap.get('data')
                             .replace(/-/g, '/')
                             .replace(/_/g, '+');
                         buffer = new Buffer(data, 'base64');
-                        privateKey = buffer.slice(0, 32);
-                        this.proof = buffer.slice(32);
+                        if (this.router.url.substr(0, 3) === '/r/') {
+                            contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_4__["QRTOKEN_SMART_CONTRACT_ADDRESS_v1"]);
+                            privateKey = buffer.slice(0, 32);
+                            this.proof = buffer.slice(32);
+                        }
+                        else {
+                            contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, '0x' + buffer.slice(0, 20).toString('hex'));
+                            privateKey = buffer.slice(20, 52);
+                            this.proof = buffer.slice(52);
+                        }
                         proof = this.proof;
                         console.log('privateKey', privateKey.toString('hex'));
                         this.privateKey = privateKey;
@@ -129,7 +137,7 @@ var RedeemFormComponent = /** @class */ (function () {
                         _loop_1 = function (token) {
                             if (token.address.toLowerCase() === distribution['token'].toLowerCase()) {
                                 this_1.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
-                                    var decimals, pairs;
+                                    var decimals, gasPriceRequest, pairs;
                                     var _this = this;
                                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                                         switch (_a.label) {
@@ -140,14 +148,18 @@ var RedeemFormComponent = /** @class */ (function () {
                                             case 1:
                                                 decimals = _a.sent();
                                                 this.tokensAmount = (distribution['sumAmount'] / (Math.pow(10, decimals))) / distribution['codesCount'];
+                                                gasPriceRequest = this.http.get('https://gasprice.poa.network');
                                                 pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
                                                 pairs.subscribe(function (d) {
-                                                    console.log('Token Pair', d['ETH_' + _this.token.symbol]);
-                                                    var lastPrice = d['ETH_' + _this.token.symbol]['lastPrice'];
-                                                    _this.fee = 400000 * 5e9 / lastPrice / Math.pow(10, 18);
-                                                    console.log('Fees', _this.fee);
-                                                    _this.fee = Math.ceil(_this.fee * 100 / _this.tokensAmount);
-                                                    console.log('Fees', _this.fee);
+                                                    gasPriceRequest.subscribe(function (gasPriceResponse) {
+                                                        console.log('Token Pair', d['ETH_' + _this.token.symbol]);
+                                                        var lastPrice = d['ETH_' + _this.token.symbol]['lastPrice'];
+                                                        _this.gasPrice = gasPriceResponse['fast'] * 1e9;
+                                                        _this.fee = 400000 * _this.gasPrice / lastPrice / Math.pow(10, 18);
+                                                        console.log('Fees', _this.fee);
+                                                        _this.fee = Math.ceil(_this.fee * 100 / _this.tokensAmount);
+                                                        console.log('Fees', _this.fee);
+                                                    });
                                                 });
                                                 return [2 /*return*/];
                                         }
@@ -241,7 +253,7 @@ var RedeemFormComponent = /** @class */ (function () {
                             case 1:
                                 _a.trys.push([1, 3, , 4]);
                                 return [4 /*yield*/, this.walletService
-                                        .transferTokensByZeroTransactionGasFee(this.account, transferAccount.address, this.receiver, this.fee, this.proof)];
+                                        .transferTokensByZeroTransactionGasFee(this.account, transferAccount.address, this.receiver, this.fee, this.gasPrice, this.proof)];
                             case 2:
                                 _a.sent();
                                 this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
@@ -278,6 +290,7 @@ var RedeemFormComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./redeem-form.component.css */ "./src/app/redeem/redeem-form/redeem-form.component.css")]
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
             _util_web3_service__WEBPACK_IMPORTED_MODULE_3__["Web3Service"],
             _util_wallet_service__WEBPACK_IMPORTED_MODULE_7__["WalletService"],
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"],
