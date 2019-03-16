@@ -30,8 +30,20 @@ contract QRToken is InstaLend, AnyPaymentReceiver {
 
     mapping(uint160 => Distribution) public distributions;
 
-    event Created();
-    event Redeemed(uint160 root, uint256 index, address receiver);
+    event Created(
+        address indexed creator,
+        uint160 indexed root,
+        IERC20 indexed token,
+        uint256 sumTokenAmount,
+        uint256 codesCount,
+        uint256 deadline
+    );
+
+    event Redeemed(
+        uint160 indexed root,
+        uint256 index,
+        address receiver
+    );
 
     constructor()
         public
@@ -60,6 +72,8 @@ contract QRToken is InstaLend, AnyPaymentReceiver {
         distribution.codesCount = codesCount;
         distribution.deadline = deadline;
         distribution.sponsor = msg.sender;
+
+        emit Created(msg.sender, root, token, sumTokenAmount, codesCount, deadline);
     }
 
     function redeemed(uint160 root, uint index) public view returns(bool) {
@@ -109,7 +123,7 @@ contract QRToken is InstaLend, AnyPaymentReceiver {
         external
         notInLendingMode
     {
-        (uint160 root, uint256 index) = calcRootAndIndex(signature, merkleProof, abi.encodePacked(receiver, feePrecent));
+        (uint160 root, uint256 index) = calcRootAndIndex(signature, merkleProof, abi.encodePacked(receiver, feePrecent, msg.sender));
         Distribution storage distribution = distributions[root];
         require(distribution.bitMask[index / 32] & (1 << (index % 32)) == 0);
 
