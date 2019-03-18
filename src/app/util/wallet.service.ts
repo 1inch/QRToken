@@ -8,6 +8,8 @@ declare let require: any;
 const tokenContractArtifacts = require('./TokenABI.json');
 const qrtokenContractArtifacts = require('./QRTokenABI.json');
 
+import PromiEvent from 'web3-core-promievent';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -202,7 +204,7 @@ export class WalletService implements OnInit {
             });
     }
 
-    async transferTokensByZeroTransactionGasFee(account, fromAddress, receiver, feePrecent, gasPrice, merkleProof) {
+    transferTokensByZeroTransactionGasFee(account, fromAddress, receiver, feePrecent, gasPrice, merkleProof, nonce): PromiEvent {
 
         // console.log('receiver', receiver);
         // console.log('feePrecent', feePrecent);
@@ -240,11 +242,13 @@ export class WalletService implements OnInit {
                 '0x' + merkleProof.toString('hex')
             );
 
-        return await tx.send({
+        return tx.send({
             from: fromAddress,
             // gas: await tx.estimateGas(),
+            // gasPrice: 2e9,
             gas: 380000,
-            gasPrice: gasPrice
+            gasPrice: gasPrice,
+            nonce: nonce
         });
     }
 }

@@ -22,6 +22,7 @@ const qrtokenContractArtifacts = require('../../util/QRTokenABI.json');
 export class RedeemFormComponent implements OnInit {
 
     loading = false;
+    status = '';
 
     done = false;
     account;
@@ -36,6 +37,9 @@ export class RedeemFormComponent implements OnInit {
     gasPrice;
     withFee = false;
     isRedeemed;
+    root;
+    index;
+    contract;
 
     tokens: Token[] = TOKENS;
 
@@ -90,6 +94,10 @@ export class RedeemFormComponent implements OnInit {
             .privateKeyToAccount('0x' + privateKey.toString('hex'));
 
         const {root, index} = MerkleTree.applyProof(this.account.address, proofs);
+
+        this.root = root;
+        this.index = index;
+        this.contract = contract;
 
         this.zone.run(async () => {
             this.isRedeemed = await contract.methods
@@ -221,22 +229,86 @@ export class RedeemFormComponent implements OnInit {
                     this.web3Service.web3.eth.defaultAccount = transferAccount.address;
 
                     try {
-                        await this.walletService
-                            .transferTokensByZeroTransactionGasFee(
-                                this.account, transferAccount.address, this.receiver, this.fee, this.gasPrice, this.proof);
 
-                        this.zone.run(async () => {
-                            this.done = true;
-                        });
+                        const nonce = await this.web3Service.web3.eth.getTransactionCount(transferAccount.address);
+
+                        this.isRedeemed = await this.contract.methods
+                            .redeemed(
+                                this.root,
+                                this.index
+                            )
+                            .call();
+
+                        console.log('isRedeemed', this.isRedeemed);
+
+                        if (!this.isRedeemed) {
+                            const tx = this.walletService
+                                .transferTokensByZeroTransactionGasFee(
+                                    this.account, transferAccount.address, this.receiver, this.fee, this.gasPrice, this.proof, nonce);
+
+                            console.log('TX', tx);
+
+                            const scope = this;
+
+                            tx
+                                .once('transactionHash', function(hash){
+
+                                    console.log('hash', hash);
+
+                                    scope.zone.run(async () => {
+                                        scope.done = true;
+                                        scope.loading = false;
+                                    });
+                                })
+                                .once('receipt', function(receipt){
+
+                                    console.log('receipt', receipt);
+
+                                    scope.zone.run(async () => {
+                                        scope.status = '';
+                                        scope.done = true;
+                                        scope.loading = false;
+                                    });
+                                })
+                                .on('confirmation', function(confNumber, receipt){
+
+                                    console.log('confNumber', confNumber);
+                                    console.log('receipt', receipt);
+                                })
+                                .on('error', function(error){
+
+                                    console.log('error', error);
+                                })
+                                .then((receipt) => {
+
+                                    console.log('Receipt', receipt);
+
+                                    this.zone.run(async () => {
+                                        this.done = true;
+                                        this.loading = false;
+                                    });
+                                })
+                                .catch((error) => {
+
+                                    console.log('Error', error);
+
+                                    this.zone.run(async () => {
+                                        this.loading = false;
+                                    });
+                                });
+                        } else {
+                            this.zone.run(async () => {
+                                this.loading = false;
+                            });
+                        }
                     } catch (e) {
                         alert(e.toString());
                         console.error(e);
+
+                        this.zone.run(async () => {
+                            this.loading = false;
+                        });
                     }
-
-
-                    this.zone.run(async () => {
-                        this.loading = false;
-                    });
                 }
             );
     }
