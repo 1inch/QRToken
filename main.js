@@ -235,7 +235,7 @@ module.exports = ".navbar-brand {\n  font-size: 1.5rem;\n}\n\n/*# sourceMappingU
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-lg navbar-light bg-light\">\n\n  <button (click)=\"goBack()\" [hidden]=\"!navigationService.showBackButton\"\n          class=\"btn btn-link my-2 my-sm-0 text-success mr-auto\" type=\"submit\">\n    <fa-icon [icon]=\"backIcon\" style=\"font-size: 30px;\"></fa-icon>\n  </button>\n\n  <div class=\"ml-auto mr-auto\" style=\"display: flex!important;flex-basis: auto;\">\n    <a routerLink=\"/\" class=\"navbar-brand\">\n      <img alt=\"QRToken\" height=\"50\" src=\"assets/logo.svg\"> QR<strong>Token</strong>\n    </a>\n  </div>\n</nav>\n\n<router-outlet></router-outlet>\n"
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-light bg-light\">\n\n  <button (click)=\"goBack()\" [hidden]=\"!navigationService.showBackButton\"\n          class=\"btn btn-link my-2 my-sm-0 text-success mr-auto\" type=\"submit\">\n    <fa-icon [icon]=\"backIcon\" style=\"font-size: 30px;\"></fa-icon>\n  </button>\n\n  <div class=\"ml-auto mr-auto\" style=\"display: flex!important;flex-basis: auto;\">\n    <a routerLink=\"/\" class=\"navbar-brand\">\n      <img alt=\"QRToken\" height=\"50\" src=\"assets/logo.svg\"> QR<strong>Token</strong>\n    </a>\n  </div>\n</nav>\n\n<router-outlet></router-outlet>\n\n<br>\n<br>\n<h5 style=\"text-align: center\">Smart Contract: <a href=\"https://etherscan.io/address/{{QRTOKEN_SMART_CONTRACT_ADDRESS}}\" target=\"_blank\">{{QRTOKEN_SMART_CONTRACT_ADDRESS}}</a></h5>\n"
 
 /***/ }),
 
@@ -256,6 +256,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fortawesome/free-solid-svg-icons */ "./node_modules/@fortawesome/free-solid-svg-icons/index.es.js");
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 /* harmony import */ var _util_web3_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/web3.service */ "./src/app/util/web3.service.ts");
+/* harmony import */ var _util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../util/qrtoken-smart-contract */ "./src/app/util/qrtoken-smart-contract.ts");
+
 
 
 
@@ -271,6 +273,7 @@ var BaseComponent = /** @class */ (function () {
         this.router = router;
         this.web3Service = web3Service;
         this.backIcon = _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_4__["faArrowLeft"];
+        this.QRTOKEN_SMART_CONTRACT_ADDRESS = _util_qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_7__["QRTOKEN_SMART_CONTRACT_ADDRESS"];
     }
     BaseComponent.prototype.ngOnInit = function () {
     };
@@ -380,6 +383,23 @@ var NoContentComponent = /** @class */ (function () {
     return NoContentComponent;
 }());
 
+
+
+/***/ }),
+
+/***/ "./src/app/util/qrtoken-smart-contract.ts":
+/*!************************************************!*\
+  !*** ./src/app/util/qrtoken-smart-contract.ts ***!
+  \************************************************/
+/*! exports provided: QRTOKEN_SMART_CONTRACT_ADDRESS, QRTOKEN_SMART_CONTRACT_ADDRESS_v1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QRTOKEN_SMART_CONTRACT_ADDRESS", function() { return QRTOKEN_SMART_CONTRACT_ADDRESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QRTOKEN_SMART_CONTRACT_ADDRESS_v1", function() { return QRTOKEN_SMART_CONTRACT_ADDRESS_v1; });
+var QRTOKEN_SMART_CONTRACT_ADDRESS = '0x1ab601a2e158fbfd44b314e3a9dae742332c7f48';
+var QRTOKEN_SMART_CONTRACT_ADDRESS_v1 = '0xE687951e1b7049f4aEa2D6598a20A6f2EAda09CC';
 
 
 /***/ }),

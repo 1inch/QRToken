@@ -6358,6 +6358,50 @@ var ReactiveFormsModule = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/helpers/classCallCheck.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/classCallCheck.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+module.exports = _classCallCheck;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/createClass.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/createClass.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+module.exports = _createClass;
+
+/***/ }),
+
 /***/ "./node_modules/assert/assert.js":
 /*!***************************************!*\
   !*** ./node_modules/assert/assert.js ***!
@@ -8362,7 +8406,7 @@ var BN = __webpack_require__(/*! bn.js */ "./node_modules/bn.js/lib/bn.js");
  * @returns returns buffer of encoded data
  **/
 function encode(input) {
-    if (input instanceof Array) {
+    if (Array.isArray(input)) {
         var output = [];
         for (var i = 0; i < input.length; i++) {
             output.push(encode(input[i]));
@@ -8541,6 +8585,9 @@ function stripHexPrefix(str) {
 }
 /** Transform an integer into its hexadecimal value */
 function intToHex(integer) {
+    if (integer < 0) {
+        throw new Error('Invalid integer as argument, must be unsigned!');
+    }
     var hex = integer.toString(16);
     return hex.length % 2 ? "0" + hex : hex;
 }
@@ -10143,6 +10190,413 @@ exports.callbackify = callbackify;
 
 /***/ }),
 
+/***/ "./node_modules/web3-core-promievent/dist/web3-core-promievent.umd.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/web3-core-promievent/dist/web3-core-promievent.umd.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function (global, factory) {
+     true ? factory(exports, __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"), __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"), __webpack_require__(/*! eventemitter3 */ "./node_modules/web3-core-promievent/node_modules/eventemitter3/index.js")) :
+    undefined;
+}(this, (function (exports,_classCallCheck,_createClass,EventEmitter) { 'use strict';
+
+    _classCallCheck = _classCallCheck && _classCallCheck.hasOwnProperty('default') ? _classCallCheck['default'] : _classCallCheck;
+    _createClass = _createClass && _createClass.hasOwnProperty('default') ? _createClass['default'] : _createClass;
+    EventEmitter = EventEmitter && EventEmitter.hasOwnProperty('default') ? EventEmitter['default'] : EventEmitter;
+
+    var PromiEvent =
+    function () {
+      function PromiEvent() {
+        var _this = this;
+        _classCallCheck(this, PromiEvent);
+        this.promise = new Promise(function (resolve, reject) {
+          _this.resolve = resolve;
+          _this.reject = reject;
+        });
+        this.eventEmitter = new EventEmitter();
+        return new Proxy(this, {
+          get: this.proxyHandler
+        });
+      }
+      _createClass(PromiEvent, [{
+        key: "proxyHandler",
+        value: function proxyHandler(target, name) {
+          if (name === 'resolve' || name === 'reject') {
+            return target[name];
+          }
+          if (name === 'then') {
+            return target.promise.then.bind(target.promise);
+          }
+          if (name === 'catch') {
+            return target.promise.catch.bind(target.promise);
+          }
+          if (target.eventEmitter[name]) {
+            return target.eventEmitter[name];
+          }
+        }
+      }]);
+      return PromiEvent;
+    }();
+
+    exports.PromiEvent = PromiEvent;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+
+
+/***/ }),
+
+/***/ "./node_modules/web3-core-promievent/node_modules/eventemitter3/index.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/web3-core-promievent/node_modules/eventemitter3/index.js ***!
+  \*******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var has = Object.prototype.hasOwnProperty
+  , prefix = '~';
+
+/**
+ * Constructor to create a storage for our `EE` objects.
+ * An `Events` instance is a plain object whose properties are event names.
+ *
+ * @constructor
+ * @private
+ */
+function Events() {}
+
+//
+// We try to not inherit from `Object.prototype`. In some engines creating an
+// instance in this way is faster than calling `Object.create(null)` directly.
+// If `Object.create(null)` is not supported we prefix the event names with a
+// character to make sure that the built-in object properties are not
+// overridden or used as an attack vector.
+//
+if (Object.create) {
+  Events.prototype = Object.create(null);
+
+  //
+  // This hack is needed because the `__proto__` property is still inherited in
+  // some old browsers like Android 4, iPhone 5.1, Opera 11 and Safari 5.
+  //
+  if (!new Events().__proto__) prefix = false;
+}
+
+/**
+ * Representation of a single event listener.
+ *
+ * @param {Function} fn The listener function.
+ * @param {*} context The context to invoke the listener with.
+ * @param {Boolean} [once=false] Specify if the listener is a one-time listener.
+ * @constructor
+ * @private
+ */
+function EE(fn, context, once) {
+  this.fn = fn;
+  this.context = context;
+  this.once = once || false;
+}
+
+/**
+ * Add a listener for a given event.
+ *
+ * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
+ * @param {(String|Symbol)} event The event name.
+ * @param {Function} fn The listener function.
+ * @param {*} context The context to invoke the listener with.
+ * @param {Boolean} once Specify if the listener is a one-time listener.
+ * @returns {EventEmitter}
+ * @private
+ */
+function addListener(emitter, event, fn, context, once) {
+  if (typeof fn !== 'function') {
+    throw new TypeError('The listener must be a function');
+  }
+
+  var listener = new EE(fn, context || emitter, once)
+    , evt = prefix ? prefix + event : event;
+
+  if (!emitter._events[evt]) emitter._events[evt] = listener, emitter._eventsCount++;
+  else if (!emitter._events[evt].fn) emitter._events[evt].push(listener);
+  else emitter._events[evt] = [emitter._events[evt], listener];
+
+  return emitter;
+}
+
+/**
+ * Clear event by name.
+ *
+ * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
+ * @param {(String|Symbol)} evt The Event name.
+ * @private
+ */
+function clearEvent(emitter, evt) {
+  if (--emitter._eventsCount === 0) emitter._events = new Events();
+  else delete emitter._events[evt];
+}
+
+/**
+ * Minimal `EventEmitter` interface that is molded against the Node.js
+ * `EventEmitter` interface.
+ *
+ * @constructor
+ * @public
+ */
+function EventEmitter() {
+  this._events = new Events();
+  this._eventsCount = 0;
+}
+
+/**
+ * Return an array listing the events for which the emitter has registered
+ * listeners.
+ *
+ * @returns {Array}
+ * @public
+ */
+EventEmitter.prototype.eventNames = function eventNames() {
+  var names = []
+    , events
+    , name;
+
+  if (this._eventsCount === 0) return names;
+
+  for (name in (events = this._events)) {
+    if (has.call(events, name)) names.push(prefix ? name.slice(1) : name);
+  }
+
+  if (Object.getOwnPropertySymbols) {
+    return names.concat(Object.getOwnPropertySymbols(events));
+  }
+
+  return names;
+};
+
+/**
+ * Return the listeners registered for a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @returns {Array} The registered listeners.
+ * @public
+ */
+EventEmitter.prototype.listeners = function listeners(event) {
+  var evt = prefix ? prefix + event : event
+    , handlers = this._events[evt];
+
+  if (!handlers) return [];
+  if (handlers.fn) return [handlers.fn];
+
+  for (var i = 0, l = handlers.length, ee = new Array(l); i < l; i++) {
+    ee[i] = handlers[i].fn;
+  }
+
+  return ee;
+};
+
+/**
+ * Return the number of listeners listening to a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @returns {Number} The number of listeners.
+ * @public
+ */
+EventEmitter.prototype.listenerCount = function listenerCount(event) {
+  var evt = prefix ? prefix + event : event
+    , listeners = this._events[evt];
+
+  if (!listeners) return 0;
+  if (listeners.fn) return 1;
+  return listeners.length;
+};
+
+/**
+ * Calls each of the listeners registered for a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @returns {Boolean} `true` if the event had listeners, else `false`.
+ * @public
+ */
+EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
+  var evt = prefix ? prefix + event : event;
+
+  if (!this._events[evt]) return false;
+
+  var listeners = this._events[evt]
+    , len = arguments.length
+    , args
+    , i;
+
+  if (listeners.fn) {
+    if (listeners.once) this.removeListener(event, listeners.fn, undefined, true);
+
+    switch (len) {
+      case 1: return listeners.fn.call(listeners.context), true;
+      case 2: return listeners.fn.call(listeners.context, a1), true;
+      case 3: return listeners.fn.call(listeners.context, a1, a2), true;
+      case 4: return listeners.fn.call(listeners.context, a1, a2, a3), true;
+      case 5: return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
+      case 6: return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
+    }
+
+    for (i = 1, args = new Array(len -1); i < len; i++) {
+      args[i - 1] = arguments[i];
+    }
+
+    listeners.fn.apply(listeners.context, args);
+  } else {
+    var length = listeners.length
+      , j;
+
+    for (i = 0; i < length; i++) {
+      if (listeners[i].once) this.removeListener(event, listeners[i].fn, undefined, true);
+
+      switch (len) {
+        case 1: listeners[i].fn.call(listeners[i].context); break;
+        case 2: listeners[i].fn.call(listeners[i].context, a1); break;
+        case 3: listeners[i].fn.call(listeners[i].context, a1, a2); break;
+        case 4: listeners[i].fn.call(listeners[i].context, a1, a2, a3); break;
+        default:
+          if (!args) for (j = 1, args = new Array(len -1); j < len; j++) {
+            args[j - 1] = arguments[j];
+          }
+
+          listeners[i].fn.apply(listeners[i].context, args);
+      }
+    }
+  }
+
+  return true;
+};
+
+/**
+ * Add a listener for a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @param {Function} fn The listener function.
+ * @param {*} [context=this] The context to invoke the listener with.
+ * @returns {EventEmitter} `this`.
+ * @public
+ */
+EventEmitter.prototype.on = function on(event, fn, context) {
+  return addListener(this, event, fn, context, false);
+};
+
+/**
+ * Add a one-time listener for a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @param {Function} fn The listener function.
+ * @param {*} [context=this] The context to invoke the listener with.
+ * @returns {EventEmitter} `this`.
+ * @public
+ */
+EventEmitter.prototype.once = function once(event, fn, context) {
+  return addListener(this, event, fn, context, true);
+};
+
+/**
+ * Remove the listeners of a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @param {Function} fn Only remove the listeners that match this function.
+ * @param {*} context Only remove the listeners that have this context.
+ * @param {Boolean} once Only remove one-time listeners.
+ * @returns {EventEmitter} `this`.
+ * @public
+ */
+EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
+  var evt = prefix ? prefix + event : event;
+
+  if (!this._events[evt]) return this;
+  if (!fn) {
+    clearEvent(this, evt);
+    return this;
+  }
+
+  var listeners = this._events[evt];
+
+  if (listeners.fn) {
+    if (
+      listeners.fn === fn &&
+      (!once || listeners.once) &&
+      (!context || listeners.context === context)
+    ) {
+      clearEvent(this, evt);
+    }
+  } else {
+    for (var i = 0, events = [], length = listeners.length; i < length; i++) {
+      if (
+        listeners[i].fn !== fn ||
+        (once && !listeners[i].once) ||
+        (context && listeners[i].context !== context)
+      ) {
+        events.push(listeners[i]);
+      }
+    }
+
+    //
+    // Reset the array, or remove it completely if we have no more listeners.
+    //
+    if (events.length) this._events[evt] = events.length === 1 ? events[0] : events;
+    else clearEvent(this, evt);
+  }
+
+  return this;
+};
+
+/**
+ * Remove all listeners, or those of the specified event.
+ *
+ * @param {(String|Symbol)} [event] The event name.
+ * @returns {EventEmitter} `this`.
+ * @public
+ */
+EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
+  var evt;
+
+  if (event) {
+    evt = prefix ? prefix + event : event;
+    if (this._events[evt]) clearEvent(this, evt);
+  } else {
+    this._events = new Events();
+    this._eventsCount = 0;
+  }
+
+  return this;
+};
+
+//
+// Alias methods names because people roll like that.
+//
+EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+EventEmitter.prototype.addListener = EventEmitter.prototype.on;
+
+//
+// Expose the prefix.
+//
+EventEmitter.prefixed = prefix;
+
+//
+// Allow `EventEmitter` to be imported as module namespace.
+//
+EventEmitter.EventEmitter = EventEmitter;
+
+//
+// Expose the module.
+//
+if (true) {
+  module.exports = EventEmitter;
+}
+
+
+/***/ }),
+
 /***/ "./src/app/util/QRTokenABI.json":
 /*!**************************************!*\
   !*** ./src/app/util/QRTokenABI.json ***!
@@ -10302,23 +10756,6 @@ var MerkleTree = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/util/qrtoken-smart-contract.ts":
-/*!************************************************!*\
-  !*** ./src/app/util/qrtoken-smart-contract.ts ***!
-  \************************************************/
-/*! exports provided: QRTOKEN_SMART_CONTRACT_ADDRESS, QRTOKEN_SMART_CONTRACT_ADDRESS_v1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QRTOKEN_SMART_CONTRACT_ADDRESS", function() { return QRTOKEN_SMART_CONTRACT_ADDRESS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QRTOKEN_SMART_CONTRACT_ADDRESS_v1", function() { return QRTOKEN_SMART_CONTRACT_ADDRESS_v1; });
-var QRTOKEN_SMART_CONTRACT_ADDRESS = '0x1ab601a2e158fbfd44b314e3a9dae742332c7f48';
-var QRTOKEN_SMART_CONTRACT_ADDRESS_v1 = '0xE687951e1b7049f4aEa2D6598a20A6f2EAda09CC';
-
-
-/***/ }),
-
 /***/ "./src/app/util/tokens.ts":
 /*!********************************!*\
   !*** ./src/app/util/tokens.ts ***!
@@ -10413,6 +10850,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _web3_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./web3.service */ "./src/app/util/web3.service.ts");
 /* harmony import */ var _qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./qrtoken-smart-contract */ "./src/app/util/qrtoken-smart-contract.ts");
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var web3_core_promievent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! web3-core-promievent */ "./node_modules/web3-core-promievent/dist/web3-core-promievent.umd.js");
+/* harmony import */ var web3_core_promievent__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(web3_core_promievent__WEBPACK_IMPORTED_MODULE_5__);
 
 
 
@@ -10420,6 +10859,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var tokenContractArtifacts = __webpack_require__(/*! ./TokenABI.json */ "./src/app/util/TokenABI.json");
 var qrtokenContractArtifacts = __webpack_require__(/*! ./QRTokenABI.json */ "./src/app/util/QRTokenABI.json");
+
 var WalletService = /** @class */ (function () {
     function WalletService(web3Service) {
         this.web3Service = web3Service;
@@ -10589,7 +11029,7 @@ var WalletService = /** @class */ (function () {
         //
         //
         // console.log('Message Keccak', this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
-        //     .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)), {encoding: 'hex'}));
+        // .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)), {encoding: 'hex'}));
         var signature = signatureObject.signature;
         var contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__["QRTOKEN_SMART_CONTRACT_ADDRESS"]);
         var tx = contract.methods
@@ -10601,6 +11041,33 @@ var WalletService = /** @class */ (function () {
             gas: 380000,
             gasPrice: gasPrice,
             nonce: nonce
+        });
+    };
+    WalletService.prototype.transferTokensByZeroTransactionGasFeeV1 = function (account, fromAddress, receiver, feePrecent, gasPrice, merkleProof, nonce) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, web3_core_promievent__WEBPACK_IMPORTED_MODULE_5___default.a, function () {
+            var signatureObject, signature, contract, tx, _a, _b, _c;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        signatureObject = account.sign(this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
+                            .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)), { encoding: 'hex' }));
+                        signature = signatureObject.signature;
+                        contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, _qrtoken_smart_contract__WEBPACK_IMPORTED_MODULE_3__["QRTOKEN_SMART_CONTRACT_ADDRESS_v1"]);
+                        tx = contract.methods
+                            .redeemWithFee('0x818E6FECD516Ecc3849DAf6845e3EC868087B755', receiver, feePrecent, signature, '0x' + merkleProof.toString('hex'));
+                        _b = (_a = tx).send;
+                        _c = {
+                            from: fromAddress
+                        };
+                        return [4 /*yield*/, tx.estimateGas()];
+                    case 1: return [2 /*return*/, _b.apply(_a, [(_c.gas = _d.sent(),
+                                // gasPrice: 2e9,
+                                // gas: 380000,
+                                _c.gasPrice = gasPrice,
+                                _c.nonce = nonce,
+                                _c)])];
+                }
+            });
         });
     };
     WalletService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
