@@ -11,7 +11,7 @@
 </div>
 
 <div [hidden]="withFee && fee >= 100">
-    <div class="container-fluid" [hidden]="!loading || done">
+    <div class="container-fluid" [hidden]="!loading || done || error">
         <div class="row align-items-center">
             <div class="col-12">
                 <div class="sk-cube-grid">
@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <div class="container-fluid" [hidden]="!isRedeemed || loading || done">
+    <div class="container-fluid" [hidden]="!isRedeemed || loading || done || error">
         <div class="row align-items-center">
             <div class="col-12 text-center">
                 <h3 class="mt-5">QRToken is already taken!</h3>
@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div class="container-fluid" [hidden]="!done || loading">
+    <div class="container-fluid" [hidden]="!done || loading || error">
         <div class="row align-items-center">
             <div class="col-12 text-center">
                 <h3 class="mt-5">Your tokens were transmitted.</h3>
@@ -46,7 +46,15 @@
         </div>
     </div>
 
-    <div [hidden]="loading || isRedeemed || done">
+    <div class="container-fluid" [hidden]="!error || loading || done">
+        <div class="row align-items-center">
+            <div class="col-12 text-center">
+                <h3 class="mt-5">An error has occurred.</h3>
+            </div>
+        </div>
+    </div>
+
+    <div [hidden]="loading || isRedeemed || done || error">
         <div class="container" id="redeem-form">
             <div class="row align-items-center">
                 <div class="col-sm-8 ml-auto mr-auto">

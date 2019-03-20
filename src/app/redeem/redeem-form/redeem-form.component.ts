@@ -22,6 +22,7 @@ const qrtokenContractArtifacts = require('../../util/QRTokenABI.json');
 export class RedeemFormComponent implements OnInit {
 
     loading = false;
+    error = false;
     status = '';
 
     done = false;
@@ -40,6 +41,7 @@ export class RedeemFormComponent implements OnInit {
     root;
     index;
     contract;
+    version;
 
     tokens: Token[] = TOKENS;
 
@@ -56,116 +58,128 @@ export class RedeemFormComponent implements OnInit {
 
     async processParams() {
 
-        const data = this.route.snapshot.paramMap.get('data')
-            .replace(/-/g, '/')
-            .replace(/_/g, '+');
+        try {
+            const data = this.route.snapshot.paramMap.get('data')
+                .replace(/-/g, '/')
+                .replace(/_/g, '+');
 
-        const buffer = new Buffer(data, 'base64');
+            const buffer = new Buffer(data, 'base64');
 
-        let contract;
-        let privateKey;
+            let contract;
+            let privateKey;
 
-        if (this.router.url.substr(0, 3) === '/r/') {
-            contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, QRTOKEN_SMART_CONTRACT_ADDRESS_v1);
-            privateKey = buffer.slice(0, 32);
-            this.proof = buffer.slice(32);
-        } else {
-            contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, '0x' + buffer.slice(0, 20).toString('hex'));
-            privateKey = buffer.slice(20, 52);
-            this.proof = buffer.slice(52);
-        }
+            if (this.router.url.substr(0, 3) === '/r/') {
+                contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, QRTOKEN_SMART_CONTRACT_ADDRESS_v1);
+                privateKey = buffer.slice(0, 32);
+                this.proof = buffer.slice(32);
+                this.version = 1;
+            } else {
+                contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, '0x' + buffer.slice(0, 20).toString('hex'));
+                privateKey = buffer.slice(20, 52);
+                this.proof = buffer.slice(52);
+                this.version = 2;
+            }
 
-        let proof = this.proof;
+            let proof = this.proof;
 
-        // console.log('privateKey', privateKey.toString('hex'));
+            // console.log('privateKey', privateKey.toString('hex'));
 
-        this.privateKey = privateKey;
+            this.privateKey = privateKey;
 
-        const proofs = [];
+            const proofs = [];
 
-        while (proof.slice(0, 20).length > 0) {
-            const slice = proof.slice(0, 20);
-            proof = proof.slice(20);
+            while (proof.slice(0, 20).length > 0) {
+                const slice = proof.slice(0, 20);
+                proof = proof.slice(20);
 
-            proofs.push(slice.toString('hex'));
-        }
+                proofs.push(slice.toString('hex'));
+            }
 
-        this.account = this.web3Service.web3.eth.accounts
-            .privateKeyToAccount('0x' + privateKey.toString('hex'));
+            this.account = this.web3Service.web3.eth.accounts
+                .privateKeyToAccount('0x' + privateKey.toString('hex'));
 
-        const {root, index} = MerkleTree.applyProof(this.account.address, proofs);
+            const {root, index} = MerkleTree.applyProof(this.account.address, proofs);
 
-        this.root = root;
-        this.index = index;
-        this.contract = contract;
+            this.root = root;
+            this.index = index;
+            this.contract = contract;
 
-        this.zone.run(async () => {
-            this.isRedeemed = await contract.methods
-                .redeemed(
-                    root,
-                    index
-                )
-                .call();
-        });
-
-        if (this.isRedeemed) {
             this.zone.run(async () => {
-                this.loading = false;
+                this.isRedeemed = await contract.methods
+                    .redeemed(
+                        root,
+                        index
+                    )
+                    .call();
             });
 
-            return;
-        }
-
-        //
-        // console.log('Account', this.account);
-
-        // console.log('Root', '0x' + root.toString('hex'));
-        // console.log('Index', index);
-        //
-        // console.log('proofs', proofs);
-
-        const distribution = await contract.methods
-            .distributions('0x' + root.toString('hex'))
-            .call();
-
-        // console.log('distribution', distribution);
-
-        for (const token of this.tokens) {
-
-            if (token.address.toLowerCase() === distribution['token'].toLowerCase()) {
-
+            if (this.isRedeemed) {
                 this.zone.run(async () => {
-                    this.tokenName = token.name;
-
-                    this.token = token;
-
-                    const decimals = await this.walletService.getDecimals(token.address);
-                    this.tokensAmount = (distribution['sumAmount'] / (10 ** decimals)) / distribution['codesCount'];
-
-                    const gasPriceRequest = this.http.get('https://gasprice.poa.network');
-                    const pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
-
-                    pairs.subscribe(d => {
-
-                        gasPriceRequest.subscribe(gasPriceResponse => {
-
-                            // console.log('Token Pair', d['ETH_' + this.token.symbol]);
-
-                            const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
-                            this.gasPrice = gasPriceResponse['fast'] * 1e9;
-                            this.fee = 400000 * this.gasPrice / lastPrice / 10 ** 18;
-
-                            // console.log('Fees', this.fee);
-
-                            this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
-
-                            // console.log('Fees', this.fee);
-                        });
-                    });
+                    this.loading = false;
                 });
 
-                break;
+                return;
             }
+
+            //
+            // console.log('Account', this.account);
+
+            // console.log('Root', '0x' + root.toString('hex'));
+            // console.log('Index', index);
+            //
+            // console.log('proofs', proofs);
+
+            const distribution = await contract.methods
+                .distributions('0x' + root.toString('hex'))
+                .call();
+
+            // console.log('distribution', distribution);
+
+            for (const token of this.tokens) {
+
+                if (token.address.toLowerCase() === distribution['token'].toLowerCase()) {
+
+                    this.zone.run(async () => {
+                        this.tokenName = token.name;
+
+                        this.token = token;
+
+                        const decimals = await this.walletService.getDecimals(token.address);
+                        this.tokensAmount = (distribution['sumAmount'] / (10 ** decimals)) / distribution['codesCount'];
+
+                        const gasPriceRequest = this.http.get('https://gasprice.poa.network');
+                        const pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
+
+                        pairs.subscribe(d => {
+
+                            gasPriceRequest.subscribe(gasPriceResponse => {
+
+                                // console.log('Token Pair', d['ETH_' + this.token.symbol]);
+
+                                const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
+                                this.gasPrice = gasPriceResponse['fast'] * 1e9;
+                                this.fee = 400000 * this.gasPrice / lastPrice / 10 ** 18;
+
+                                // console.log('Fees', this.fee);
+
+                                this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
+
+                                // console.log('Fees', this.fee);
+                            });
+                        });
+                    });
+
+                    break;
+                }
+            }
+        } catch (e) {
+
+            this.zone.run(async () => {
+                this.loading = false;
+                this.error = true;
+            });
+
+            console.log('Error', e);
         }
     }
 
@@ -242,16 +256,27 @@ export class RedeemFormComponent implements OnInit {
                         console.log('isRedeemed', this.isRedeemed);
 
                         if (!this.isRedeemed) {
-                            const tx = this.walletService
-                                .transferTokensByZeroTransactionGasFee(
-                                    this.account, transferAccount.address, this.receiver, this.fee, this.gasPrice, this.proof, nonce);
+
+                            let tx;
+
+                            if (this.version === 1) {
+
+                                tx = this.walletService
+                                    .transferTokensByZeroTransactionGasFeeV1(
+                                        this.account, transferAccount.address, this.receiver, this.fee, this.gasPrice, this.proof, nonce);
+                            } else {
+
+                                tx = this.walletService
+                                    .transferTokensByZeroTransactionGasFee(
+                                        this.account, transferAccount.address, this.receiver, this.fee, this.gasPrice, this.proof, nonce);
+                            }
 
                             console.log('TX', tx);
 
                             const scope = this;
 
                             tx
-                                .once('transactionHash', function(hash){
+                                .once('transactionHash', function (hash) {
 
                                     console.log('hash', hash);
 
@@ -260,7 +285,7 @@ export class RedeemFormComponent implements OnInit {
                                         scope.loading = false;
                                     });
                                 })
-                                .once('receipt', function(receipt){
+                                .once('receipt', function (receipt) {
 
                                     console.log('receipt', receipt);
 
@@ -270,12 +295,12 @@ export class RedeemFormComponent implements OnInit {
                                         scope.loading = false;
                                     });
                                 })
-                                .on('confirmation', function(confNumber, receipt){
+                                .on('confirmation', function (confNumber, receipt) {
 
                                     console.log('confNumber', confNumber);
                                     console.log('receipt', receipt);
                                 })
-                                .on('error', function(error){
+                                .on('error', function (error) {
 
                                     console.log('error', error);
                                 })

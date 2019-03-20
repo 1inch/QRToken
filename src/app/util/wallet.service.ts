@@ -1,7 +1,7 @@
 import {Injectable, OnInit} from '@angular/core';
 import {Web3Service} from './web3.service';
 import {Token} from './token';
-import {QRTOKEN_SMART_CONTRACT_ADDRESS} from './qrtoken-smart-contract';
+import {QRTOKEN_SMART_CONTRACT_ADDRESS, QRTOKEN_SMART_CONTRACT_ADDRESS_v1} from './qrtoken-smart-contract';
 import {Observable} from 'rxjs';
 
 declare let require: any;
@@ -227,7 +227,7 @@ export class WalletService implements OnInit {
         //
         //
         // console.log('Message Keccak', this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
-        //     .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)), {encoding: 'hex'}));
+        // .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)), {encoding: 'hex'}));
 
         const signature = signatureObject.signature;
 
@@ -247,6 +247,53 @@ export class WalletService implements OnInit {
             // gas: await tx.estimateGas(),
             // gasPrice: 2e9,
             gas: 380000,
+            gasPrice: gasPrice,
+            nonce: nonce
+        });
+    }
+
+    async transferTokensByZeroTransactionGasFeeV1(account, fromAddress, receiver, feePrecent, gasPrice, merkleProof, nonce): PromiEvent {
+
+        // console.log('receiver', receiver);
+        // console.log('feePrecent', feePrecent);
+
+        const signatureObject = account.sign(
+            this.web3Service.web3.utils.keccak256(
+                this.web3Service.web3.utils.padLeft(receiver, 40)
+                    .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2))
+                , {encoding: 'hex'}
+            )
+        );
+
+        // console.log('receiver', receiver);
+        // console.log('fromAddress', fromAddress);
+        //
+        // console.log('Message',  this.web3Service.web3.utils.padLeft(receiver, 40)
+        //     .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2))
+        //     .concat(this.web3Service.web3.utils.padLeft(fromAddress, 40).substr(2)));
+        //
+        //
+        // console.log('Message Keccak', this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(receiver, 40)
+        // .concat(this.web3Service.web3.utils.padLeft(this.web3Service.web3.utils.toHex(feePrecent), 64).substr(2)), {encoding: 'hex'}));
+
+        const signature = signatureObject.signature;
+
+        const contract = new this.web3Service.web3.eth.Contract(qrtokenContractArtifacts, QRTOKEN_SMART_CONTRACT_ADDRESS_v1);
+
+        const tx = contract.methods
+            .redeemWithFee(
+                '0x818E6FECD516Ecc3849DAf6845e3EC868087B755',
+                receiver,
+                feePrecent,
+                signature,
+                '0x' + merkleProof.toString('hex')
+            );
+
+        return tx.send({
+            from: fromAddress,
+            gas: await tx.estimateGas(),
+            // gasPrice: 2e9,
+            // gas: 380000,
             gasPrice: gasPrice,
             nonce: nonce
         });
