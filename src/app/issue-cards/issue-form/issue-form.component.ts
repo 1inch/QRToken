@@ -270,12 +270,13 @@ export class IssueFormComponent implements OnInit {
             const pdf = new jspdf({
                 orientation: 'landscape',
                 unit: 'mm',
-                format: 'a6'
+                format: 'a6',
+                compress: true
             }); // A4 size page of PDF
             const position = 0;
 
-            pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-            pdf.save('MYPdf' + index + '.pdf'); // Generated PDF
+            pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight, 'QRToken' + index, 'SLOW');
+            pdf.save('QRToken' + index + '.pdf'); // Generated PDF
 
             this.hidePrintButtons = false;
         });
