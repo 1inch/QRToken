@@ -11755,11 +11755,12 @@ var IssueFormComponent = /** @class */ (function () {
             var pdf = new jspdf__WEBPACK_IMPORTED_MODULE_5__({
                 orientation: 'landscape',
                 unit: 'mm',
-                format: 'a6'
+                format: 'a6',
+                compress: true
             }); // A4 size page of PDF
             var position = 0;
-            pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-            pdf.save('MYPdf' + index + '.pdf'); // Generated PDF
+            pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight, 'QRToken' + index, 'SLOW');
+            pdf.save('QRToken' + index + '.pdf'); // Generated PDF
             _this.hidePrintButtons = false;
         });
     };
