@@ -11656,12 +11656,15 @@ var IssueFormComponent = /** @class */ (function () {
     };
     IssueFormComponent.prototype.create = function () {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var privateKeys, i, accounts, merkleTree, cards, _a;
+            var privateKeys, i, accounts, merkleTree, cards, _a, e_1;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         this.loading = true;
                         console.log('Cards amount', this.cardsAmount);
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 4, 5, 6]);
                         privateKeys = [];
                         for (i = 0; i < this.cardsAmount; i++) {
                             privateKeys.push(this.web3Service.web3.eth.accounts.create());
@@ -11672,21 +11675,28 @@ var IssueFormComponent = /** @class */ (function () {
                         console.log('pk accounts', privateKeys.map(function (pk) { return pk.address; }));
                         console.log(merkleTree);
                         return [4 /*yield*/, this.storeMerkleTree(merkleTree)];
-                    case 1:
+                    case 2:
                         _b.sent();
                         cards = this.generateCards(privateKeys.map(function (pk) { return pk.privateKey; }), merkleTree);
                         _a = this;
                         return [4 /*yield*/, this.generateQRCodes(cards)];
-                    case 2:
+                    case 3:
                         _a.QRCodes = (_b.sent()).map(function (qr) {
                             return {
                                 qr: qr, index: null
                             };
                         });
                         this.getBalance(this.selectedToken);
+                        return [3 /*break*/, 6];
+                    case 4:
+                        e_1 = _b.sent();
+                        alert(e_1);
+                        return [3 /*break*/, 6];
+                    case 5:
                         this.created = true;
                         this.loading = false;
-                        return [2 /*return*/];
+                        return [7 /*endfinally*/];
+                    case 6: return [2 /*return*/];
                 }
             });
         });
@@ -11706,7 +11716,7 @@ var IssueFormComponent = /** @class */ (function () {
                             var _this = this;
                             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                                 scope.web3Service.getAccounts().subscribe(function (addresses) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
-                                    var contract, decimals, result;
+                                    var contract, decimals, result, e_2;
                                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
@@ -11714,15 +11724,25 @@ var IssueFormComponent = /** @class */ (function () {
                                                 return [4 /*yield*/, scope.walletService.getDecimals(scope.selectedToken.address)];
                                             case 1:
                                                 decimals = _a.sent();
+                                                _a.label = 2;
+                                            case 2:
+                                                _a.trys.push([2, 4, , 5]);
                                                 return [4 /*yield*/, contract.methods
-                                                        .create(scope.selectedToken.address, scope.web3Service.web3.utils.toHex(scope.tokenAmount * Math.pow(10, decimals)), scope.cardsAmount, merkleTree.getHexRoot(), Math.trunc(Date.now() / 1000 + 60 * 60 * 24 * 7))
+                                                        .create(scope.selectedToken.address, scope.web3Service.web3.utils.toHex(scope.web3Service.web3.utils.toBN(scope.tokenAmount)
+                                                        .mul(scope.web3Service.web3.utils.toBN(10))
+                                                        .pow(scope.web3Service.web3.utils.toBN(decimals))), scope.cardsAmount, merkleTree.getHexRoot(), Math.trunc(Date.now() / 1000 + 60 * 60 * 24 * 7))
                                                         .send({
                                                         from: addresses[0]
                                                     })];
-                                            case 2:
+                                            case 3:
                                                 result = _a.sent();
                                                 resolve(result);
-                                                return [2 /*return*/];
+                                                return [3 /*break*/, 5];
+                                            case 4:
+                                                e_2 = _a.sent();
+                                                reject(e_2);
+                                                return [3 /*break*/, 5];
+                                            case 5: return [2 /*return*/];
                                         }
                                     });
                                 }); });
