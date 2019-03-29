@@ -163,6 +163,8 @@ export class IssueFormComponent implements OnInit {
 
         console.log('Cards amount', this.cardsAmount);
 
+        try {
+
         const privateKeys = [];
 
         for (let i = 0; i < this.cardsAmount; i++) {
@@ -189,8 +191,14 @@ export class IssueFormComponent implements OnInit {
 
         this.getBalance(this.selectedToken);
 
-        this.created = true;
-        this.loading = false;
+        } catch (e) {
+
+            alert(e);
+        } finally {
+
+            this.created = true;
+            this.loading = false;
+        }
     }
 
     printAll() {
@@ -221,19 +229,28 @@ export class IssueFormComponent implements OnInit {
                     // const decimals = await tokenContract.methods.decimals().call();
                     const decimals = await scope.walletService.getDecimals(scope.selectedToken.address);
 
-                    const result = await contract.methods
-                        .create(
-                            scope.selectedToken.address,
-                            scope.web3Service.web3.utils.toHex(scope.tokenAmount * 10 ** decimals),
-                            scope.cardsAmount,
-                            merkleTree.getHexRoot(),
-                            Math.trunc(Date.now() / 1000 + 60 * 60 * 24 * 7)
-                        )
-                        .send({
-                            from: addresses[0]
-                        });
+                    try {
 
-                    resolve(result);
+                        const result = await contract.methods
+                            .create(
+                                scope.selectedToken.address,
+                                scope.web3Service.web3.utils.toHex(
+                                    scope.web3Service.web3.utils.toBN(scope.tokenAmount)
+                                        .mul(scope.web3Service.web3.utils.toBN(10))
+                                        .pow(scope.web3Service.web3.utils.toBN(decimals))
+                                ),
+                                scope.cardsAmount,
+                                merkleTree.getHexRoot(),
+                                Math.trunc(Date.now() / 1000 + 60 * 60 * 24 * 7)
+                            )
+                            .send({
+                                from: addresses[0]
+                            });
+
+                        resolve(result);
+                    } catch (e) {
+                        reject(e);
+                    }
                 });
             });
     }
