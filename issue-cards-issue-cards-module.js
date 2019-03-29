@@ -11729,8 +11729,8 @@ var IssueFormComponent = /** @class */ (function () {
                                                 _a.trys.push([2, 4, , 5]);
                                                 return [4 /*yield*/, contract.methods
                                                         .create(scope.selectedToken.address, scope.web3Service.web3.utils.toHex(scope.web3Service.web3.utils.toBN(scope.tokenAmount)
-                                                        .mul(scope.web3Service.web3.utils.toBN(10))
-                                                        .pow(scope.web3Service.web3.utils.toBN(decimals))), scope.cardsAmount, merkleTree.getHexRoot(), Math.trunc(Date.now() / 1000 + 60 * 60 * 24 * 7))
+                                                        .mul(scope.web3Service.web3.utils.toBN(10)
+                                                        .pow(scope.web3Service.web3.utils.toBN(decimals)))), scope.cardsAmount, merkleTree.getHexRoot(), Math.trunc(Date.now() / 1000 + 60 * 60 * 24 * 7))
                                                         .send({
                                                         from: addresses[0]
                                                     })];
