@@ -11730,9 +11730,9 @@ var IssueFormComponent = /** @class */ (function () {
                                                 tokenAmountDecimals = scope.countDecimals(scope.tokenAmount);
                                                 return [4 /*yield*/, contract.methods
                                                         .create(scope.selectedToken.address, scope.web3Service.web3.utils.toHex(scope.web3Service.web3.utils.toBN(!tokenAmountDecimals ? scope.tokenAmount : scope.tokenAmount * (Math.pow(10, tokenAmountDecimals)))
-                                                        .div(scope.web3Service.web3.utils.toBN(tokenAmountDecimals ? (Math.pow(10, tokenAmountDecimals)) : 1))
                                                         .mul(scope.web3Service.web3.utils.toBN(10)
-                                                        .pow(scope.web3Service.web3.utils.toBN(decimals)))), scope.cardsAmount, merkleTree.getHexRoot(), Math.trunc(Date.now() / 1000 + 60 * 60 * 24 * 7))
+                                                        .pow(scope.web3Service.web3.utils.toBN(decimals)))
+                                                        .div(scope.web3Service.web3.utils.toBN(tokenAmountDecimals ? (Math.pow(10, tokenAmountDecimals)) : 1))), scope.cardsAmount, merkleTree.getHexRoot(), Math.trunc(Date.now() / 1000 + 60 * 60 * 24 * 7))
                                                         .send({
                                                         from: addresses[0]
                                                     })];
