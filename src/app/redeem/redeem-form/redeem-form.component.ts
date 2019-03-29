@@ -37,6 +37,7 @@ export class RedeemFormComponent implements OnInit {
     fee;
     gasPrice;
     withFee = false;
+    metamask = false;
     isRedeemed;
     root;
     index;
@@ -133,7 +134,7 @@ export class RedeemFormComponent implements OnInit {
                 .distributions('0x' + root.toString('hex'))
                 .call();
 
-            // console.log('distribution', distribution);
+            console.log('distribution', distribution);
 
             for (const token of this.tokens) {
 
@@ -156,20 +157,31 @@ export class RedeemFormComponent implements OnInit {
 
                                 // console.log('Token Pair', d['ETH_' + this.token.symbol]);
 
-                                const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
-                                this.gasPrice = gasPriceResponse['fast'] * 1e9;
-                                this.fee = 400000 * this.gasPrice / lastPrice / 10 ** 18;
+                                if (!d['ETH_' + this.token.symbol]) {
 
-                                // console.log('Fees', this.fee);
+                                    const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
+                                    this.gasPrice = gasPriceResponse['fast'] * 1e9;
+                                    this.fee = 400000 * this.gasPrice / lastPrice / 10 ** 18;
 
-                                this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
+                                    // console.log('Fees', this.fee);
 
-                                // console.log('Fees', this.fee);
+                                    this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
+
+                                    // console.log('Fees', this.fee);
+                                } else {
+
+                                    this.withFee = false;
+                                    this.fee = 100;
+                                }
                             });
                         });
                     });
 
                     break;
+                } else {
+
+                    this.withFee = true;
+                    this.fee = 100;
                 }
             }
         } catch (e) {
