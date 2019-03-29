@@ -1,4 +1,4 @@
-<div [hidden]="!(withFee && fee >= 100)">
+<div [hidden]="!metamask">
     <div class="container-fluid" id="select-screen">
         <div class="row align-items-center">
             <div class="col-12 text-center pt-4">
@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<div [hidden]="withFee && fee >= 100">
+<div [hidden]="metamask">
     <div class="container-fluid" [hidden]="!loading || done || error">
         <div class="row align-items-center">
             <div class="col-12">
