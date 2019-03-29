@@ -34,7 +34,7 @@ export class RedeemFormComponent implements OnInit {
     tokensAmount;
     receiver;
     tokenName;
-    fee;
+    fee = 0;
     gasPrice;
     withFee = false;
     metamask = false;
