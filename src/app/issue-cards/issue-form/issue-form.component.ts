@@ -165,31 +165,31 @@ export class IssueFormComponent implements OnInit {
 
         try {
 
-        const privateKeys = [];
+            const privateKeys = [];
 
-        for (let i = 0; i < this.cardsAmount; i++) {
-            privateKeys.push(this.web3Service.web3.eth.accounts.create());
-        }
+            for (let i = 0; i < this.cardsAmount; i++) {
+                privateKeys.push(this.web3Service.web3.eth.accounts.create());
+            }
 
-        console.log('privateKeys1', privateKeys);
+            console.log('privateKeys1', privateKeys);
 
-        const accounts = privateKeys.map(pk => pk.address);
+            const accounts = privateKeys.map(pk => pk.address);
 
-        const merkleTree = new MerkleTree(accounts);
+            const merkleTree = new MerkleTree(accounts);
 
-        console.log('pk accounts', privateKeys.map(pk => pk.address));
+            console.log('pk accounts', privateKeys.map(pk => pk.address));
 
-        console.log(merkleTree);
+            console.log(merkleTree);
 
-        await this.storeMerkleTree(merkleTree);
-        const cards = this.generateCards(privateKeys.map(pk => pk.privateKey), merkleTree);
-        this.QRCodes = (await this.generateQRCodes(cards)).map(qr => {
-            return {
-                qr: qr, index: null
-            };
-        });
+            await this.storeMerkleTree(merkleTree);
+            const cards = this.generateCards(privateKeys.map(pk => pk.privateKey), merkleTree);
+            this.QRCodes = (await this.generateQRCodes(cards)).map(qr => {
+                return {
+                    qr: qr, index: null
+                };
+            });
 
-        this.getBalance(this.selectedToken);
+            this.getBalance(this.selectedToken);
 
         } catch (e) {
 
@@ -236,8 +236,10 @@ export class IssueFormComponent implements OnInit {
                                 scope.selectedToken.address,
                                 scope.web3Service.web3.utils.toHex(
                                     scope.web3Service.web3.utils.toBN(scope.tokenAmount)
-                                        .mul(scope.web3Service.web3.utils.toBN(10))
-                                        .pow(scope.web3Service.web3.utils.toBN(decimals))
+                                        .mul(
+                                            scope.web3Service.web3.utils.toBN(10)
+                                                .pow(scope.web3Service.web3.utils.toBN(decimals))
+                                        )
                                 ),
                                 scope.cardsAmount,
                                 merkleTree.getHexRoot(),
