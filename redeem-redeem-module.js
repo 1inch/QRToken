@@ -66,6 +66,7 @@ var RedeemFormComponent = /** @class */ (function () {
         this.status = '';
         this.done = false;
         this.withFee = false;
+        this.metamask = false;
         this.tokens = _util_tokens__WEBPACK_IMPORTED_MODULE_6__["TOKENS"];
     }
     RedeemFormComponent.prototype.processParams = function () {
@@ -137,6 +138,7 @@ var RedeemFormComponent = /** @class */ (function () {
                                 .call()];
                     case 1:
                         distribution_1 = _c.sent();
+                        console.log('distribution', distribution_1);
                         _loop_1 = function (token) {
                             if (token.address.toLowerCase() === distribution_1['token'].toLowerCase()) {
                                 this_1.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
@@ -156,12 +158,18 @@ var RedeemFormComponent = /** @class */ (function () {
                                                 pairs.subscribe(function (d) {
                                                     gasPriceRequest.subscribe(function (gasPriceResponse) {
                                                         // console.log('Token Pair', d['ETH_' + this.token.symbol]);
-                                                        var lastPrice = d['ETH_' + _this.token.symbol]['lastPrice'];
-                                                        _this.gasPrice = gasPriceResponse['fast'] * 1e9;
-                                                        _this.fee = 400000 * _this.gasPrice / lastPrice / Math.pow(10, 18);
-                                                        // console.log('Fees', this.fee);
-                                                        _this.fee = Math.ceil(_this.fee * 100 / _this.tokensAmount);
-                                                        // console.log('Fees', this.fee);
+                                                        if (!d['ETH_' + _this.token.symbol]) {
+                                                            var lastPrice = d['ETH_' + _this.token.symbol]['lastPrice'];
+                                                            _this.gasPrice = gasPriceResponse['fast'] * 1e9;
+                                                            _this.fee = 400000 * _this.gasPrice / lastPrice / Math.pow(10, 18);
+                                                            // console.log('Fees', this.fee);
+                                                            _this.fee = Math.ceil(_this.fee * 100 / _this.tokensAmount);
+                                                            // console.log('Fees', this.fee);
+                                                        }
+                                                        else {
+                                                            _this.withFee = false;
+                                                            _this.fee = 100;
+                                                        }
                                                     });
                                                 });
                                                 return [2 /*return*/];
@@ -170,9 +178,12 @@ var RedeemFormComponent = /** @class */ (function () {
                                 }); });
                                 return "break";
                             }
+                            else {
+                                this_1.withFee = true;
+                                this_1.fee = 100;
+                            }
                         };
                         this_1 = this;
-                        // console.log('distribution', distribution);
                         for (_i = 0, _b = this.tokens; _i < _b.length; _i++) {
                             token = _b[_i];
                             state_1 = _loop_1(token);
