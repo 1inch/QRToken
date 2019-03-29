@@ -11687,13 +11687,13 @@ var IssueFormComponent = /** @class */ (function () {
                             };
                         });
                         this.getBalance(this.selectedToken);
+                        this.created = true;
                         return [3 /*break*/, 6];
                     case 4:
                         e_1 = _b.sent();
                         alert(e_1);
                         return [3 /*break*/, 6];
                     case 5:
-                        this.created = true;
                         this.loading = false;
                         return [7 /*endfinally*/];
                     case 6: return [2 /*return*/];
@@ -11716,7 +11716,7 @@ var IssueFormComponent = /** @class */ (function () {
                             var _this = this;
                             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                                 scope.web3Service.getAccounts().subscribe(function (addresses) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
-                                    var contract, decimals, result, e_2;
+                                    var contract, decimals, tokenAmountDecimals, result, e_2;
                                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
@@ -11727,8 +11727,10 @@ var IssueFormComponent = /** @class */ (function () {
                                                 _a.label = 2;
                                             case 2:
                                                 _a.trys.push([2, 4, , 5]);
+                                                tokenAmountDecimals = scope.countDecimals(scope.tokenAmount);
                                                 return [4 /*yield*/, contract.methods
-                                                        .create(scope.selectedToken.address, scope.web3Service.web3.utils.toHex(scope.web3Service.web3.utils.toBN(scope.tokenAmount)
+                                                        .create(scope.selectedToken.address, scope.web3Service.web3.utils.toHex(scope.web3Service.web3.utils.toBN(!tokenAmountDecimals ? scope.tokenAmount : scope.tokenAmount * (Math.pow(10, tokenAmountDecimals)))
+                                                        .div(scope.web3Service.web3.utils.toBN(tokenAmountDecimals ? (Math.pow(10, tokenAmountDecimals)) : 1))
                                                         .mul(scope.web3Service.web3.utils.toBN(10)
                                                         .pow(scope.web3Service.web3.utils.toBN(decimals)))), scope.cardsAmount, merkleTree.getHexRoot(), Math.trunc(Date.now() / 1000 + 60 * 60 * 24 * 7))
                                                         .send({
@@ -11752,6 +11754,11 @@ var IssueFormComponent = /** @class */ (function () {
                     })];
             });
         });
+    };
+    IssueFormComponent.prototype.countDecimals = function (value) {
+        if ((value % 1) != 0)
+            return value.toString().split('.')[1].length;
+        return 0;
     };
     IssueFormComponent.prototype.print = function (index) {
         this.hidePrintButtons = true;
