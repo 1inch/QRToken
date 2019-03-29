@@ -191,12 +191,12 @@ export class IssueFormComponent implements OnInit {
 
             this.getBalance(this.selectedToken);
 
+            this.created = true;
         } catch (e) {
 
             alert(e);
         } finally {
 
-            this.created = true;
             this.loading = false;
         }
     }
@@ -231,11 +231,20 @@ export class IssueFormComponent implements OnInit {
 
                     try {
 
+                        const tokenAmountDecimals = scope.countDecimals(scope.tokenAmount);
+
                         const result = await contract.methods
                             .create(
                                 scope.selectedToken.address,
                                 scope.web3Service.web3.utils.toHex(
-                                    scope.web3Service.web3.utils.toBN(scope.tokenAmount)
+                                    scope.web3Service.web3.utils.toBN(
+                                        !tokenAmountDecimals ? scope.tokenAmount : scope.tokenAmount * (10 ** tokenAmountDecimals)
+                                    )
+                                        .div(
+                                            scope.web3Service.web3.utils.toBN(
+                                                tokenAmountDecimals ? (10 ** tokenAmountDecimals) : 1
+                                            )
+                                        )
                                         .mul(
                                             scope.web3Service.web3.utils.toBN(10)
                                                 .pow(scope.web3Service.web3.utils.toBN(decimals))
@@ -255,6 +264,13 @@ export class IssueFormComponent implements OnInit {
                     }
                 });
             });
+    }
+
+
+    countDecimals(value) {
+        if ((value % 1) != 0)
+            return value.toString().split('.')[1].length;
+        return 0;
     }
 
     print(index: any) {
