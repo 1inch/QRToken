@@ -157,7 +157,7 @@ export class RedeemFormComponent implements OnInit {
 
                                 // console.log('Token Pair', d['ETH_' + this.token.symbol]);
 
-                                if (!d['ETH_' + this.token.symbol]) {
+                                if (d['ETH_' + this.token.symbol]) {
 
                                     const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
                                     this.gasPrice = gasPriceResponse['fast'] * 1e9;
@@ -167,21 +167,22 @@ export class RedeemFormComponent implements OnInit {
 
                                     this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
 
+
+                                    if (this.fee >= 100) {
+
+                                        this.metamask = true;
+                                    }
+
                                     // console.log('Fees', this.fee);
                                 } else {
 
-                                    this.withFee = false;
-                                    this.fee = 100;
+                                    this.metamask = true;
                                 }
                             });
                         });
                     });
 
                     break;
-                } else {
-
-                    this.withFee = true;
-                    this.fee = 100;
                 }
             }
         } catch (e) {
