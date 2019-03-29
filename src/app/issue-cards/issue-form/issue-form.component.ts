@@ -240,14 +240,14 @@ export class IssueFormComponent implements OnInit {
                                     scope.web3Service.web3.utils.toBN(
                                         !tokenAmountDecimals ? scope.tokenAmount : scope.tokenAmount * (10 ** tokenAmountDecimals)
                                     )
+                                        .mul(
+                                            scope.web3Service.web3.utils.toBN(10)
+                                                .pow(scope.web3Service.web3.utils.toBN(decimals))
+                                        )
                                         .div(
                                             scope.web3Service.web3.utils.toBN(
                                                 tokenAmountDecimals ? (10 ** tokenAmountDecimals) : 1
                                             )
-                                        )
-                                        .mul(
-                                            scope.web3Service.web3.utils.toBN(10)
-                                                .pow(scope.web3Service.web3.utils.toBN(decimals))
                                         )
                                 ),
                                 scope.cardsAmount,
