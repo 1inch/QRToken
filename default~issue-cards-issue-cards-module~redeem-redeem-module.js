@@ -10830,6 +10830,15 @@ var TOKENS = [
         allowance: 0,
         inApproval: false
     },
+    {
+        address: '0x255Aa6DF07540Cb5d3d297f0D0D4D84cb52bc8e6',
+        icon: 'assets/icons/raiden.png',
+        name: 'RDN - Raiden Network Token',
+        symbol: 'RDN',
+        balance: Number(0),
+        allowance: 0,
+        inApproval: false
+    },
 ];
 
 
