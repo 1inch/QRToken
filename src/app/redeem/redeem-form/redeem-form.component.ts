@@ -13,6 +13,10 @@ declare let Buffer: any;
 
 declare let require: any;
 const qrtokenContractArtifacts = require('../../util/QRTokenABI.json');
+const kyberContractArtifacts = require('../../util/KyberABI.json');
+
+const KYBER_ETHER_TOKEN_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
+const KYBER_SMART_CONTRACT_ADDRESS = '0x818e6fecd516ecc3849daf6845e3ec868087b755';
 
 @Component({
     selector: 'app-redeem-form',
@@ -58,6 +62,10 @@ export class RedeemFormComponent implements OnInit {
     }
 
     async processParams() {
+
+        this.zone.run(async () => {
+            this.loading = true;
+        });
 
         try {
             const data = this.route.snapshot.paramMap.get('data')
@@ -149,37 +157,64 @@ export class RedeemFormComponent implements OnInit {
                         this.tokensAmount = (distribution['sumAmount'] / (10 ** decimals)) / distribution['codesCount'];
 
                         const gasPriceRequest = this.http.get('https://gasprice.poa.network');
-                        const pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
 
-                        pairs.subscribe(d => {
+                        // console.log('lastPrice', lastPrice);
 
-                            gasPriceRequest.subscribe(gasPriceResponse => {
+                        // console.log('expectedRate', expectedRate);
+                        // console.log('slippageRate', slippageRate);
+                        //
+                        // const pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
 
-                                // console.log('Token Pair', d['ETH_' + this.token.symbol]);
+                        // pairs.subscribe(d => {
 
-                                if (d['ETH_' + this.token.symbol]) {
+                        gasPriceRequest.subscribe(async gasPriceResponse => {
 
-                                    const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
-                                    this.gasPrice = gasPriceResponse['fast'] * 1e9;
-                                    this.fee = 400000 * this.gasPrice / lastPrice / 10 ** 18;
+                            // console.log('Token Pair', d['ETH_' + this.token.symbol]);
 
-                                    // console.log('Fees', this.fee);
+                            // if (d['ETH_' + this.token.symbol]) {
 
-                                    this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
+                            // const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
 
+                            this.gasPrice = gasPriceResponse['fast'] * 1e9;
 
-                                    if (this.fee >= 100) {
+                            if (!this.receiver) {
+                                const kyberContract = new this.web3Service.web3.eth.Contract(
+                                    kyberContractArtifacts,
+                                    KYBER_SMART_CONTRACT_ADDRESS
+                                );
 
+                                const {expectedRate, slippageRate} = await kyberContract.methods
+                                    .getExpectedRate(
+                                        KYBER_ETHER_TOKEN_ADDRESS,
+                                        this.token.address,
+                                        1e15
+                                    )
+                                    .call();
+
+                                const lastPrice = 1e18 / expectedRate;
+                                this.fee = 400000 * this.gasPrice / lastPrice / 10 ** 18;
+
+                                this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
+                                // console.log('Fees', this.fee);
+
+                                if (this.fee >= 100) {
+
+                                    this.zone.run(async () => {
                                         this.metamask = true;
-                                    }
-
-                                    // console.log('Fees', this.fee);
-                                } else {
-
-                                    this.metamask = true;
+                                    });
                                 }
+                            }
+
+                            this.zone.run(async () => {
+                                this.loading = false;
                             });
+                            // console.log('Fees', this.fee);
+                            // } else {
+                            //
+                            //     this.metamask = true;
+                            // }
                         });
+                        // });
                     });
 
                     break;

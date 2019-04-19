@@ -11,19 +11,19 @@ contract IKyberNetwork {
         uint256 minConversionRate,
         address walletId
     )
-        public
-        payable
-        returns(uint);
+    public
+    payable
+    returns (uint);
 
     function getExpectedRate(
         address source,
         address dest,
         uint srcQty
     )
-        public
-        view
-        returns (
-            uint expectedPrice,
-            uint slippagePrice
-        );
+    public
+    view
+    returns (
+        uint expectedPrice,
+        uint slippagePrice
+    );
 }
