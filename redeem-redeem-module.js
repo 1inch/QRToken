@@ -53,6 +53,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var qrtokenContractArtifacts = __webpack_require__(/*! ../../util/QRTokenABI.json */ "./src/app/util/QRTokenABI.json");
+var kyberContractArtifacts = __webpack_require__(/*! ../../util/KyberABI.json */ "./src/app/util/KyberABI.json");
+var KYBER_ETHER_TOKEN_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
+var KYBER_SMART_CONTRACT_ADDRESS = '0x818e6fecd516ecc3849daf6845e3ec868087b755';
 var RedeemFormComponent = /** @class */ (function () {
     function RedeemFormComponent(route, router, web3Service, walletService, zone, http) {
         this.route = route;
@@ -77,7 +80,15 @@ var RedeemFormComponent = /** @class */ (function () {
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        _c.trys.push([0, 2, , 3]);
+                        this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                this.loading = true;
+                                return [2 /*return*/];
+                            });
+                        }); });
+                        _c.label = 1;
+                    case 1:
+                        _c.trys.push([1, 3, , 4]);
                         data = this.route.snapshot.paramMap.get('data')
                             .replace(/-/g, '/')
                             .replace(/_/g, '+');
@@ -137,13 +148,13 @@ var RedeemFormComponent = /** @class */ (function () {
                         return [4 /*yield*/, contract_1.methods
                                 .distributions('0x' + root_1.toString('hex'))
                                 .call()];
-                    case 1:
+                    case 2:
                         distribution_1 = _c.sent();
                         console.log('distribution', distribution_1);
                         _loop_1 = function (token) {
                             if (token.address.toLowerCase() === distribution_1['token'].toLowerCase()) {
                                 this_1.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
-                                    var decimals, gasPriceRequest, pairs;
+                                    var decimals, gasPriceRequest;
                                     var _this = this;
                                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                                         switch (_a.label) {
@@ -155,26 +166,53 @@ var RedeemFormComponent = /** @class */ (function () {
                                                 decimals = _a.sent();
                                                 this.tokensAmount = (distribution_1['sumAmount'] / (Math.pow(10, decimals))) / distribution_1['codesCount'];
                                                 gasPriceRequest = this.http.get('https://gasprice.poa.network');
-                                                pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
-                                                pairs.subscribe(function (d) {
-                                                    gasPriceRequest.subscribe(function (gasPriceResponse) {
-                                                        // console.log('Token Pair', d['ETH_' + this.token.symbol]);
-                                                        if (d['ETH_' + _this.token.symbol]) {
-                                                            var lastPrice = d['ETH_' + _this.token.symbol]['lastPrice'];
-                                                            _this.gasPrice = gasPriceResponse['fast'] * 1e9;
-                                                            _this.fee = 400000 * _this.gasPrice / lastPrice / Math.pow(10, 18);
-                                                            // console.log('Fees', this.fee);
-                                                            _this.fee = Math.ceil(_this.fee * 100 / _this.tokensAmount);
-                                                            if (_this.fee >= 100) {
-                                                                _this.metamask = true;
-                                                            }
-                                                            // console.log('Fees', this.fee);
-                                                        }
-                                                        else {
-                                                            _this.metamask = true;
+                                                // console.log('lastPrice', lastPrice);
+                                                // console.log('expectedRate', expectedRate);
+                                                // console.log('slippageRate', slippageRate);
+                                                //
+                                                // const pairs = this.http.get('https://tracker.kyber.network/api/tokens/pairs');
+                                                // pairs.subscribe(d => {
+                                                gasPriceRequest.subscribe(function (gasPriceResponse) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                                    var kyberContract, _a, expectedRate, slippageRate, lastPrice;
+                                                    var _this = this;
+                                                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_b) {
+                                                        switch (_b.label) {
+                                                            case 0:
+                                                                // console.log('Token Pair', d['ETH_' + this.token.symbol]);
+                                                                // if (d['ETH_' + this.token.symbol]) {
+                                                                // const lastPrice = d['ETH_' + this.token.symbol]['lastPrice'];
+                                                                this.gasPrice = gasPriceResponse['fast'] * 1e9;
+                                                                if (!!this.receiver) return [3 /*break*/, 2];
+                                                                kyberContract = new this.web3Service.web3.eth.Contract(kyberContractArtifacts, KYBER_SMART_CONTRACT_ADDRESS);
+                                                                return [4 /*yield*/, kyberContract.methods
+                                                                        .getExpectedRate(KYBER_ETHER_TOKEN_ADDRESS, this.token.address, 1e15)
+                                                                        .call()];
+                                                            case 1:
+                                                                _a = _b.sent(), expectedRate = _a.expectedRate, slippageRate = _a.slippageRate;
+                                                                lastPrice = 1e18 / expectedRate;
+                                                                this.fee = 400000 * this.gasPrice / lastPrice / Math.pow(10, 18);
+                                                                this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
+                                                                // console.log('Fees', this.fee);
+                                                                if (this.fee >= 100) {
+                                                                    this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                                                        return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                                                            this.metamask = true;
+                                                                            return [2 /*return*/];
+                                                                        });
+                                                                    }); });
+                                                                }
+                                                                _b.label = 2;
+                                                            case 2:
+                                                                this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                                                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                                                        this.loading = false;
+                                                                        return [2 /*return*/];
+                                                                    });
+                                                                }); });
+                                                                return [2 /*return*/];
                                                         }
                                                     });
-                                                });
+                                                }); });
                                                 return [2 /*return*/];
                                         }
                                     });
@@ -189,8 +227,8 @@ var RedeemFormComponent = /** @class */ (function () {
                             if (state_1 === "break")
                                 break;
                         }
-                        return [3 /*break*/, 3];
-                    case 2:
+                        return [3 /*break*/, 4];
+                    case 3:
                         e_1 = _c.sent();
                         this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
                             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
@@ -200,8 +238,8 @@ var RedeemFormComponent = /** @class */ (function () {
                             });
                         }); });
                         console.log('Error', e_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -452,6 +490,17 @@ var RedeemModule = /** @class */ (function () {
 }());
 
 
+
+/***/ }),
+
+/***/ "./src/app/util/KyberABI.json":
+/*!************************************!*\
+  !*** ./src/app/util/KyberABI.json ***!
+  \************************************/
+/*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, default */
+/***/ (function(module) {
+
+module.exports = [{"constant":false,"inputs":[{"name":"alerter","type":"address"}],"name":"removeAlerter","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"enabled","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"pendingAdmin","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getOperators","outputs":[{"name":"","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"src","type":"address"},{"name":"srcAmount","type":"uint256"},{"name":"dest","type":"address"},{"name":"destAddress","type":"address"},{"name":"maxDestAmount","type":"uint256"},{"name":"minConversionRate","type":"uint256"},{"name":"walletId","type":"address"},{"name":"hint","type":"bytes"}],"name":"tradeWithHint","outputs":[{"name":"","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"token","type":"address"},{"name":"srcAmount","type":"uint256"},{"name":"minConversionRate","type":"uint256"}],"name":"swapTokenToEther","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"token","type":"address"},{"name":"amount","type":"uint256"},{"name":"sendTo","type":"address"}],"name":"withdrawToken","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"maxGasPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newAlerter","type":"address"}],"name":"addAlerter","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"kyberNetworkContract","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"user","type":"address"}],"name":"getUserCapInWei","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"src","type":"address"},{"name":"srcAmount","type":"uint256"},{"name":"dest","type":"address"},{"name":"minConversionRate","type":"uint256"}],"name":"swapTokenToToken","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newAdmin","type":"address"}],"name":"transferAdmin","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"claimAdmin","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"token","type":"address"},{"name":"minConversionRate","type":"uint256"}],"name":"swapEtherToToken","outputs":[{"name":"","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"newAdmin","type":"address"}],"name":"transferAdminQuickly","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getAlerters","outputs":[{"name":"","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"src","type":"address"},{"name":"dest","type":"address"},{"name":"srcQty","type":"uint256"}],"name":"getExpectedRate","outputs":[{"name":"expectedRate","type":"uint256"},{"name":"slippageRate","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"user","type":"address"},{"name":"token","type":"address"}],"name":"getUserCapInTokenWei","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOperator","type":"address"}],"name":"addOperator","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_kyberNetworkContract","type":"address"}],"name":"setKyberNetworkContract","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"operator","type":"address"}],"name":"removeOperator","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"field","type":"bytes32"}],"name":"info","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"src","type":"address"},{"name":"srcAmount","type":"uint256"},{"name":"dest","type":"address"},{"name":"destAddress","type":"address"},{"name":"maxDestAmount","type":"uint256"},{"name":"minConversionRate","type":"uint256"},{"name":"walletId","type":"address"}],"name":"trade","outputs":[{"name":"","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"amount","type":"uint256"},{"name":"sendTo","type":"address"}],"name":"withdrawEther","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"token","type":"address"},{"name":"user","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"admin","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_admin","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"trader","type":"address"},{"indexed":false,"name":"src","type":"address"},{"indexed":false,"name":"dest","type":"address"},{"indexed":false,"name":"actualSrcAmount","type":"uint256"},{"indexed":false,"name":"actualDestAmount","type":"uint256"}],"name":"ExecuteTrade","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"newNetworkContract","type":"address"},{"indexed":false,"name":"oldNetworkContract","type":"address"}],"name":"KyberNetworkSet","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"token","type":"address"},{"indexed":false,"name":"amount","type":"uint256"},{"indexed":false,"name":"sendTo","type":"address"}],"name":"TokenWithdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"amount","type":"uint256"},{"indexed":false,"name":"sendTo","type":"address"}],"name":"EtherWithdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"pendingAdmin","type":"address"}],"name":"TransferAdminPending","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"newAdmin","type":"address"},{"indexed":false,"name":"previousAdmin","type":"address"}],"name":"AdminClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"newAlerter","type":"address"},{"indexed":false,"name":"isAdd","type":"bool"}],"name":"AlerterAdded","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"newOperator","type":"address"},{"indexed":false,"name":"isAdd","type":"bool"}],"name":"OperatorAdded","type":"event"}];
 
 /***/ }),
 

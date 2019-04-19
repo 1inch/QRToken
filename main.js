@@ -475,25 +475,30 @@ var Web3Service = /** @class */ (function () {
         return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (obs) {
             var scope = _this;
             var callback = function () {
-                scope.web3.eth.getAccounts(function (err, accs) {
-                    // console.log('Account request', accs);
-                    if (err != null) {
-                        console.warn('There was an error fetching your accounts.');
-                        obs.error(err);
+                if (scope.web3) {
+                    scope.web3.eth.getAccounts(function (err, accs) {
+                        // console.log('Account request', accs);
+                        if (err != null) {
+                            console.warn('There was an error fetching your accounts.');
+                            obs.error(err);
+                            obs.complete();
+                            return;
+                        }
+                        // Get the initial account balance so it can be displayed.
+                        if (accs.length === 0) {
+                            var error = 'Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.';
+                            obs.error(error);
+                            obs.complete();
+                            // console.warn(error);
+                            return;
+                        }
+                        obs.next(accs);
                         obs.complete();
-                        return;
-                    }
-                    // Get the initial account balance so it can be displayed.
-                    if (accs.length === 0) {
-                        var error = 'Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.';
-                        obs.error(error);
-                        obs.complete();
-                        // console.warn(error);
-                        return;
-                    }
-                    obs.next(accs);
-                    obs.complete();
-                });
+                    });
+                }
+                else {
+                    setTimeout(callback, 200);
+                }
             };
             if (!_this.web3 || (_this.web3 && !_this.web3['eth'])) {
                 setTimeout(callback, 200);
