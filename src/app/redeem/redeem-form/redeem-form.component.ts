@@ -255,7 +255,9 @@ export class RedeemFormComponent implements OnInit {
 
     async onSubmit() {
 
-        this.loading = true;
+        this.zone.run(async () => {
+            this.loading = true;
+        });
 
         this.web3Service.getAccounts()
             .subscribe(
