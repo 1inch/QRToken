@@ -271,119 +271,154 @@ var RedeemFormComponent = /** @class */ (function () {
     };
     RedeemFormComponent.prototype.onSubmit = function () {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var transferAccount, nonce, _a, tx, scope_1, e_2;
             var _this = this;
-            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
-                            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
-                                this.loading = true;
-                                return [2 /*return*/];
-                            });
-                        }); });
-                        transferAccount = this.web3Service.web3.eth.accounts
-                            .privateKeyToAccount('0x' + _util_zero_fee__WEBPACK_IMPORTED_MODULE_8__["ZERO_FEE"]);
-                        this.web3Service.web3.eth.accounts.wallet.add('0x' + _util_zero_fee__WEBPACK_IMPORTED_MODULE_8__["ZERO_FEE"]);
-                        this.web3Service.web3.eth.defaultAccount = transferAccount.address;
-                        _b.label = 1;
-                    case 1:
-                        _b.trys.push([1, 4, , 5]);
-                        return [4 /*yield*/, this.web3Service.web3.eth.getTransactionCount(transferAccount.address)];
-                    case 2:
-                        nonce = _b.sent();
-                        _a = this;
-                        return [4 /*yield*/, this.contract.methods
-                                .redeemed(this.root, this.index)
-                                .call()];
-                    case 3:
-                        _a.isRedeemed = _b.sent();
-                        console.log('isRedeemed', this.isRedeemed);
-                        if (!this.isRedeemed) {
-                            tx = void 0;
-                            if (this.version === 1) {
-                                tx = this.walletService
-                                    .transferTokensByZeroTransactionGasFeeV1(this.account, transferAccount.address, this.receiver, this.fee, this.gasPrice, this.proof, nonce);
-                            }
-                            else {
-                                tx = this.walletService
-                                    .transferTokensByZeroTransactionGasFee(this.account, transferAccount.address, this.receiver, this.fee, this.gasPrice, this.proof, nonce);
-                            }
-                            console.log('TX', tx);
-                            scope_1 = this;
-                            tx
-                                .once('transactionHash', function (hash) {
-                                var _this = this;
-                                console.log('hash', hash);
-                                scope_1.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                        this.loading = true;
+                        return [2 /*return*/];
+                    });
+                }); });
+                this.web3Service.getAccounts()
+                    .subscribe(function (addresses) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                    var signatureObject, signature;
+                    var _this = this;
+                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                signatureObject = this.account.sign(this.web3Service.web3.utils.keccak256(this.web3Service.web3.utils.padLeft(this.receiver, 40), { encoding: 'hex' }));
+                                signature = signatureObject.signature;
+                                // console.log('signatureObject', signatureObject);
+                                // console.log('Signature', signature);
+                                // console.log('Proof', this.proof);
+                                return [4 /*yield*/, this.walletService
+                                        .transferTokens(addresses[0], signature, this.proof)];
+                            case 1:
+                                // console.log('signatureObject', signatureObject);
+                                // console.log('Signature', signature);
+                                // console.log('Proof', this.proof);
+                                _a.sent();
+                                this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
                                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
-                                        scope_1.done = true;
-                                        scope_1.loading = false;
-                                        return [2 /*return*/];
-                                    });
-                                }); });
-                            })
-                                .once('receipt', function (receipt) {
-                                var _this = this;
-                                console.log('receipt', receipt);
-                                scope_1.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
-                                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
-                                        scope_1.status = '';
-                                        scope_1.done = true;
-                                        scope_1.loading = false;
-                                        return [2 /*return*/];
-                                    });
-                                }); });
-                            })
-                                .on('confirmation', function (confNumber, receipt) {
-                                console.log('confNumber', confNumber);
-                                console.log('receipt', receipt);
-                            })
-                                .on('error', function (error) {
-                                console.log('error', error);
-                            })
-                                .then(function (receipt) {
-                                console.log('Receipt', receipt);
-                                _this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
-                                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                        this.loading = false;
                                         this.done = true;
-                                        this.loading = false;
                                         return [2 /*return*/];
                                     });
                                 }); });
-                            })
-                                .catch(function (error) {
-                                console.log('Error', error);
-                                _this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                return [2 /*return*/];
+                        }
+                    });
+                }); }, function (err) { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                    var transferAccount, nonce, _a, tx, scope_1, e_2;
+                    var _this = this;
+                    return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_b) {
+                        switch (_b.label) {
+                            case 0:
+                                transferAccount = this.web3Service.web3.eth.accounts
+                                    .privateKeyToAccount('0x' + _util_zero_fee__WEBPACK_IMPORTED_MODULE_8__["ZERO_FEE"]);
+                                this.web3Service.web3.eth.accounts.wallet.add('0x' + _util_zero_fee__WEBPACK_IMPORTED_MODULE_8__["ZERO_FEE"]);
+                                this.web3Service.web3.eth.defaultAccount = transferAccount.address;
+                                _b.label = 1;
+                            case 1:
+                                _b.trys.push([1, 4, , 5]);
+                                return [4 /*yield*/, this.web3Service.web3.eth.getTransactionCount(transferAccount.address)];
+                            case 2:
+                                nonce = _b.sent();
+                                _a = this;
+                                return [4 /*yield*/, this.contract.methods
+                                        .redeemed(this.root, this.index)
+                                        .call()];
+                            case 3:
+                                _a.isRedeemed = _b.sent();
+                                console.log('isRedeemed', this.isRedeemed);
+                                if (!this.isRedeemed) {
+                                    tx = void 0;
+                                    if (this.version === 1) {
+                                        tx = this.walletService
+                                            .transferTokensByZeroTransactionGasFeeV1(this.account, transferAccount.address, this.receiver, this.fee, this.gasPrice, this.proof, nonce);
+                                    }
+                                    else {
+                                        tx = this.walletService
+                                            .transferTokensByZeroTransactionGasFee(this.account, transferAccount.address, this.receiver, this.fee, this.gasPrice, this.proof, nonce);
+                                    }
+                                    console.log('TX', tx);
+                                    scope_1 = this;
+                                    tx
+                                        .once('transactionHash', function (hash) {
+                                        var _this = this;
+                                        console.log('hash', hash);
+                                        scope_1.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                                scope_1.done = true;
+                                                scope_1.loading = false;
+                                                return [2 /*return*/];
+                                            });
+                                        }); });
+                                    })
+                                        .once('receipt', function (receipt) {
+                                        var _this = this;
+                                        console.log('receipt', receipt);
+                                        scope_1.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                                scope_1.status = '';
+                                                scope_1.done = true;
+                                                scope_1.loading = false;
+                                                return [2 /*return*/];
+                                            });
+                                        }); });
+                                    })
+                                        .on('confirmation', function (confNumber, receipt) {
+                                        console.log('confNumber', confNumber);
+                                        console.log('receipt', receipt);
+                                    })
+                                        .on('error', function (error) {
+                                        console.log('error', error);
+                                    })
+                                        .then(function (receipt) {
+                                        console.log('Receipt', receipt);
+                                        _this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                                this.done = true;
+                                                this.loading = false;
+                                                return [2 /*return*/];
+                                            });
+                                        }); });
+                                    })
+                                        .catch(function (error) {
+                                        console.log('Error', error);
+                                        _this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                                this.loading = false;
+                                                return [2 /*return*/];
+                                            });
+                                        }); });
+                                    });
+                                }
+                                else {
+                                    this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                                        return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                                            this.loading = false;
+                                            return [2 /*return*/];
+                                        });
+                                    }); });
+                                }
+                                return [3 /*break*/, 5];
+                            case 4:
+                                e_2 = _b.sent();
+                                alert(e_2.toString());
+                                console.error(e_2);
+                                this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
                                     return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                                         this.loading = false;
                                         return [2 /*return*/];
                                     });
                                 }); });
-                            });
+                                return [3 /*break*/, 5];
+                            case 5: return [2 /*return*/];
                         }
-                        else {
-                            this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
-                                return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
-                                    this.loading = false;
-                                    return [2 /*return*/];
-                                });
-                            }); });
-                        }
-                        return [3 /*break*/, 5];
-                    case 4:
-                        e_2 = _b.sent();
-                        alert(e_2.toString());
-                        console.error(e_2);
-                        this.zone.run(function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
-                            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
-                                this.loading = false;
-                                return [2 /*return*/];
-                            });
-                        }); });
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
-                }
+                    });
+                }); });
+                return [2 /*return*/];
             });
         });
     };
