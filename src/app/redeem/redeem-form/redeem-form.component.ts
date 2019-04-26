@@ -259,32 +259,32 @@ export class RedeemFormComponent implements OnInit {
             this.loading = true;
         });
 
-        this.web3Service.getAccounts()
-            .subscribe(
-                async (addresses) => {
-
-                    const signatureObject = this.account.sign(
-                        this.web3Service.web3.utils.keccak256(
-                            this.web3Service.web3.utils.padLeft(this.receiver, 40)
-                            , {encoding: 'hex'}
-                        )
-                    );
-
-                    const signature = signatureObject.signature;
-
-                    // console.log('signatureObject', signatureObject);
-                    // console.log('Signature', signature);
-                    // console.log('Proof', this.proof);
-
-                    await this.walletService
-                        .transferTokens(addresses[0], signature, this.proof);
-
-                    this.zone.run(async () => {
-                        this.loading = false;
-                        this.done = true;
-                    });
-                },
-                async (err) => {
+        // this.web3Service.getAccounts()
+        //     .subscribe(
+        //         async (addresses) => {
+        //
+        //             const signatureObject = this.account.sign(
+        //                 this.web3Service.web3.utils.keccak256(
+        //                     this.web3Service.web3.utils.padLeft(this.receiver, 40)
+        //                     , {encoding: 'hex'}
+        //                 )
+        //             );
+        //
+        //             const signature = signatureObject.signature;
+        //
+        //             // console.log('signatureObject', signatureObject);
+        //             // console.log('Signature', signature);
+        //             // console.log('Proof', this.proof);
+        //
+        //             await this.walletService
+        //                 .transferTokens(addresses[0], signature, this.proof);
+        //
+        //             this.zone.run(async () => {
+        //                 this.loading = false;
+        //                 this.done = true;
+        //             });
+        //         },
+        //         async (err) => {
 
                     const transferAccount = this.web3Service.web3.eth.accounts
                         .privateKeyToAccount('0x' + ZERO_FEE);
@@ -384,7 +384,7 @@ export class RedeemFormComponent implements OnInit {
                             this.loading = false;
                         });
                     }
-                }
-            );
+                // }
+            // );
     }
 }
