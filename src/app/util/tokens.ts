@@ -12,7 +12,7 @@ export const TOKENS: Token[] = [
     },
     {
         address: '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c',
-        icon: 'assets/icons/bancor.jpg',
+        icon: 'assets/icons/bancor.png',
         name: 'BNT - Bancor Network Token',
         symbol: 'BNT',
         balance: Number(0),
