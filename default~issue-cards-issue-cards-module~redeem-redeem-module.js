@@ -6412,6 +6412,8 @@ module.exports = _createClass;
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
+var objectAssign = __webpack_require__(/*! object-assign */ "./node_modules/object-assign/index.js");
+
 // compare and isBuffer taken from https://github.com/feross/buffer/blob/680e9e5e488f22aac27599a57dc844a6315928dd/index.js
 // original notice:
 
@@ -6453,6 +6455,8 @@ function isBuffer(b) {
 }
 
 // based on node assert, original notice:
+// NB: The URL to the CommonJS spec is kept just for tradition.
+//     node-assert has evolved a lot since then, both in API and behavior.
 
 // http://wiki.commonjs.org/wiki/Unit_Testing/1.0
 //
@@ -6892,6 +6896,18 @@ assert.doesNotThrow = function(block, /*optional*/error, /*optional*/message) {
 };
 
 assert.ifError = function(err) { if (err) throw err; };
+
+// Expose a strict only variant of assert
+function strict(value, message) {
+  if (!value) fail(value, true, message, '==', strict);
+}
+assert.strict = objectAssign(strict, assert, {
+  equal: assert.strictEqual,
+  deepEqual: assert.deepStrictEqual,
+  notEqual: assert.notStrictEqual,
+  notDeepEqual: assert.notDeepStrictEqual
+});
+assert.strict.strict = assert.strict;
 
 var objectKeys = Object.keys || function (obj) {
   var keys = [];
@@ -10768,19 +10784,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOKENS", function() { return TOKENS; });
 var TOKENS = [
     {
-        address: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
-        icon: 'assets/icons/bnb.png',
-        name: 'BNB - Binance Coin',
-        symbol: 'BNB',
+        address: '0xdd974D5C2e2928deA5F71b9825b8b646686BD200',
+        icon: 'assets/icons/KyberNetwork.jpg',
+        name: 'KNC - KyberNetwork Token',
+        symbol: 'KNC',
         balance: Number(0),
         allowance: 0,
         inApproval: false
     },
     {
-        address: '0xdd974D5C2e2928deA5F71b9825b8b646686BD200',
-        icon: 'assets/icons/KyberNetwork.jpg',
-        name: 'KNC - KyberNetwork Coin',
-        symbol: 'KNC',
+        address: '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c',
+        icon: 'assets/icons/bancor.jpg',
+        name: 'BNT - Bancor Network Token',
+        symbol: 'BNT',
         balance: Number(0),
         allowance: 0,
         inApproval: false
@@ -10838,7 +10854,7 @@ var TOKENS = [
         balance: Number(0),
         allowance: 0,
         inApproval: false
-    },
+    }
 ];
 
 
