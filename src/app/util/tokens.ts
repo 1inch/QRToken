@@ -2,19 +2,19 @@ import {Token} from './token';
 
 export const TOKENS: Token[] = [
     {
-        address: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
-        icon: 'assets/icons/bnb.png',
-        name: 'BNB - Binance Coin',
-        symbol: 'BNB',
+        address: '0xdd974D5C2e2928deA5F71b9825b8b646686BD200',
+        icon: 'assets/icons/KyberNetwork.jpg',
+        name: 'KNC - KyberNetwork Token',
+        symbol: 'KNC',
         balance: Number(0),
         allowance: 0,
         inApproval: false
     },
     {
-        address: '0xdd974D5C2e2928deA5F71b9825b8b646686BD200',
-        icon: 'assets/icons/KyberNetwork.jpg',
-        name: 'KNC - KyberNetwork Coin',
-        symbol: 'KNC',
+        address: '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c',
+        icon: 'assets/icons/bancor.jpg',
+        name: 'BNT - Bancor Network Token',
+        symbol: 'BNT',
         balance: Number(0),
         allowance: 0,
         inApproval: false
@@ -72,5 +72,5 @@ export const TOKENS: Token[] = [
         balance: Number(0),
         allowance: 0,
         inApproval: false
-    },
+    }
 ];
