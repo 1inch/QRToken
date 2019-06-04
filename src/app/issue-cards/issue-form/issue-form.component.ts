@@ -25,7 +25,7 @@ declare let window: any;
 })
 export class IssueFormComponent implements OnInit {
 
-    selectedTokenAddress = '0xB8c77482e45F1F44dE1745F52C74426C631bDD52';
+    selectedTokenAddress = '0xdd974D5C2e2928deA5F71b9825b8b646686BD200';
     customTokenAddress = '';
     selectedToken: Token;
     cardsAmount = 4;
