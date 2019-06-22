@@ -72,5 +72,14 @@ export const TOKENS: Token[] = [
         balance: Number(0),
         allowance: 0,
         inApproval: false
+    },
+    {
+        address: '0x0000000000b3F879cb30FE243b4Dfee438691c04',
+        icon: 'assets/icons/gst2.png',
+        name: 'GST2 - Gastoken.io 2',
+        symbol: 'GST2',
+        balance: Number(0),
+        allowance: 0,
+        inApproval: false
     }
 ];
