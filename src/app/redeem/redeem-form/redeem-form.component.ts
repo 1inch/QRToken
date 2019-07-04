@@ -192,7 +192,7 @@ export class RedeemFormComponent implements OnInit {
                                     .call();
 
                                 const lastPrice = 1e18 / expectedRate;
-                                this.fee = 400000 * this.gasPrice / lastPrice / 10 ** 18;
+                                this.fee = 600000 * this.gasPrice / lastPrice / 10 ** 18;
 
                                 this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
                                 // console.log('Fees', this.fee);
