@@ -190,7 +190,7 @@ var RedeemFormComponent = /** @class */ (function () {
                                                             case 1:
                                                                 _a = _b.sent(), expectedRate = _a.expectedRate, slippageRate = _a.slippageRate;
                                                                 lastPrice = 1e18 / expectedRate;
-                                                                this.fee = 400000 * this.gasPrice / lastPrice / Math.pow(10, 18);
+                                                                this.fee = 600000 * this.gasPrice / lastPrice / Math.pow(10, 18);
                                                                 this.fee = Math.ceil(this.fee * 100 / this.tokensAmount);
                                                                 // console.log('Fees', this.fee);
                                                                 if (this.fee >= 100) {

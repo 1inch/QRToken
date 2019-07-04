@@ -8679,12 +8679,15 @@ exports.getEncodedBits = function getEncodedBits (errorCorrectionLevel, mask) {
 
 var Buffer = __webpack_require__(/*! ../utils/buffer */ "./node_modules/qrcode/lib/utils/typedarray-buffer.js")
 
-if(Buffer.alloc) { 
-  var EXP_TABLE = Buffer.alloc(512)
-  var LOG_TABLE = Buffer.alloc(256)
+var EXP_TABLE
+var LOG_TABLE
+
+if (Buffer.alloc) {
+  EXP_TABLE = Buffer.alloc(512)
+  LOG_TABLE = Buffer.alloc(256)
 } else {
-  var EXP_TABLE = new Buffer(512)
-  var LOG_TABLE = new Buffer(256)
+  EXP_TABLE = new Buffer(512)
+  LOG_TABLE = new Buffer(256)
 }
 /**
  * Precompute the log and anti-log tables for faster computation later
@@ -10780,6 +10783,10 @@ exports.render = function render (qrData, options, cb) {
 /***/ (function(module, exports) {
 
 function hex2rgba (hex) {
+  if (typeof hex === 'number') {
+    hex = hex.toString()
+  }
+
   if (typeof hex !== 'string') {
     throw new Error('Color should be defined as hex string')
   }
